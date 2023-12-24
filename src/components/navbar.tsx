@@ -14,7 +14,7 @@ export default function Navbar({ className, ...props }: ComponentProps<"div">) {
           <Button variant="ghost" size="small">Courses</Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="default" size="icon">B</Button>
+          <Button variant="outline" size="icon">B</Button>
           <Button variant="default">Sign in</Button>
         </div>
       </Container>
