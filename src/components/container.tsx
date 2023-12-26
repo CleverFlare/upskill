@@ -7,7 +7,7 @@ export default function Container({
 }: ComponentProps<"div">) {
   return (
     <div
-      className={cn("m-auto h-full max-w-[1200px] px-4", className)}
+      className={cn("m-auto h-full w-full max-w-[1200px] px-4", className)}
       {...props}
     />
   );
