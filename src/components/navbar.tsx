@@ -3,12 +3,14 @@ import type { ComponentProps } from "react";
 import Container from "./container";
 import { Button } from "./ui/button";
 import Navlink from "./navlink";
-import { HiOutlineSun, HiArrowRightOnRectangle } from "react-icons/hi2"
+import { HiOutlineSun, HiArrowRightOnRectangle } from "react-icons/hi2";
 
 export default function Navbar({ className, ...props }: ComponentProps<"div">) {
   return (
-    <div className="w-full flex justify-center py-4" {...props}>
-      <Container className={cn("flex justify-between items-center w-full", className)}>
+    <div className="flex w-full justify-center py-4" {...props}>
+      <Container
+        className={cn("flex w-full items-center justify-between", className)}
+      >
         <p className="text-2xl font-bold text-blue-500">UpSkill</p>
         <div className="flex gap-10">
           <Navlink href="/">Home</Navlink>
@@ -26,5 +28,5 @@ export default function Navbar({ className, ...props }: ComponentProps<"div">) {
         </div>
       </Container>
     </div>
-  )
+  );
 }
