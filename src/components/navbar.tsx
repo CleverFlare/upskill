@@ -3,7 +3,8 @@ import type { ComponentProps } from "react";
 import Container from "./container";
 import { Button } from "./ui/button";
 import Navlink from "./navlink";
-import { HiOutlineSun, HiArrowRightOnRectangle } from "react-icons/hi2";
+import { HiArrowRightOnRectangle } from "react-icons/hi2";
+import EclipseButton from "./eclipse-button";
 
 export default function Navbar({ className, ...props }: ComponentProps<"div">) {
   return (
@@ -21,9 +22,7 @@ export default function Navbar({ className, ...props }: ComponentProps<"div">) {
           <Navlink href="/courses">Courses</Navlink>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" size="icon">
-            <HiOutlineSun />
-          </Button>
+          <EclipseButton />
           <Button variant="default" className="flex gap-2">
             <HiArrowRightOnRectangle />
             <p>Sign in</p>
