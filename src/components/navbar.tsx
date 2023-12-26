@@ -7,7 +7,10 @@ import { HiOutlineSun, HiArrowRightOnRectangle } from "react-icons/hi2";
 
 export default function Navbar({ className, ...props }: ComponentProps<"div">) {
   return (
-    <div className="flex w-full justify-center py-4" {...props}>
+    <div
+      className="border-gray/20 flex w-full justify-center border-b py-4"
+      {...props}
+    >
       <Container
         className={cn("flex w-full items-center justify-between", className)}
       >

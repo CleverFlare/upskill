@@ -25,7 +25,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn("font-sans min-h-screen flex flex-col", inter.variable)}>
+      <body
+        className={cn("flex min-h-screen flex-col font-sans", inter.variable)}
+      >
         <TRPCReactProvider cookies={cookies().toString()}>
           <Navbar />
           {children}
