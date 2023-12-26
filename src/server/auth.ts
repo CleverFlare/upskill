@@ -4,7 +4,7 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+// import CredentialsProvider from "next-auth/providers/credentials";
 
 // import { env } from "@/env";
 import { db } from "@/server/db";
@@ -47,28 +47,28 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(db),
   providers: [
-    CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
-      credentials: {
-        username: {
-          label: "username",
-          type: "username",
-          required: true,
-        },
-        password: {
-          label: "password",
-          type: "password",
-          required: true,
-        },
-      },
-
-      async authorize(credentials, _) {
-        // Add logic here to look up the user from the credentials supplied
-        if (!credentials) return null;
-        return { username: "Muhammad Maher", id: 1 };
-      },
-    }),
+    // CredentialsProvider({
+    //   id: "credentials",
+    //   name: "Credentials",
+    //   credentials: {
+    //     username: {
+    //       label: "username",
+    //       type: "username",
+    //       required: true,
+    //     },
+    //     password: {
+    //       label: "password",
+    //       type: "password",
+    //       required: true,
+    //     },
+    //   },
+    //
+    //   async authorize(credentials, _) {
+    //     // Add logic here to look up the user from the credentials supplied
+    //     if (!credentials) return null;
+    //     return { username: "Muhammad Maher", id: 1 };
+    //   },
+    // }),
   ],
 };
 
