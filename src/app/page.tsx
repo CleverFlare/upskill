@@ -1,6 +1,7 @@
 // import Link from "next/link";
 
 import Container from "@/components/container";
+import HomeSVG from "@/components/home-svg";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { HiArrowRight, HiArrowRightOnRectangle } from "react-icons/hi2";
@@ -14,31 +15,36 @@ export default async function Home() {
   // const session = await getServerAuthSession();
 
   return (
-    <Container className="flex flex-1 flex-col justify-center">
-      <div className="flex w-1/2 flex-col gap-6">
-        <h1 className="text-4xl font-bold md:text-6xl">
-          <span className="text-primary">Learn from the best</span> and get
-          ahead in your field
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Welcome to UpSkill, the only platform you need to unlock your true
-          potential and land your dream job, you’ll find all the necessary
-          skills required for your career in comprehensible set of courses
-          instructed by leading names in the fields.
-        </p>
-        <div className="flex gap-4">
-          <Button variant="ghost" asChild className="flex gap-2">
-            <Link href="about-us">
-              Learn More About Us
-              <HiArrowRight className="text-lg" />
-            </Link>
-          </Button>
-          <Button className="flex gap-2">
-            <HiArrowRightOnRectangle className="text-lg" />
-            Sign in now
-          </Button>
+    <main className="relative flex flex-1 overflow-hidden">
+      <Container className="flex h-auto flex-1 flex-col justify-center py-5">
+        <div className="z-10 flex w-full flex-col gap-6 lg:w-1/2">
+          <h1 className="text-4xl font-bold sm:text-6xl">
+            <span className="text-primary">Learn from the best</span> and get
+            ahead in your field
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Welcome to UpSkill, the only platform you need to unlock your true
+            potential and land your dream job, you’ll find all the necessary
+            skills required for your career in comprehensible set of courses
+            instructed by leading names in the fields.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <Button variant="ghost" asChild className="flex gap-2">
+              <Link href="about-us">
+                Learn More About Us
+                <HiArrowRight className="text-lg" />
+              </Link>
+            </Button>
+            <Button className="flex gap-2">
+              <HiArrowRightOnRectangle className="text-lg" />
+              Sign in now
+            </Button>
+          </div>
         </div>
-      </div>
-    </Container>
+        <div className="absolute -right-[300px] -top-[100px] hidden aspect-square h-[1360px] lg:block">
+          <HomeSVG />
+        </div>
+      </Container>
+    </main>
   );
 }
