@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import Navlink from "./navlink";
 import { HiArrowRightOnRectangle } from "react-icons/hi2";
 import EclipseButton from "./eclipse-button";
+import MobileMenu from "./mobile-menu";
 
 export default function Navbar({ className, ...props }: ComponentProps<"div">) {
   return (
@@ -16,17 +17,20 @@ export default function Navbar({ className, ...props }: ComponentProps<"div">) {
         className={cn("flex w-full items-center justify-between", className)}
       >
         <p className="text-2xl font-bold text-blue-500">UpSkill</p>
-        <div className="flex gap-10">
+        <div className=" hidden gap-10 md:flex">
           <Navlink href="/">Home</Navlink>
           <Navlink href="/about-us">About Us</Navlink>
           <Navlink href="/courses">Courses</Navlink>
         </div>
-        <div className="flex gap-3">
+        <div className="hidden gap-3 md:flex">
           <EclipseButton />
           <Button variant="default" className="flex gap-2">
             <HiArrowRightOnRectangle />
             <p>Sign in</p>
           </Button>
+        </div>
+        <div className="flex md:hidden">
+          <MobileMenu />
         </div>
       </Container>
     </div>
