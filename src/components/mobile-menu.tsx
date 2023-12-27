@@ -1,19 +1,14 @@
 "use client";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "./ui/button";
-import {
-  HiArrowRightOnRectangle,
-  HiBars3,
-  HiOutlineHome,
-  HiOutlineInformationCircle,
-  HiOutlineRectangleGroup,
-} from "react-icons/hi2";
+import { HiArrowRightOnRectangle, HiBars3 } from "react-icons/hi2";
 import EclipseButton from "./eclipse-button";
 import Navlink from "./navlink";
 import { Separator } from "./ui/separator";
 import { useAtom } from "jotai";
 import { navigationLinks } from "@/data/navigation";
-export default function MobileMenu() {
+
+export default function MobileMenuButton() {
   const [navlinks] = useAtom(navigationLinks);
   return (
     <Drawer>

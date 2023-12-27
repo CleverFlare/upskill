@@ -6,9 +6,9 @@ import { Button } from "./ui/button";
 import Navlink from "./navlink";
 import { HiArrowRightOnRectangle } from "react-icons/hi2";
 import EclipseButton from "./eclipse-button";
-import MobileMenu from "./mobile-menu";
 import { useAtom } from "jotai";
 import { navigationLinks } from "@/data/navigation";
+import MobileMenuButton from "./mobile-menu";
 
 export default function Navbar({ className, ...props }: ComponentProps<"div">) {
   const [navlinks] = useAtom(navigationLinks);
@@ -35,7 +35,7 @@ export default function Navbar({ className, ...props }: ComponentProps<"div">) {
           </Button>
         </div>
         <div className="flex md:hidden">
-          <MobileMenu />
+          <MobileMenuButton />
         </div>
       </Container>
     </div>
