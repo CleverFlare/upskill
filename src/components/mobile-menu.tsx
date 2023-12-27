@@ -11,7 +11,10 @@ import {
 import EclipseButton from "./eclipse-button";
 import Navlink from "./navlink";
 import { Separator } from "./ui/separator";
+import { useAtom } from "jotai";
+import { navigationLinks } from "@/data/navigation";
 export default function MobileMenu() {
+  const [navlinks] = useAtom(navigationLinks);
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -21,33 +24,17 @@ export default function MobileMenu() {
       </DrawerTrigger>
       <DrawerContent>
         <div className="flex flex-col gap-4 p-4">
-          <Navlink
-            href="/"
-            className="w-full"
-            buttonClassName="w-full justify-start gap-2"
-            size="default"
-          >
-            <HiOutlineHome className="text-lg" />
-            Home
-          </Navlink>
-          <Navlink
-            href="/about-us"
-            className="w-full"
-            buttonClassName="w-full justify-start gap-2"
-            size="default"
-          >
-            <HiOutlineInformationCircle className="text-lg" />
-            About Us
-          </Navlink>
-          <Navlink
-            href="/courses"
-            className="w-full"
-            buttonClassName="w-full justify-start gap-2"
-            size="default"
-          >
-            <HiOutlineRectangleGroup className="text-lg" />
-            Courses
-          </Navlink>
+          {navlinks.map((navlink) => (
+            <Navlink
+              href={navlink.href}
+              className="w-full"
+              buttonClassName="w-full justify-start gap-2"
+              size="default"
+            >
+              {navlink.icon}
+              {navlink.title}
+            </Navlink>
+          ))}
           <Separator decorative />
           <div className="flex gap-3">
             <Button variant="default" className="flex w-full flex-1 gap-2">
