@@ -23,8 +23,10 @@ export default function Navbar({ className, ...props }: ComponentProps<"div">) {
       >
         <p className="text-2xl font-bold text-blue-500">UpSkill</p>
         <div className=" hidden gap-10 md:flex">
-          {navlinks.map((navlink) => (
-            <Navlink href={navlink.href}>{navlink.title}</Navlink>
+          {navlinks.map((navlink, index: number) => (
+            <Navlink key={`navlink ${index}`} href={navlink.href}>
+              {navlink.title}
+            </Navlink>
           ))}
         </div>
         <div className="hidden gap-3 md:flex">

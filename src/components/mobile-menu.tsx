@@ -19,8 +19,9 @@ export default function MobileMenuButton() {
       </DrawerTrigger>
       <DrawerContent>
         <div className="flex flex-col gap-4 p-4">
-          {navlinks.map((navlink) => (
+          {navlinks.map((navlink, index: number) => (
             <Navlink
+              key={`navlink ${index}`}
               href={navlink.href}
               className="w-full"
               buttonClassName="w-full justify-start gap-2"
