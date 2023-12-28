@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import type { ReactNode } from "react";
+
 import {
   HiArrowUp,
   HiCog6Tooth,
@@ -8,10 +8,11 @@ import {
   HiSparkles,
   HiUserGroup,
 } from "react-icons/hi2";
+import type { IconType } from "react-icons";
 
 type ValuesType = {
   headline: string;
-  Icon: typeof HiCog6Tooth;
+  Icon: IconType;
   text: string;
 };
 
