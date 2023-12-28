@@ -1,3 +1,6 @@
+interface CustomSVGProps extends SVGProps<SVGSVGElement> {
+  enableBackground?: string;
+}
 export default function HomeSVG() {
   return (
     <svg
@@ -7,9 +10,6 @@ export default function HomeSVG() {
       x="0px"
       y="0px"
       viewBox="0 0 5000 3500"
-      style={{
-        enableBackground: "new 0 0 5000 3500",
-      }}
       xmlSpace="preserve"
     >
       <style type="text/css">
