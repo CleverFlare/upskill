@@ -1,6 +1,3 @@
-interface CustomSVGProps extends SVGProps<SVGSVGElement> {
-  enableBackground?: string;
-}
 export default function HomeSVG() {
   return (
     <svg
