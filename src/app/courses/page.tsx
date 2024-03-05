@@ -14,7 +14,7 @@ export default function Courses() {
           Skill up, game on! Level up your life with UpSkill's diverse courses.
         </p>
       </div>
-      <div className="flex">
+      <div className="flex w-[400px]">
         <Input
           placeholder="Search..."
           className="rounded-ee-none rounded-se-none"
