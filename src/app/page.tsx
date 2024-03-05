@@ -15,9 +15,9 @@ export default async function Home() {
   // const session = await getServerAuthSession();
 
   return (
-    <main className="relative flex flex-1 overflow-hidden">
-      <Container className="flex h-auto flex-1 flex-col justify-center py-5">
-        <div className="z-10 flex w-full flex-col gap-6 lg:w-1/2">
+    <main className="flex flex-1 overflow-hidden">
+      <Container className="relative flex h-auto flex-1 flex-col py-5">
+        <div className="z-10 mt-[150px] flex w-full flex-col gap-6 lg:w-1/2">
           <h1 className="text-4xl font-bold sm:text-6xl">
             <span className="text-primary">Learn from the best</span> and get
             ahead in your field
@@ -41,7 +41,7 @@ export default async function Home() {
             </Button>
           </div>
         </div>
-        <div className="absolute -right-[300px] -top-[100px] hidden aspect-square h-[1360px] lg:block">
+        <div className="absolute -right-[600px] -top-[100px] hidden aspect-square h-[1360px] lg:block">
           <HomeSVG />
         </div>
       </Container>
