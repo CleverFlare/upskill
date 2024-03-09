@@ -1,15 +1,31 @@
 import CourseDetails from "@/app/_components/course-details";
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
+import { db } from "@/server/db";
+import type { Course } from "@prisma/client";
 import Link from "next/link";
 import { HiArrowRightOnRectangle } from "react-icons/hi2";
 
-export default async function Page() {
+export default async function Page({ params }: { params: { slug: string } }) {
   await new Promise((resolve) => setTimeout(resolve, 5000));
 
+  const databaseCourseData: Course | null = await db.course.findUnique({
+    where: {
+      id: params.slug,
+    },
+  });
+
+  console.log(databaseCourseData);
+
   return (
-    <Container className="flex flex-col py-5">
-      <CourseDetails />
+    <Container className="flex flex-col gap-10 py-5">
+      <CourseDetails
+        name={databaseCourseData?.name ?? ""}
+        bannerUrl={(databaseCourseData?.banner as string) ?? ""}
+        description={(databaseCourseData?.description as string) ?? ""}
+        technologies={(databaseCourseData?.technologies as []) ?? []}
+        prerequisites={(databaseCourseData?.prerequisites as []) ?? []}
+      />
       <Button variant="outline" className="flex gap-2" asChild>
         <Link href="/">
           <HiArrowRightOnRectangle />

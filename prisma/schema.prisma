@@ -14,12 +14,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type Technology {
+  logoUrl String
+  name    String
+}
+
 model Course {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  thumbnail String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  thumbnail     String
+  banner        String
+  description   String
+  technologies  Technology[]
+  prerequisites String[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 // Necessary for Next auth
