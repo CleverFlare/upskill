@@ -14,16 +14,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
+model Course {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
+  thumbnail String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  createdBy   User   @relation(fields: [createdById], references: [id])
-  createdById String @db.ObjectId
-
-  @@index([name])
 }
 
 // Necessary for Next auth
@@ -61,7 +57,6 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  posts         Post[]
 }
 
 model VerificationToken {

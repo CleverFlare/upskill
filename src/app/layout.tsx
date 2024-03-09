@@ -7,6 +7,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import Navbar from "@/components/navbar";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Provider } from "jotai";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,12 +30,14 @@ export default function RootLayout({
       <body
         className={cn("flex min-h-screen flex-col font-sans", inter.variable)}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TRPCReactProvider cookies={cookies().toString()}>
-            <Navbar />
-            {children}
-          </TRPCReactProvider>
-        </ThemeProvider>
+        <Provider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <TRPCReactProvider cookies={cookies().toString()}>
+              <Navbar />
+              {children}
+            </TRPCReactProvider>
+          </ThemeProvider>
+        </Provider>
       </body>
     </html>
   );

@@ -1,10 +1,29 @@
 import Container from "@/components/container";
+import { db } from "@/server/db";
+import type { Course } from "@prisma/client";
+import SearchBar from "./_components/search-bar";
 import CourseCard from "@/components/course-card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { HiMagnifyingGlass } from "react-icons/hi2";
+import { HiOutlineExclamationTriangle } from "react-icons/hi2";
 
-export default function Courses() {
+export default async function Courses({
+  searchParams,
+}: {
+  searchParams: Record<string, string | string[]>;
+}) {
+  const searchParam = !!searchParams?.search
+    ? Array.isArray(searchParams.search)
+      ? searchParams.search[0]
+      : searchParams.search
+    : "";
+
+  const databaseCoursesData: Course[] = await db.course.findMany({
+    where: {
+      name: {
+        contains: searchParam,
+      },
+    },
+  });
+
   return (
     <Container className="flex flex-col gap-8 py-10">
       <div className="flex flex-col gap-3">
@@ -14,24 +33,25 @@ export default function Courses() {
           Skill up, game on! Level up your life with UpSkill's diverse courses.
         </p>
       </div>
-      <div className="flex w-[400px]">
-        <Input
-          placeholder="Search..."
-          className="rounded-ee-none rounded-se-none"
-        />
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-es-none rounded-ss-none"
-        >
-          <HiMagnifyingGlass className="text-lg" />
-        </Button>
-      </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        <CourseCard>Hello World</CourseCard>
-        <CourseCard>Hello World</CourseCard>
-        <CourseCard>Hello World</CourseCard>
-      </div>
+      <SearchBar />
+      {!!searchParam && (
+        <p className="text-2xl font-bold">Search Results of "{searchParam}"</p>
+      )}
+      {!databaseCoursesData.length && (
+        <p className="text-xl text-gray-500">
+          <HiOutlineExclamationTriangle className="inline" /> No Course
+          Available
+        </p>
+      )}
+      {!!databaseCoursesData.length && (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {databaseCoursesData.map((course) => (
+            <CourseCard thumbnailUrl={course.thumbnail}>
+              {course.name}
+            </CourseCard>
+          ))}
+        </div>
+      )}
     </Container>
   );
 }
