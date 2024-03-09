@@ -1,9 +1,12 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import type { ComponentProps } from "react";
+import Link, { type LinkProps } from "next/link";
+import { type ReactNode } from "react";
 
-interface CourseCardProps extends ComponentProps<"div"> {
+interface CourseCardProps extends LinkProps {
   thumbnailUrl?: string;
+  className?: string;
+  children?: ReactNode;
 }
 
 export default function CourseCard({
@@ -13,7 +16,7 @@ export default function CourseCard({
   ...props
 }: CourseCardProps) {
   return (
-    <div className={cn("flex flex-col gap-3", className)} {...props}>
+    <Link className={cn("flex flex-col gap-3", className)} {...props}>
       <Image
         src={thumbnailUrl}
         alt="course thumbnail"
@@ -22,6 +25,6 @@ export default function CourseCard({
         className="aspect-video w-full rounded-md"
       />
       <p className="w-full font-bold">{children}</p>
-    </div>
+    </Link>
   );
 }

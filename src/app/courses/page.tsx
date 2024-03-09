@@ -46,7 +46,10 @@ export default async function Courses({
       {!!databaseCoursesData.length && (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {databaseCoursesData.map((course) => (
-            <CourseCard thumbnailUrl={course.thumbnail}>
+            <CourseCard
+              href={`/courses/${course.id}`}
+              thumbnailUrl={course.thumbnail}
+            >
               {course.name}
             </CourseCard>
           ))}
