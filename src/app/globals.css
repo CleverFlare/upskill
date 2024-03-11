@@ -74,10 +74,12 @@
     @apply bg-background text-foreground;
   }
   .text-border {
-    text-shadow:
-      2px 2px 0px rgba(0, 0, 0, var(--tw-text-opacity)),
-      -2px -2px 0px rgba(0, 0, 0, var(--tw-text-opacity)),
-      2px -2px 0px rgba(0, 0, 0, var(--tw-text-opacity)),
-      -2px 2px 0px rgba(0, 0, 0, var(--tw-text-opacity)); /* Adjust values as needed */
+    /* text-shadow: */
+    /*   2px 2px 0px rgba(0, 0, 0, var(--tw-text-opacity)), */
+    /*   -2px -2px 0px rgba(0, 0, 0, var(--tw-text-opacity)), */
+    /*   2px -2px 0px rgba(0, 0, 0, var(--tw-text-opacity)), */
+    /*   -2px 2px 0px rgba(0, 0, 0, var(--tw-text-opacity)); */ /* Adjust values as needed */
+    -webkit-text-stroke: 2px black;
+    font-weight: 900;
   }
 }

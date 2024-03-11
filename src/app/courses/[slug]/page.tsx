@@ -15,14 +15,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
     },
   });
 
-  console.log(databaseCourseData);
-
   return (
     <Container className="flex flex-col gap-10 py-5">
       <CourseDetails
         name={databaseCourseData?.name ?? ""}
-        bannerUrl={(databaseCourseData?.banner as string) ?? ""}
-        description={(databaseCourseData?.description as string) ?? ""}
+        bannerUrl={databaseCourseData?.banner ?? ""}
+        description={databaseCourseData?.description ?? ""}
         technologies={(databaseCourseData?.technologies as []) ?? []}
         prerequisites={(databaseCourseData?.prerequisites as []) ?? []}
       />
