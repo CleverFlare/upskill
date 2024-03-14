@@ -7,8 +7,6 @@ import Link from "next/link";
 import { HiArrowRightOnRectangle } from "react-icons/hi2";
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-
   const databaseCourseData: Course | null = await db.course.findUnique({
     where: {
       id: params.slug,
