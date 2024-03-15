@@ -16,8 +16,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
-import { HiPlus, HiTrash } from "react-icons/hi2";
+import Image from "next/image";
+import { createRef, useState } from "react";
+import { HiPencil, HiPhoto, HiPlus, HiTrash } from "react-icons/hi2";
 
 type TechnologiesStateType = Record<string, { name: string; image: Blob }>;
 
@@ -26,8 +27,12 @@ export default function Page() {
   const [description, setDescription] = useState<string>("");
   const [prerequisites, setPrerequisites] = useState<string[]>([""]);
   const [technologies, setTechnologies] = useState<TechnologiesStateType>({});
+  const [banner, setBanner] = useState<Blob | null>();
+  const [thumbnail, setThumbnail] = useState<Blob | null>();
   const [technologyName, setTechnologyName] = useState<string>("");
   const [technologyImage, setTechnologyImage] = useState<Blob | null>();
+  const bannerFileInputRef = createRef<HTMLInputElement>();
+  const thumbnailFileInputRef = createRef<HTMLInputElement>();
 
   function handleDeleteTechnology(id: string) {
     setTechnologies((technologies) => {
@@ -74,12 +79,87 @@ export default function Page() {
         className="flex flex-col gap-10"
         onSubmit={(e) => e.preventDefault()}
       >
-        <div className="relative h-[217px] w-full overflow-hidden rounded-xl bg-gray-400 p-5">
+        <div className="relative h-[217px] w-full overflow-hidden rounded-xl p-5">
           <textarea
             className="z-20 h-full w-1/2 resize-none bg-transparent text-4xl text-border text-white outline-none"
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+          />
+          <div className="absolute right-4 top-4 flex gap-4">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-white hover:bg-white/10 hover:text-white dark:hover:bg-gray-500/20"
+                >
+                  <HiPhoto />
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Course Thumbnail</DialogTitle>
+                  <DialogDescription>
+                    This will set the course thumbnail.
+                  </DialogDescription>
+                </DialogHeader>
+                <div
+                  className="relative aspect-video h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-200"
+                  onClick={() => thumbnailFileInputRef.current?.click()}
+                >
+                  {!!thumbnail && (
+                    <Image
+                      src={thumbnail ? URL.createObjectURL(thumbnail) : ""}
+                      layout="fill"
+                      objectFit="cover"
+                      objectPosition="center"
+                      alt="thumbnail"
+                    />
+                  )}
+                  <input
+                    type="file"
+                    ref={thumbnailFileInputRef}
+                    className="hidden"
+                    onChange={(e) => setThumbnail(e?.target?.files?.[0])}
+                  />
+                </div>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setThumbnail(null)}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    Remove
+                  </Button>
+                  <DialogClose asChild>
+                    <Button>Save</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/10 hover:text-white dark:hover:bg-gray-500/20"
+              onClick={() => bannerFileInputRef.current?.click()}
+            >
+              <HiPencil />
+            </Button>
+          </div>
+          <input
+            type="file"
+            ref={bannerFileInputRef}
+            onChange={(e) => setBanner(e?.target?.files?.[0] ?? null)}
+            className="hidden"
+          />
+          <Image
+            src={banner ? URL.createObjectURL(banner) : ""}
+            layout="fill"
+            objectFit={banner ? "cover" : "contain"}
+            objectPosition="center"
+            className="-z-10 bg-gray-200"
+            alt="banner"
           />
         </div>
         <div className="flex flex-col gap-4">
@@ -99,7 +179,7 @@ export default function Page() {
             technologies
           </p>
           <div className="box-content flex w-full snap-x snap-mandatory flex-wrap gap-4 overflow-x-auto pb-2 md:overflow-x-visible">
-            {Object.entries(technologies!).map(([id, technology]) => (
+            {Object.entries(technologies).map(([id, technology]) => (
               <TechnologyCard
                 key={id}
                 logoUrl={URL.createObjectURL(technology.image)}
