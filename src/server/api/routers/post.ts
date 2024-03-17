@@ -1,12 +1,68 @@
-// import { z } from "zod";
+import { z } from "zod";
 
 import {
   createTRPCRouter,
   // protectedProcedure,
-  // publicProcedure,
+  publicProcedure,
 } from "@/server/api/trpc";
 
+import base64 from "next-base64";
+import { imagekit, db } from "@/server/db";
+
 export const postRouter = createTRPCRouter({
+  createCourse: publicProcedure
+    .input(
+      z.object({
+        thumbnail: z.string(),
+        banner: z.string(),
+        name: z.string(),
+        description: z.string(),
+        technologies: z.object({ logo: z.string(), name: z.string() }).array(),
+        prerequisites: z.string().array(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      try {
+        const technologyLogos = input.technologies.map(({ logo }) => logo);
+        const uploadedThumbnail = await imagekit.upload({
+          file: input.thumbnail,
+          fileName: `${crypto.randomUUID()}.jpg`,
+          folder: "/thumbnails/",
+        });
+        const uploadedBanner = await imagekit.upload({
+          file: input.banner,
+          fileName: `${crypto.randomUUID()}.jpg`,
+          folder: "/banners/",
+        });
+        const uploadedTechnologyLogos = await Promise.all(
+          technologyLogos.map((logo) =>
+            imagekit.upload({
+              file: logo,
+              fileName: `${crypto.randomUUID()}.png`,
+              folder: "/technologies/",
+            }),
+          ),
+        );
+
+        const createdCourse = await db.course.create({
+          data: {
+            banner: uploadedBanner.url,
+            thumbnail: uploadedThumbnail.url,
+            technologies: input.technologies.map(({ name }, index) => ({
+              name,
+              logoUrl: uploadedTechnologyLogos[index]?.url ?? "",
+            })),
+            name: input.name,
+            description: input.description,
+            prerequisites: input.prerequisites,
+          },
+        });
+
+        return createdCourse;
+      } catch (err) {
+        return { error: "Something went wrong!" };
+      }
+    }),
   // hello: publicProcedure
   //   .input(z.object({ text: z.string() }))
   //   .query(({ input }) => {

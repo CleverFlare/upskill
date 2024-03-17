@@ -17,8 +17,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
-import { createRef, useState } from "react";
+import { FormEvent, FormEventHandler, createRef, useState } from "react";
 import { HiPencil, HiPhoto, HiPlus, HiTrash } from "react-icons/hi2";
+import { api } from "@/trpc/react";
+import { useRouter } from "next/navigation";
+import base64 from "next-base64";
+import { toBase64 } from "@/lib/to-base64";
 
 type TechnologiesStateType = Record<string, { name: string; image: Blob }>;
 
@@ -33,6 +37,13 @@ export default function Page() {
   const [technologyImage, setTechnologyImage] = useState<Blob | null>();
   const bannerFileInputRef = createRef<HTMLInputElement>();
   const thumbnailFileInputRef = createRef<HTMLInputElement>();
+  const router = useRouter();
+
+  const createCourse = api.post.createCourse.useMutation({
+    onSuccess: () => {
+      router.push("/courses");
+    },
+  });
 
   function handleDeleteTechnology(id: string) {
     setTechnologies((technologies) => {
@@ -73,12 +84,33 @@ export default function Page() {
     });
   }
 
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    // console.log(thumbnail);
+    const encodedThumbnail = await toBase64(thumbnail!);
+    const encodedBanner = await toBase64(banner!);
+    const technologiesWithEncodedLogos = await Promise.all(
+      Object.entries(technologies).map(async ([_, data]) => {
+        const logo = (await toBase64(data.image as File)) as string;
+        return {
+          name: data.name,
+          logo,
+        };
+      }),
+    );
+    createCourse.mutate({
+      name: title,
+      prerequisites,
+      technologies: technologiesWithEncodedLogos,
+      description,
+      thumbnail: encodedThumbnail as string,
+      banner: encodedBanner as string,
+    });
+  }
+
   return (
     <Container className="py-5">
-      <form
-        className="flex flex-col gap-10"
-        onSubmit={(e) => e.preventDefault()}
-      >
+      <form className="flex flex-col gap-10" onSubmit={(e) => handleSubmit(e)}>
         <div className="relative h-[217px] w-full overflow-hidden rounded-xl p-5">
           <textarea
             className="z-20 h-full w-1/2 resize-none bg-transparent text-4xl text-border text-white outline-none"
@@ -129,11 +161,12 @@ export default function Page() {
                     variant="outline"
                     onClick={() => setThumbnail(null)}
                     className="text-destructive hover:text-destructive"
+                    type="button"
                   >
                     Remove
                   </Button>
                   <DialogClose asChild>
-                    <Button>Save</Button>
+                    <Button type="button">Save</Button>
                   </DialogClose>
                 </DialogFooter>
               </DialogContent>
@@ -143,6 +176,7 @@ export default function Page() {
               size="icon"
               className="text-white hover:bg-white/10 hover:text-white dark:hover:bg-gray-500/20"
               onClick={() => bannerFileInputRef.current?.click()}
+              type="button"
             >
               <HiPencil />
             </Button>
@@ -192,6 +226,7 @@ export default function Page() {
                 <Button
                   variant="ghost"
                   className="h-screen max-h-24 w-full max-w-24  border-2 border-dashed border-primary hover:bg-primary/5"
+                  type="button"
                 >
                   <HiPlus className="text-primary" />
                 </Button>
@@ -232,7 +267,7 @@ export default function Page() {
                 </div>
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button onClick={() => handleAddTechnology()}>
+                    <Button onClick={() => handleAddTechnology()} type="button">
                       Save changes
                     </Button>
                   </DialogClose>
@@ -277,6 +312,7 @@ export default function Page() {
                   className="text-destructive hover:text-destructive"
                   size="icon"
                   onClick={() => handleDeletePrerequisite(index)}
+                  type="button"
                 >
                   <HiTrash />
                 </Button>
@@ -286,10 +322,19 @@ export default function Page() {
               variant="ghost"
               className="border-2 border-dashed border-primary hover:bg-primary/5"
               onClick={() => setPrerequisites((prev) => [...prev, ""])}
+              type="button"
             >
               <HiPlus className="text-primary" />
             </Button>
           </div>
+        </div>
+        <div className="flex justify-end gap-4">
+          <Button variant="outline" type="button">
+            Cancel
+          </Button>
+          <Button disabled={createCourse.isLoading} type="submit">
+            Create
+          </Button>
         </div>
       </form>
     </Container>
