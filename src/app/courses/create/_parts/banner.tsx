@@ -1,41 +1,45 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type createCourseSchema from "@/schema/create-course";
 import Image from "next/image";
 import {
   type ComponentProps,
   createRef,
   type ChangeEvent,
-  forwardRef,
-  type RefObject,
   type ReactNode,
 } from "react";
+import { type Control, useController } from "react-hook-form";
 import { HiPencil } from "react-icons/hi2";
+import type { z } from "zod";
 
 interface BannerProps
-  extends Omit<ComponentProps<"input">, "onChange" | "onError" | "value"> {
+  extends Omit<
+    ComponentProps<"input">,
+    "onChange" | "onError" | "value" | "name"
+  > {
   error?: string;
   onError: (message: string) => void;
-  onChange: (value: Blob) => void;
   markError?: boolean;
-  value: File | Blob;
   NameInput?: ReactNode;
   ActionButtons?: ReactNode;
+  control: Control<z.infer<typeof createCourseSchema>>;
+  name: keyof z.infer<typeof createCourseSchema>;
 }
 
-export default forwardRef(function Banner(
-  {
-    value,
-    onChange,
-    error,
-    onError,
-    markError,
-    NameInput,
-    ActionButtons,
-    ...rest
-  }: BannerProps,
-  ref,
-) {
+export default function Banner({
+  error,
+  onError,
+  markError,
+  NameInput,
+  ActionButtons,
+  control,
+  name,
+  ...rest
+}: BannerProps) {
   const labelRef = createRef<HTMLLabelElement>();
+  const {
+    field: { onChange, value, ref, ...field },
+  } = useController({ control, name });
 
   async function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const size = (e.target.files?.[0]?.size ?? 0) / (1024 * 1024);
@@ -78,14 +82,14 @@ export default forwardRef(function Banner(
         <input
           type="file"
           id="banner-input"
-          ref={ref as RefObject<HTMLInputElement>}
+          ref={ref}
           onChange={handleChange}
           className="hidden"
-          {...rest}
+          {...field}
         />
         {!!value && (
           <Image
-            src={URL.createObjectURL(value)}
+            src={URL.createObjectURL(value as Blob)}
             className="absolute bottom-0 left-0 right-0 top-0 -z-10 bg-gray-200 object-cover object-center"
             width={1168}
             height={217}
@@ -100,4 +104,4 @@ export default forwardRef(function Banner(
       )}
     </div>
   );
-});
+}

@@ -1,18 +1,26 @@
 import { cn } from "@/lib/utils";
-import {
-  forwardRef,
-  type ComponentProps,
-  type RefObject,
-  useEffect,
-} from "react";
+import type createCourseSchema from "@/schema/create-course";
+import { type ComponentProps } from "react";
+import { useController, type Control } from "react-hook-form";
+import type { z } from "zod";
 
 interface NameFieldProps extends ComponentProps<"textarea"> {
   markError?: boolean;
+  control: Control<z.infer<typeof createCourseSchema>>;
+  name: keyof z.infer<typeof createCourseSchema>;
 }
-export default forwardRef(function NameField(
-  { markError, ...rest }: NameFieldProps,
-  ref,
-) {
+export default function NameField({
+  markError,
+  control,
+  name,
+  ...rest
+}: NameFieldProps) {
+  const {
+    field: { value, onChange, ref, ...field },
+  } = useController({
+    control,
+    name,
+  });
   return (
     <textarea
       className={cn(
@@ -21,8 +29,11 @@ export default forwardRef(function NameField(
         markError ? "outline-1 outline-destructive" : "",
       )}
       placeholder="Title"
-      ref={ref as RefObject<HTMLTextAreaElement>}
+      value={value as string}
+      onChange={(e) => onChange(e.target.value)}
+      ref={ref}
+      {...field}
       {...rest}
     />
   );
-});
+}

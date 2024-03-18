@@ -10,28 +10,35 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import type createCourseSchema from "@/schema/create-course";
 import Image from "next/image";
-import {
-  type ComponentProps,
-  type RefObject,
-  type ChangeEvent,
-  createRef,
-  forwardRef,
-} from "react";
+import { type ComponentProps, type ChangeEvent, createRef } from "react";
+import { useController, type Control } from "react-hook-form";
 import { HiPhoto } from "react-icons/hi2";
+import type { z } from "zod";
 
 interface ThumbnailProps
   extends Omit<ComponentProps<"input">, "onChange" | "onError" | "value"> {
   onError: (message: string) => void;
-  onChange: (value: Blob | undefined) => void;
+  control: Control<z.infer<typeof createCourseSchema>>;
+  name: keyof z.infer<typeof createCourseSchema>;
   markError?: boolean;
-  value: File | Blob;
 }
 
-export default forwardRef(function Thumbnail(
-  { onChange, onError, markError, value, ...rest }: ThumbnailProps,
-  ref,
-) {
+export default function Thumbnail({
+  onError,
+  markError,
+  control,
+  name,
+  ...rest
+}: ThumbnailProps) {
+  const {
+    field: { value, onChange, ref, ...field },
+  } = useController({
+    control,
+    name,
+  });
+
   const labelRef = createRef<HTMLLabelElement>();
 
   async function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -77,7 +84,7 @@ export default forwardRef(function Thumbnail(
           ></label>
           {!!value && (
             <Image
-              src={value ? URL.createObjectURL(value) : ""}
+              src={value ? URL.createObjectURL(value as Blob) : ""}
               layout="fill"
               objectFit="cover"
               objectPosition="center"
@@ -86,10 +93,11 @@ export default forwardRef(function Thumbnail(
           )}
           <input
             type="file"
-            ref={ref as RefObject<HTMLInputElement>}
+            ref={ref}
             className="hidden"
             onChange={handleChange}
             id="thumbnail-field"
+            {...field}
             {...rest}
           />
         </div>
@@ -109,4 +117,4 @@ export default forwardRef(function Thumbnail(
       </DialogContent>
     </Dialog>
   );
-});
+}

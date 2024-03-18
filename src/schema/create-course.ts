@@ -1,15 +1,6 @@
-import { type ZodType, z } from "zod";
+import { z } from "zod";
 
-export type CreateCourseSchemaType = {
-  name: string;
-  thumbnail: Blob;
-  banner: Blob;
-  description: string;
-  prerequisites: string[];
-  technologies: { name: string; logo: Blob }[];
-};
-
-const createCourseSchema: ZodType<CreateCourseSchemaType> = z.object({
+const createCourseSchema = z.object({
   name: z
     .string({ required_error: "Course name is required" })
     .min(1, { message: "Course name is required" }),
