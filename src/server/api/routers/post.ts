@@ -6,7 +6,6 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 
-import base64 from "next-base64";
 import { imagekit, db } from "@/server/db";
 
 export const postRouter = createTRPCRouter({

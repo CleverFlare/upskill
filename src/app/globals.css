@@ -57,7 +57,8 @@
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    /* --destructive: 0 62.8% 30.6%; */
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
@@ -80,6 +81,12 @@
     /*   2px -2px 0px rgba(0, 0, 0, var(--tw-text-opacity)), */
     /*   -2px 2px 0px rgba(0, 0, 0, var(--tw-text-opacity)); */ /* Adjust values as needed */
     -webkit-text-stroke: 2px black;
+    -webkit-text-fill-color: white;
     font-weight: 900;
+  }
+  .text-border::placeholder {
+    -webkit-text-stroke: 0px;
+    -webkit-text-fill-color: initial;
+    font-weight: normal;
   }
 }
