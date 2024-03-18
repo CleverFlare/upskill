@@ -16,8 +16,17 @@ export default function Page() {
     setError,
     control,
     formState: { errors },
+    getValues,
   } = useForm<CreateCourseSchemaType>({
     resolver: zodResolver(createCourseSchema),
+  });
+
+  console.log(getValues());
+  console.log(errors);
+
+  const { field: bannerField } = useController({
+    name: "banner",
+    control: control,
   });
 
   const { field: thumbnailField } = useController({
@@ -40,45 +49,39 @@ export default function Page() {
         className="flex flex-col gap-10"
         onSubmit={handleSubmit(submitData)}
       >
-        <Controller
-          control={control}
-          name="banner"
-          render={({ field: { value, onChange, ref, ...field } }) => (
-            <Banner
-              {...field}
-              onError={(message: string) =>
-                setError("banner", { message, type: "custom" })
-              }
-              onChange={onChange}
-              value={value}
-              ref={ref}
-              error={
-                errors?.banner?.message ??
-                errors?.name?.message ??
-                errors?.thumbnail?.message
-              }
-              ActionButtons={
-                <Thumbnail
-                  value={thumbnailField.value}
-                  onChange={thumbnailField.onChange}
-                  ref={thumbnailField.ref}
-                  onError={(message: string) =>
-                    setError("banner", { message, type: "custom" })
-                  }
-                  markError={!!errors?.thumbnail}
-                />
-              }
-              NameInput={
-                <NameField
-                  markError={!!errors?.name}
-                  onChange={(e) => nameField.onChange(e.target.value)}
-                  value={nameField.value}
-                  ref={ref}
-                />
-              }
-              markError={!!errors?.banner}
+        <Banner
+          onError={(message: string) =>
+            setError("banner", { message, type: "custom" })
+          }
+          onChange={bannerField.onChange}
+          value={bannerField.value}
+          ref={bannerField.ref}
+          error={
+            errors?.banner?.message ??
+            errors?.name?.message ??
+            errors?.thumbnail?.message
+          }
+          NameInput={
+            <NameField
+              markError={!!errors?.name}
+              onChange={(e) => nameField.onChange(e.target.value)}
+              value={nameField.value}
+              ref={nameField.ref}
+              onBlur={() => nameField.onBlur()}
             />
-          )}
+          }
+          ActionButtons={
+            <Thumbnail
+              markError={!!errors?.thumbnail}
+              onChange={thumbnailField.onChange}
+              value={thumbnailField.value}
+              ref={thumbnailField.ref}
+              onError={(message: string) =>
+                setError("thumbnail", { message, type: "custom" })
+              }
+            />
+          }
+          markError={!!errors?.banner}
         />
         <div className="flex justify-end gap-4">
           <Button variant="outline" type="button">

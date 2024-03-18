@@ -13,9 +13,6 @@ export default forwardRef(function NameField(
   { markError, ...rest }: NameFieldProps,
   ref,
 ) {
-  useEffect(() => {
-    console.log(rest);
-  }, [rest]);
   return (
     <textarea
       className={cn(

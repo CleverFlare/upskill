@@ -41,9 +41,9 @@ export default forwardRef(function Banner(
     const size = (e.target.files?.[0]?.size ?? 0) / (1024 * 1024);
     if (!e.target?.files?.[0]) return;
     if (!e.target.files?.[0]?.type.includes("image"))
-      return onError("Non-image file");
+      return onError("Non-image file in banner");
     else if (size > 20)
-      return onError(`Your file is over 20MB in size, it accounts for ${size}`);
+      return onError(`Your banner image is over 20MB in size`);
 
     onChange(e.target.files[0]);
   }
