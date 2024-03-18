@@ -25,6 +25,11 @@ export default function Page() {
     control: control,
   });
 
+  const { field: nameField } = useController({
+    name: "name",
+    control: control,
+  });
+
   function submitData(data: CreateCourseSchemaType) {
     console.log(data);
   }
@@ -64,21 +69,11 @@ export default function Page() {
                 />
               }
               NameInput={
-                <Controller
-                  control={control}
-                  name="name"
-                  render={({
-                    field: { value, onChange, onBlur, ref, ...field },
-                  }) => (
-                    <NameField
-                      markError={!!errors?.name}
-                      onChange={(e) => onChange(e.target.value)}
-                      value={value}
-                      ref={ref}
-                      onBlur={onBlur}
-                      {...field}
-                    />
-                  )}
+                <NameField
+                  markError={!!errors?.name}
+                  onChange={(e) => nameField.onChange(e.target.value)}
+                  value={nameField.value}
+                  ref={ref}
                 />
               }
               markError={!!errors?.banner}

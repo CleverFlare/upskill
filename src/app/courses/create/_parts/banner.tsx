@@ -68,7 +68,7 @@ export default forwardRef(function Banner(
           <Button
             variant="secondary"
             size="icon"
-            className={cn("")}
+            className={cn(markError ? "border border-destructive" : "")}
             onClick={() => labelRef.current?.click()}
             type="button"
           >
