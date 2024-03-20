@@ -101,7 +101,12 @@ export default function Technologies({
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <form onSubmit={handleSubmit(submitData)}>
+              <form
+                onSubmit={(e) => {
+                  e.stopPropagation();
+                  return handleSubmit(submitData)(e);
+                }}
+              >
                 <DialogHeader>
                   <DialogTitle>Add a Technology</DialogTitle>
                   <DialogDescription>
