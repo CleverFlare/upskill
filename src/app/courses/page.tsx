@@ -61,7 +61,7 @@ export default async function Courses({
             asChild
           >
             <Link href="/courses/create">
-              <HiPlus />
+              <HiPlus className="text-xl" />
             </Link>
           </Button>
         </div>
