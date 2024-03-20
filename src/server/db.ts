@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { env } from "@/env";
 import ImageKit from "imagekit";
+import saveBase64Image from "@/lib/save-image";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -15,8 +16,33 @@ export const db =
 
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
 
-export const imagekit = new ImageKit({
-  publicKey: env.IMAGE_KIT_PUBLIC_KEY,
-  privateKey: env.IMAGE_KIT_PRIVATE_KEY,
-  urlEndpoint: env.IMAGE_KIT_URL,
-});
+interface ImageKitUploadOptionsMock {
+  file: string;
+  fileName: string;
+  folder: string;
+}
+
+let imagekit: ImageKit = {
+  upload: async function ({
+    file,
+    fileName,
+    folder,
+  }: ImageKitUploadOptionsMock) {
+    await saveBase64Image(
+      file,
+      `../../../../../../../public${folder}${fileName}`,
+    );
+    return {
+      url: `${folder}${fileName}`,
+    };
+  },
+} as ImageKit;
+
+if (env.NODE_ENV === "production")
+  imagekit = new ImageKit({
+    publicKey: env.IMAGE_KIT_PUBLIC_KEY,
+    privateKey: env.IMAGE_KIT_PRIVATE_KEY,
+    urlEndpoint: env.IMAGE_KIT_URL,
+  });
+
+export { imagekit };

@@ -89,4 +89,7 @@
     -webkit-text-fill-color: initial;
     font-weight: normal;
   }
+  .text-fill-destructive {
+    -webkit-text-fill-color: hsl(var(--destructive));
+  }
 }

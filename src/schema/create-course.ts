@@ -11,12 +11,16 @@ const createCourseSchema = z.object({
     .min(1, { message: "The description is required" }),
   prerequisites: z.string().array(),
   technologies: z
-    .object({
-      name: z.string(),
-      logo: z.instanceof(Blob, { message: "The logo is required" }),
-    })
-    .array()
-    .nonempty(),
+    .record(
+      z.string(),
+      z.object({
+        name: z.string(),
+        logo: z.instanceof(Blob),
+      }),
+    )
+    .refine((data) => Object.keys(data).length > 0, {
+      message: "Record must contain at least one technology",
+    }),
 });
 
 export default createCourseSchema;

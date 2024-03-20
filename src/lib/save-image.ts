@@ -1,36 +1,44 @@
-import path from "path";
-import fs from "fs";
+import * as fs from "fs";
+import * as path from "path";
 
-export default function saveImage(
-  image: Buffer,
+interface ImageData {
+  contentType: string;
+  data: Buffer;
+}
+
+function extractImageData(base64Image: string): ImageData {
+  const parts = base64Image.split(";base64,");
+  if (parts.length !== 2) {
+    throw new Error("Invalid base64 image format");
+  }
+  const contentType = parts[0]!.split(":")[1]!;
+  const data = Buffer.from(parts[1]!, "base64");
+  return { contentType, data };
+}
+
+async function saveBase64Image(
+  base64Image: string,
   filePath: string,
-): Promise<void> {
-  // Validate input data (optional)
-  if (!image || !filePath) {
-    throw new Error("Missing required arguments: image and filePath");
+): Promise<string> {
+  // Check if the public folder exists
+  const publicFolderPath = path.join(__dirname, "public");
+  if (!fs.existsSync(publicFolderPath)) {
+    await fs.promises.mkdir(publicFolderPath);
   }
 
-  // Get the full path for the image in the public directory
-  const fullPath = path.join(__dirname, "./public", filePath);
+  const { contentType, data } = extractImageData(base64Image);
 
-  return new Promise((resolve, reject) => {
-    const writeStream = fs.createWriteStream(fullPath);
+  // Validate content type (optional)
+  if (!contentType.startsWith("image/")) {
+    throw new Error("Invalid image content type");
+  }
 
-    // Handle errors during file creation
-    writeStream.on("error", (err) => {
-      reject(err);
-    });
+  const fullFilePath = path.join(publicFolderPath, filePath);
 
-    // Write the image data to the stream
-    writeStream.write(image);
+  // Write the decoded data to the file
+  await fs.promises.writeFile(fullFilePath, data);
 
-    // Handle successful write operation (optional)
-    writeStream.on("finish", () => {
-      console.log("Image saved successfully:", filePath);
-      resolve();
-    });
-
-    // Close the stream (important)
-    writeStream.close();
-  });
+  return fullFilePath;
 }
+
+export default saveBase64Image;

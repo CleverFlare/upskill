@@ -59,7 +59,8 @@ export const postRouter = createTRPCRouter({
 
         return createdCourse;
       } catch (err) {
-        return { error: "Something went wrong!" };
+        console.log("something went wrong!", err);
+        throw Error("Something went wrong!");
       }
     }),
   // hello: publicProcedure

@@ -26,7 +26,7 @@ export default function NameField({
       className={cn(
         "z-20 h-full w-1/2 resize-none rounded-md bg-transparent text-4xl text-white caret-gray-500 outline-none dark:caret-white",
         "text-border",
-        markError ? "outline-1 outline-destructive" : "",
+        markError ? "text-fill-destructive" : "",
       )}
       placeholder="Title"
       value={value as string}
