@@ -20,7 +20,7 @@ export default function Page() {
   const {
     control,
     setError,
-    formState: { errors, isLoading },
+    formState: { errors },
     handleSubmit,
   } = useForm<z.infer<typeof createCourseSchema>>({
     resolver: zodResolver(createCourseSchema),
@@ -118,8 +118,14 @@ export default function Page() {
           <Button variant="outline" type="button">
             Cancel
           </Button>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading && <LuLoader2 className="me-2 animate-spin" />}
+          <Button
+            type="submit"
+            disabled={createCourse.isLoading}
+            aria-disabled={createCourse.isLoading}
+          >
+            {createCourse.isLoading && (
+              <LuLoader2 className="me-2 animate-spin" />
+            )}
             Create
           </Button>
         </div>

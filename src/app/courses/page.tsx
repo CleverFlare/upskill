@@ -3,7 +3,9 @@ import { db } from "@/server/db";
 import type { Course } from "@prisma/client";
 import SearchBar from "./_components/search-bar";
 import CourseCard from "@/components/course-card";
-import { HiOutlineExclamationTriangle } from "react-icons/hi2";
+import { HiOutlineExclamationTriangle, HiPlus } from "react-icons/hi2";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default async function Courses({
   searchParams,
@@ -53,6 +55,15 @@ export default async function Courses({
               {course.name}
             </CourseCard>
           ))}
+          <Button
+            variant="outline"
+            className="aspect-video h-full w-full rounded-xl border-2 border-dashed border-primary text-primary hover:text-primary"
+            asChild
+          >
+            <Link href="/courses/create">
+              <HiPlus />
+            </Link>
+          </Button>
         </div>
       )}
     </Container>
