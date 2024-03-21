@@ -1,7 +1,6 @@
 import { Textarea, type TextareaProps } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import type createCourseSchema from "@/schema/create-course";
-import { type RefObject, forwardRef } from "react";
 import { useController, type Control } from "react-hook-form";
 import type { z } from "zod";
 
