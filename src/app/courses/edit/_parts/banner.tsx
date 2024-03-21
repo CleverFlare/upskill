@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type createCourseSchema from "@/schema/create-course";
+import type updateCourseSchema from "@/schema/update-course";
 import Image from "next/image";
 import {
   type ComponentProps,
@@ -22,8 +22,8 @@ interface BannerProps
   markError?: boolean;
   NameInput?: ReactNode;
   ActionButtons?: ReactNode;
-  control: Control<z.infer<typeof createCourseSchema>>;
-  name: keyof z.infer<typeof createCourseSchema>;
+  control: Control<z.infer<typeof updateCourseSchema>>;
+  name: keyof z.infer<typeof updateCourseSchema>;
 }
 
 export default function Banner({
@@ -90,7 +90,11 @@ export default function Banner({
         />
         {!!value && (
           <Image
-            src={URL.createObjectURL(value as Blob)}
+            src={
+              value instanceof Blob
+                ? URL.createObjectURL(value)
+                : (value as string)
+            }
             className="absolute bottom-0 left-0 right-0 top-0 -z-10 bg-gray-200 object-cover object-center"
             width={1168}
             height={217}

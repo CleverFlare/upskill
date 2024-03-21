@@ -7,6 +7,7 @@ import {
 } from "@/server/api/trpc";
 
 import { imagekit, db } from "@/server/db";
+import _ from "lodash";
 
 export const postRouter = createTRPCRouter({
   createCourse: publicProcedure
@@ -46,10 +47,13 @@ export const postRouter = createTRPCRouter({
         const createdCourse = await db.course.create({
           data: {
             banner: uploadedBanner.url,
+            bannerId: uploadedBanner.fileId,
             thumbnail: uploadedThumbnail.url,
+            thumbnailId: uploadedThumbnail.fileId,
             technologies: input.technologies.map(({ name }, index) => ({
               name,
               logoUrl: uploadedTechnologyLogos[index]?.url ?? "",
+              logoId: uploadedTechnologyLogos[index]?.fileId ?? "",
             })),
             name: input.name,
             description: input.description,
@@ -62,6 +66,113 @@ export const postRouter = createTRPCRouter({
         console.log("something went wrong!", err);
         throw Error("Something went wrong!");
       }
+    }),
+  course: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      const retrievedCourse = await db.course.findUnique({
+        where: { id: input.id },
+      });
+      return retrievedCourse;
+    }),
+  updateCourse: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        thumbnail: z.string().optional(),
+        banner: z.string().optional(),
+        name: z.string().optional(),
+        description: z.string().optional(),
+        technologies: z
+          .object({
+            logo: z.string(),
+            name: z.string(),
+            logoId: z.string().optional(),
+          })
+          .array()
+          .optional(),
+        prerequisites: z.string().array().optional(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      // console.log(input);
+      const course = await db.course.findUnique({ where: { id: input.id } });
+      if (!course) throw Error("Invalid ID!");
+
+      let modifiedData = {} as Record<string, unknown>;
+
+      const deletedTechnologies = input?.technologies
+        ? _.differenceWith(
+            course.technologies,
+            input.technologies,
+            (obj1, obj2) => _.isEqual(obj1, obj2),
+          )
+        : undefined;
+
+      if (deletedTechnologies)
+        await Promise.all(
+          deletedTechnologies.map(
+            async (tech) => await imagekit.deleteFile(tech.logoId),
+          ),
+        );
+
+      if (input?.technologies)
+        modifiedData.technologies = await Promise.all(
+          input.technologies.map(async (tech) => {
+            if (tech?.logoId)
+              return {
+                name: tech.name,
+                logoUrl: tech.logo,
+                logoId: tech.logoId,
+              };
+
+            const storedLogo = await imagekit.upload({
+              file: tech.logo,
+              fileName: `${crypto.randomUUID()}.png`,
+              folder: "/technologies/",
+            });
+            return {
+              name: tech.name,
+              logoUrl: storedLogo.url,
+              logoId: storedLogo.fileId,
+            };
+          }),
+        );
+
+      if (input?.banner) {
+        await imagekit.deleteFile(course.bannerId);
+
+        const storedBanner = await imagekit.upload({
+          file: input.banner,
+          fileName: `${crypto.randomUUID()}.jpg`,
+          folder: "/banners/",
+        });
+
+        modifiedData.banner = storedBanner.url;
+        modifiedData.bannerId = storedBanner.fileId;
+      }
+
+      if (input?.thumbnail) {
+        await imagekit.deleteFile(course.thumbnail);
+
+        const storedThumbnail = await imagekit.upload({
+          file: input.thumbnail,
+          fileName: `${crypto.randomUUID()}.jpg`,
+          folder: "/thumbnails/",
+        });
+
+        modifiedData.thumbnail = storedThumbnail.url;
+        modifiedData.thumbnailId = storedThumbnail.fileId;
+      }
+
+      modifiedData = { ...input, ...modifiedData };
+
+      delete modifiedData.id;
+
+      return await db.course.update({
+        where: { id: input.id },
+        data: modifiedData,
+      });
     }),
   // hello: publicProcedure
   //   .input(z.object({ text: z.string() }))

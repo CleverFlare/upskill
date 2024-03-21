@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import type createCourseSchema from "@/schema/create-course";
+import type updateCourseSchema from "@/schema/update-course";
 import Image from "next/image";
 import { type ComponentProps, type ChangeEvent, createRef } from "react";
 import { useController, type Control } from "react-hook-form";
@@ -20,8 +20,8 @@ import type { z } from "zod";
 interface ThumbnailProps
   extends Omit<ComponentProps<"input">, "onChange" | "onError" | "value"> {
   onError: (message: string) => void;
-  control: Control<z.infer<typeof createCourseSchema>>;
-  name: keyof z.infer<typeof createCourseSchema>;
+  control: Control<z.infer<typeof updateCourseSchema>>;
+  name: keyof z.infer<typeof updateCourseSchema>;
   markError?: boolean;
 }
 
@@ -84,7 +84,11 @@ export default function Thumbnail({
           ></label>
           {!!value && (
             <Image
-              src={URL.createObjectURL(value as Blob)}
+              src={
+                value instanceof Blob
+                  ? URL.createObjectURL(value)
+                  : (value as string)
+              }
               layout="fill"
               objectFit="cover"
               objectPosition="center"

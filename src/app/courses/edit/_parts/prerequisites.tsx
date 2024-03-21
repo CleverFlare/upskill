@@ -1,4 +1,4 @@
-import type createCourseSchema from "@/schema/create-course";
+import type updateCourseSchema from "@/schema/update-course";
 import { useController, type Control } from "react-hook-form";
 import type { z } from "zod";
 import type { PropertyType } from "./technologies";
@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { HiPlus, HiTrash } from "react-icons/hi2";
 
 interface PrerequisitesProps {
-  control: Control<z.infer<typeof createCourseSchema>>;
-  name: keyof z.infer<typeof createCourseSchema>;
+  control: Control<z.infer<typeof updateCourseSchema>>;
+  name: keyof z.infer<typeof updateCourseSchema>;
 }
 export default function Prerequisites({ control, name }: PrerequisitesProps) {
   const {
@@ -18,7 +18,7 @@ export default function Prerequisites({ control, name }: PrerequisitesProps) {
   });
 
   const value = untypedValue as PropertyType<
-    z.infer<typeof createCourseSchema>,
+    z.infer<typeof updateCourseSchema>,
     "prerequisites"
   >;
 

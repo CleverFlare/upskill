@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link, { type LinkProps } from "next/link";
 import { type ReactNode } from "react";
 
-interface CourseCardProps extends LinkProps {
+export interface CourseCardProps extends LinkProps {
   thumbnailUrl?: string;
   className?: string;
   children?: ReactNode;

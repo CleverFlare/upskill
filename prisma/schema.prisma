@@ -16,13 +16,16 @@ datasource db {
 
 type Technology {
   logoUrl String
+  logoId  String
   name    String
 }
 
 model Course {
   id            String       @id @default(auto()) @map("_id") @db.ObjectId
   name          String
+  thumbnailId   String
   thumbnail     String
+  bannerId      String
   banner        String
   description   String
   technologies  Technology[]

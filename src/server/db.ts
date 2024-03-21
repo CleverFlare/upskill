@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { env } from "@/env";
 import ImageKit from "imagekit";
 import saveBase64Image from "@/lib/save-image";
+import deleteFile from "@/lib/delete-file";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -34,8 +35,10 @@ let imagekit: ImageKit = {
     );
     return {
       url: `${folder}${fileName}`,
+      fileId: `${folder}${fileName}`,
     };
   },
+  deleteFile: (id: string) => deleteFile(`../../../../../../../public${id}`),
 } as ImageKit;
 
 if (env.NODE_ENV === "production")

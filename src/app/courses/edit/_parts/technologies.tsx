@@ -1,4 +1,4 @@
-import type createCourseSchema from "@/schema/create-course";
+import type updateCourseSchema from "@/schema/update-course";
 import createTechnologySchema from "@/schema/create-technology";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Control, useController } from "react-hook-form";
@@ -21,8 +21,8 @@ import { useState } from "react";
 export type PropertyType<T, K extends keyof T> = T[K]; // Generic to represent property type
 
 interface TechnologiesProps {
-  control: Control<z.infer<typeof createCourseSchema>>;
-  name: keyof z.infer<typeof createCourseSchema>;
+  control: Control<z.infer<typeof updateCourseSchema>>;
+  name: keyof z.infer<typeof updateCourseSchema>;
   error?: string;
   isEdit?: boolean;
 }
@@ -31,7 +31,6 @@ export default function Technologies({
   control: externalControl,
   name: externalName,
   error,
-  isEdit,
 }: TechnologiesProps) {
   const {
     control,
@@ -53,7 +52,7 @@ export default function Technologies({
   });
 
   const value = unknownValue as PropertyType<
-    z.infer<typeof createCourseSchema>,
+    z.infer<typeof updateCourseSchema>,
     "technologies"
   >;
 
@@ -86,7 +85,7 @@ export default function Technologies({
           {Object?.entries(value ?? {})?.map(([id, { name, logo }]) => (
             <TechnologyCard
               key={id}
-              logoUrl={URL.createObjectURL(logo)}
+              logoUrl={logo instanceof Blob ? URL.createObjectURL(logo) : logo}
               name={name}
               onDelete={() => handleDeleteTechnology(id)}
             />

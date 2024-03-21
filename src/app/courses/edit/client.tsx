@@ -3,7 +3,6 @@ import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import createCourseSchema from "@/schema/create-course";
 import Banner from "./_parts/banner";
 import NameField from "./_parts/name-field";
 import Thumbnail from "./_parts/thumbnail";
@@ -11,61 +10,77 @@ import DescriptionField from "./_parts/description-field";
 import type { z } from "zod";
 import Technologies from "./_parts/technologies";
 import Prerequisites from "./_parts/prerequisites";
-import { toBase64 } from "@/lib/to-base64";
 import { api } from "@/trpc/react";
-import { useRouter } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
 import Link from "next/link";
+import updateCourseSchema from "@/schema/update-course";
+import filterChange from "@/lib/filter-changes";
+import { toBase64 } from "@/lib/to-base64";
+import { useRouter } from "next/navigation";
 
-export default function Page() {
+interface DefaultValuesType {
+  banner: string;
+  thumbnail: string;
+  name: string;
+  description: string;
+  technologies: Record<string, { name: string; logo: string }>;
+  prerequisites: string[];
+}
+
+export default function ClientPage({
+  defaultValues,
+  id,
+}: {
+  defaultValues: DefaultValuesType;
+  id: string;
+}) {
   const {
     control,
     setError,
     formState: { errors },
     handleSubmit,
-  } = useForm<z.infer<typeof createCourseSchema>>({
-    resolver: zodResolver(createCourseSchema),
-    defaultValues: {
-      technologies: {},
-      prerequisites: [],
-    },
+  } = useForm<z.infer<typeof updateCourseSchema>>({
+    resolver: zodResolver(updateCourseSchema),
+    defaultValues,
   });
 
   const router = useRouter();
 
-  const createCourse = api.post.createCourse.useMutation({
+  const updateCourse = api.post.updateCourse.useMutation({
     onSuccess: () => {
       router.push("/courses");
     },
   });
 
-  async function submitData({
-    thumbnail,
-    banner,
-    technologies,
-    prerequisites,
-    name,
-    description,
-  }: z.infer<typeof createCourseSchema>) {
-    const encodedThumbnail = await toBase64(thumbnail);
-    const encodedBanner = await toBase64(banner);
-    const technologiesWithEncodedLogos = await Promise.all(
-      Object.entries(technologies).map(async ([_, data]) => {
-        const logo = (await toBase64(data.logo as File)) as string;
-        return {
-          name: data.name,
-          logo,
-        };
-      }),
+  async function submitData(data: z.infer<typeof updateCourseSchema>) {
+    // utilizes the filterChange utility to detect changes
+    const changes = filterChange(
+      defaultValues as unknown as Record<string, unknown>,
+      data,
     );
-    createCourse.mutate({
-      name,
-      prerequisites,
-      technologies: technologiesWithEncodedLogos,
-      description,
-      thumbnail: encodedThumbnail as string,
-      banner: encodedBanner as string,
-    });
+
+    // Check if there is no changes made
+    if (!Object.entries(changes).length)
+      return console.log("No changes to update");
+
+    // Converts the thumbnail image to base64 format if its present
+    if (changes?.thumbnail)
+      changes.thumbnail = await toBase64(data.thumbnail as Blob);
+
+    // Converts the banner image to base64 format if its present
+    if (changes?.banner) changes.banner = await toBase64(data.banner as Blob);
+
+    // Converts the technologies object into an array if its present
+    if (changes?.technologies)
+      changes.technologies = await Promise.all(
+        Object.entries(data.technologies).map(async ([_, data]) => {
+          if (!data?.logoId)
+            data.logo = (await toBase64(data.logo as File)) as string;
+
+          return data;
+        }),
+      );
+    updateCourse.mutate({ id, ...changes });
   }
 
   return (
@@ -121,13 +136,13 @@ export default function Page() {
           </Button>
           <Button
             type="submit"
-            disabled={createCourse.isLoading}
-            aria-disabled={createCourse.isLoading}
+            disabled={updateCourse.isLoading}
+            aria-disabled={updateCourse.isLoading}
           >
-            {createCourse.isLoading && (
+            {updateCourse.isLoading && (
               <LuLoader2 className="me-2 animate-spin" />
             )}
-            Create
+            Update
           </Button>
         </div>
       </form>

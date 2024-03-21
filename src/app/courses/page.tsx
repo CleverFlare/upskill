@@ -2,10 +2,10 @@ import Container from "@/components/container";
 import { db } from "@/server/db";
 import type { Course } from "@prisma/client";
 import SearchBar from "./_components/search-bar";
-import CourseCard from "@/components/course-card";
 import { HiOutlineExclamationTriangle, HiPlus } from "react-icons/hi2";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import CourseCardWithActions from "./_components/course-card-with-options";
 
 export default async function Courses({
   searchParams,
@@ -39,33 +39,34 @@ export default async function Courses({
       {!!searchParam && (
         <p className="text-2xl font-bold">Search Results of "{searchParam}"</p>
       )}
-      {!databaseCoursesData.length && (
-        <p className="text-xl text-gray-500">
-          <HiOutlineExclamationTriangle className="inline" /> No Course
-          Available
-        </p>
-      )}
-      {!!databaseCoursesData.length && (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {databaseCoursesData.map((course) => (
-            <CourseCard
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {!!databaseCoursesData.length &&
+          databaseCoursesData.map((course) => (
+            <CourseCardWithActions
+              key={`Course ${course.id}`}
+              id={course.id}
               href={`/courses/${course.id}`}
               thumbnailUrl={course.thumbnail}
             >
               {course.name}
-            </CourseCard>
+            </CourseCardWithActions>
           ))}
-          <Button
-            variant="outline"
-            className="aspect-video h-full w-full rounded-xl border-2 border-dashed border-primary text-primary hover:text-primary"
-            asChild
-          >
-            <Link href="/courses/create">
-              <HiPlus className="text-xl" />
-            </Link>
-          </Button>
-        </div>
-      )}
+        {!databaseCoursesData.length && (
+          <p className="text-xl text-gray-500">
+            <HiOutlineExclamationTriangle className="inline" /> No Course
+            Available
+          </p>
+        )}
+        <Button
+          variant="outline"
+          className="aspect-video h-full w-full rounded-xl border-2 border-dashed border-primary text-primary hover:text-primary"
+          asChild
+        >
+          <Link href="/courses/create">
+            <HiPlus className="text-xl" />
+          </Link>
+        </Button>
+      </div>
     </Container>
   );
 }
