@@ -67,14 +67,6 @@ export const postRouter = createTRPCRouter({
         throw Error("Something went wrong!");
       }
     }),
-  course: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      const retrievedCourse = await db.course.findUnique({
-        where: { id: input.id },
-      });
-      return retrievedCourse;
-    }),
   updateCourse: publicProcedure
     .input(
       z.object({
