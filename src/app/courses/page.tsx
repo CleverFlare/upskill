@@ -2,7 +2,7 @@ import Container from "@/components/container";
 import { db } from "@/server/db";
 import type { Course } from "@prisma/client";
 import SearchBar from "./_components/search-bar";
-import { HiOutlineExclamationTriangle, HiPlus } from "react-icons/hi2";
+import { HiPlus } from "react-icons/hi2";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import CourseCardWithActions from "./_components/course-card-with-options";
@@ -51,12 +51,6 @@ export default async function Courses({
               {course.name}
             </CourseCardWithActions>
           ))}
-        {!databaseCoursesData.length && (
-          <p className="text-xl text-gray-500">
-            <HiOutlineExclamationTriangle className="inline" /> No Course
-            Available
-          </p>
-        )}
         <Button
           variant="outline"
           className="aspect-video h-full w-full rounded-xl border-2 border-dashed border-primary text-primary hover:text-primary"
@@ -70,3 +64,10 @@ export default async function Courses({
     </Container>
   );
 }
+
+// {!databaseCoursesData.length && (
+//   <p className="text-xl text-gray-500">
+//     <HiOutlineExclamationTriangle className="inline" /> No Course
+//     Available
+//   </p>
+// )}

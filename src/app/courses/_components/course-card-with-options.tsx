@@ -1,3 +1,4 @@
+"use client";
 import CourseCard, { type CourseCardProps } from "@/components/course-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,7 +9,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { HiEllipsisVertical, HiPencil, HiTrash } from "react-icons/hi2";
 
 interface CourseCardWithActionsProps extends CourseCardProps {
@@ -21,8 +26,26 @@ export default function CourseCardWithActions({
   thumbnailUrl,
   id,
 }: CourseCardWithActionsProps) {
+  const [deleted, setDeleted] = useState<boolean>(false);
+  const router = useRouter();
+  const { mutate } = api.post.deleteCourse.useMutation({
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
+
+  async function handleDeleteCourse() {
+    mutate({ id });
+    setDeleted(true);
+  }
+
   return (
-    <div className="group relative aspect-video h-full w-full">
+    <div
+      className={cn(
+        "group relative aspect-video h-full w-full",
+        deleted ? "opacity-50" : "",
+      )}
+    >
       <CourseCard href={href} thumbnailUrl={thumbnailUrl}>
         {children}
       </CourseCard>
@@ -45,7 +68,10 @@ export default function CourseCardWithActions({
               Edit
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex gap-2">
+          <DropdownMenuItem
+            className="flex gap-2"
+            onClick={() => handleDeleteCourse()}
+          >
             <HiTrash />
             Delete
           </DropdownMenuItem>

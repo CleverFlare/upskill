@@ -166,6 +166,20 @@ export const postRouter = createTRPCRouter({
         data: modifiedData,
       });
     }),
+  deleteCourse: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      const deletedCourse = await db.course.delete({ where: { id: input.id } });
+      if (!deletedCourse) throw Error("Invalid ID");
+
+      await imagekit.deleteFile(deletedCourse.bannerId);
+      await imagekit.deleteFile(deletedCourse.thumbnailId);
+      await Promise.all(
+        deletedCourse.technologies.map(
+          async (tech) => await imagekit.deleteFile(tech.logoId),
+        ),
+      );
+    }),
   // hello: publicProcedure
   //   .input(z.object({ text: z.string() }))
   //   .query(({ input }) => {
