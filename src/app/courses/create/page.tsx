@@ -16,7 +16,6 @@ import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
 import Link from "next/link";
-import { revalidatePath } from "next/cache";
 
 export default function Page() {
   const {
@@ -36,7 +35,7 @@ export default function Page() {
 
   const createCourse = api.post.createCourse.useMutation({
     onSuccess: () => {
-      revalidatePath("/courses");
+      router.refresh();
       router.push("/courses");
     },
   });

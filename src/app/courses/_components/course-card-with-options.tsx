@@ -43,7 +43,7 @@ export default function CourseCardWithActions({
     <div
       className={cn(
         "group relative aspect-video h-full w-full",
-        deleted ? "opacity-50" : "",
+        deleted ? "pointer-events-none opacity-50" : "",
       )}
     >
       <CourseCard href={href} thumbnailUrl={thumbnailUrl}>
@@ -55,6 +55,7 @@ export default function CourseCardWithActions({
             variant="secondary"
             size="icon"
             className="absolute right-1 top-1 opacity-0 transition-opacity group-hover:opacity-100"
+            disabled={deleted}
           >
             <HiEllipsisVertical className="text-xl" />
           </Button>
