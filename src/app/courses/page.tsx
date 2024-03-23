@@ -56,8 +56,8 @@ export default async function Courses({
           className="aspect-video h-full w-full rounded-xl border-2 border-dashed border-primary text-primary hover:text-primary"
           asChild
         >
-          <Link href="/courses/create">
-            <HiPlus className="text-xl" />
+          <Link href="/courses/create" className="flex flex-col gap-4">
+            <HiPlus className="text-3xl" />
           </Link>
         </Button>
       </div>
