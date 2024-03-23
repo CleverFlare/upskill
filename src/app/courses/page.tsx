@@ -39,7 +39,7 @@ export default async function Courses({
       {!!searchParam && (
         <p className="text-2xl font-bold">Search Results of "{searchParam}"</p>
       )}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {!!databaseCoursesData.length &&
           databaseCoursesData.map((course) => (
             <CourseCardWithActions

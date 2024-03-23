@@ -72,7 +72,7 @@ export default function Thumbnail({
         </DialogHeader>
         <div
           className={cn(
-            "relative aspect-video h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-200",
+            "relative aspect-video max-h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-200",
             markError ? "border border-destructive" : "",
           )}
           onClick={() => labelRef.current?.click()}
@@ -101,7 +101,7 @@ export default function Thumbnail({
             {...rest}
           />
         </div>
-        <DialogFooter>
+        <DialogFooter className="flex gap-y-4">
           <Button
             variant="outline"
             onClick={() => onChange(undefined)}

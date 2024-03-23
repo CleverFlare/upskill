@@ -24,7 +24,7 @@ export default function CourseCard({
         height={1000}
         className="aspect-video w-full rounded-md"
       />
-      <p className="w-full font-bold">{children}</p>
+      <p className="w-full text-xl font-bold md:text-base">{children}</p>
     </Link>
   );
 }

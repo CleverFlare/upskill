@@ -91,7 +91,7 @@ export default function Banner({
         {!!value && (
           <Image
             src={URL.createObjectURL(value as Blob)}
-            className="absolute bottom-0 left-0 right-0 top-0 -z-10 bg-gray-200 object-cover object-center"
+            className="absolute left-0 top-0 -z-10 h-full w-full bg-gray-200 object-cover object-center"
             width={1168}
             height={217}
             alt="banner"
