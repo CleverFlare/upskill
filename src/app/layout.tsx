@@ -33,7 +33,6 @@ export default function RootLayout({
         <Provider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <TRPCReactProvider cookies={cookies().toString()}>
-              <Navbar />
               {children}
             </TRPCReactProvider>
           </ThemeProvider>

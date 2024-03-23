@@ -4,14 +4,23 @@ import { Button } from "@/components/ui/button";
 import { db } from "@/server/db";
 import type { Course } from "@prisma/client";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { HiArrowRightOnRectangle } from "react-icons/hi2";
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const databaseCourseData: Course | null = await db.course.findUnique({
-    where: {
-      id: params.slug,
-    },
-  });
+  let databaseCourseData: Course | null;
+
+  try {
+    databaseCourseData = await db.course.findUnique({
+      where: {
+        id: params.slug,
+      },
+    });
+  } catch (err) {
+    return redirect("/not-found");
+  }
+
+  if (!databaseCourseData) return redirect("/not-found");
 
   return (
     <Container className="flex flex-col gap-10 py-5">
