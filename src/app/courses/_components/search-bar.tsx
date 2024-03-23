@@ -17,7 +17,7 @@ export default function SearchBar() {
   return (
     <form
       onSubmit={handleSubmit as unknown as FormEventHandler<HTMLFormElement>}
-      className="flex w-[400px]"
+      className="flex max-w-[400px]"
     >
       <Input
         type="search"
