@@ -27,7 +27,7 @@ interface LogoProps {
 
 export default function Logo({ compact }: LogoProps) {
   return (
-    <div className="flex gap-2 text-primary">
+    <div className="flex items-center gap-2 text-primary">
       <SVG />
       {!compact && <p className="text-2xl font-bold">Upskill</p>}
     </div>

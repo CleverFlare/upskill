@@ -4,7 +4,7 @@ import Container from "@/components/container";
 import HomeSVG from "@/components/home-svg";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { HiArrowRight, HiArrowRightOnRectangle } from "react-icons/hi2";
+import { HiArrowLeftOnRectangle, HiArrowRight } from "react-icons/hi2";
 
 // import { CreatePost } from "@/app/_components/create-post";
 // import { getServerAuthSession } from "@/server/auth";
@@ -35,9 +35,11 @@ export default async function Home() {
                 <HiArrowRight className="text-lg" />
               </Link>
             </Button>
-            <Button className="flex gap-2">
-              <HiArrowRightOnRectangle className="text-lg" />
-              Sign in now
+            <Button className="flex gap-2" asChild>
+              <Link href="/login">
+                <HiArrowLeftOnRectangle className="text-lg" />
+                Sign in now
+              </Link>
             </Button>
           </div>
         </div>

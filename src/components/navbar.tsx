@@ -4,12 +4,13 @@ import type { ComponentProps } from "react";
 import Container from "./container";
 import { Button } from "./ui/button";
 import Navlink from "./navlink";
-import { HiArrowRightOnRectangle } from "react-icons/hi2";
+import { HiArrowLeftOnRectangle } from "react-icons/hi2";
 import EclipseButton from "./eclipse-button";
 import { useAtom } from "jotai";
 import { navigationLinks } from "@/data/navigation";
 import MobileMenuButton from "./mobile-menu";
 import Logo from "./logo";
+import Link from "next/link";
 
 export default function Navbar({ className, ...props }: ComponentProps<"div">) {
   const [navlinks] = useAtom(navigationLinks);
@@ -32,9 +33,11 @@ export default function Navbar({ className, ...props }: ComponentProps<"div">) {
         </div>
         <div className="hidden gap-3 md:flex">
           <EclipseButton />
-          <Button variant="default" className="flex gap-2">
-            <HiArrowRightOnRectangle />
-            <p>Sign in</p>
+          <Button variant="default" className="flex gap-2" asChild>
+            <Link href="/login">
+              <HiArrowLeftOnRectangle />
+              <p>Sign in</p>
+            </Link>
           </Button>
         </div>
         <div className="flex md:hidden">
