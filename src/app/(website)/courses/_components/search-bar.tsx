@@ -17,12 +17,12 @@ export default function SearchBar() {
   return (
     <form
       onSubmit={handleSubmit as unknown as FormEventHandler<HTMLFormElement>}
-      className="flex max-w-[400px]"
+      className="flex max-w-[400px] rounded-md focus-within:ring-2 focus-within:ring-primary"
     >
       <Input
         type="search"
         placeholder="Search..."
-        className="rounded-ee-none rounded-se-none"
+        className="rounded-ee-none rounded-se-none focus-visible:outline-none focus-visible:ring-0"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
