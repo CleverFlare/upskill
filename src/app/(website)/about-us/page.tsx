@@ -14,12 +14,12 @@ export default function Page() {
             Your Journey to Unlocking Potential
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            At UpSkill, we believe transformation, not just training, unlocks
+            At Upskill, we believe transformation, not just training, unlocks
             your potential. The world is racing ahead, leaving traditional
             education behind. We saw a need for adaptable, engaging learning
             that empowers you to thrive in this new landscape.
             <br />
-            <br /> That's why we built UpSkill. We're passionate educators,
+            <br /> That's why we built Upskill. We're passionate educators,
             entrepreneurs, and lifelong learners, and our courses are just the
             beginning. Join our vibrant community, connect with like-minded
             individuals, and together, let's unlock your greatness.
@@ -68,7 +68,7 @@ export default function Page() {
             <br />
             <br />
             <span className="font-bold">
-              That's why we're building UpSkill:
+              That's why we're building Upskill:
             </span>{" "}
             <p>
               a vibrant community where passion fuels knowledge, and innovation

@@ -23,7 +23,7 @@ export default async function Home() {
             ahead in your field
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Welcome to UpSkill, the only platform you need to unlock your true
+            Welcome to Upskill, the only platform you need to unlock your true
             potential and land your dream job, you’ll find all the necessary
             skills required for your career in comprehensible set of courses
             instructed by leading names in the fields.
