@@ -9,6 +9,7 @@ import EclipseButton from "./eclipse-button";
 import { useAtom } from "jotai";
 import { navigationLinks } from "@/data/navigation";
 import MobileMenuButton from "./mobile-menu";
+import Logo from "./logo";
 
 export default function Navbar({ className, ...props }: ComponentProps<"div">) {
   const [navlinks] = useAtom(navigationLinks);
@@ -21,7 +22,7 @@ export default function Navbar({ className, ...props }: ComponentProps<"div">) {
       <Container
         className={cn("flex w-full items-center justify-between", className)}
       >
-        <p className="text-2xl font-bold text-blue-500">UpSkill</p>
+        <Logo />
         <div className=" hidden gap-10 md:flex">
           {navlinks.map((navlink, index: number) => (
             <Navlink key={`navlink ${index}`} href={navlink.href}>
