@@ -1,8 +1,8 @@
 import AboutUsSVG from "@/components/about-us-svg";
 import Container from "@/components/container";
 import Image from "next/image";
-import Values from "../_components/values";
-import Mission from "../_components/mission";
+import Values from "@/app/_components/values";
+import Mission from "@/app/_components/mission";
 
 export default function Page() {
   return (
