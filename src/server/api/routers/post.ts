@@ -8,6 +8,8 @@ import {
 
 import { imagekit, db } from "@/server/db";
 import _ from "lodash";
+import LoginSchema from "@/schema/login";
+import RegisterSchema from "@/schema/register";
 
 export const postRouter = createTRPCRouter({
   createCourse: publicProcedure
@@ -179,6 +181,14 @@ export const postRouter = createTRPCRouter({
           async (tech) => await imagekit.deleteFile(tech.logoId),
         ),
       );
+    }),
+  login: publicProcedure.input(LoginSchema).mutation(async ({ input }) => {
+    console.log(input);
+  }),
+  register: publicProcedure
+    .input(RegisterSchema)
+    .mutation(async ({ input }) => {
+      console.log(input);
     }),
   // hello: publicProcedure
   //   .input(z.object({ text: z.string() }))

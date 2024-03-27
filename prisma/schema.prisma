@@ -63,7 +63,14 @@ model Session {
 
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
+  firstName     String
+  lastName      String
+  username      String
+  birthDay      String
+  role          String
+  gender        String
+  phone         String
+  password      String
   email         String?   @unique
   emailVerified DateTime?
   image         String?
