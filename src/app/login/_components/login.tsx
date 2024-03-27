@@ -10,7 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useController, useForm } from "react-hook-form";
-import { HiArrowRightOnRectangle, HiOutlineUser } from "react-icons/hi2";
+import {
+  HiArrowLeftOnRectangle,
+  HiArrowRightOnRectangle,
+  HiOutlineUser,
+} from "react-icons/hi2";
 import type { z } from "zod";
 
 export default function Login() {
@@ -108,12 +112,12 @@ export default function Login() {
         Not ready to login? Go home.
       </Link>
       <Button className="flex gap-2">
-        <HiArrowRightOnRectangle />
+        <HiArrowLeftOnRectangle className="text-base" />
         Login
       </Button>
       <Button variant="outline" className="flex gap-2" asChild>
         <Link href="/register">
-          <HiOutlineUser />
+          <HiOutlineUser className="text-base" />
           Register
         </Link>
       </Button>

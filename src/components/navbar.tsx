@@ -35,7 +35,7 @@ export default function Navbar({ className, ...props }: ComponentProps<"div">) {
           <EclipseButton />
           <Button variant="default" className="flex gap-2" asChild>
             <Link href="/login">
-              <HiArrowLeftOnRectangle />
+              <HiArrowLeftOnRectangle className="text-base" />
               <p>Sign in</p>
             </Link>
           </Button>
