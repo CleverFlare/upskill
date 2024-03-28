@@ -65,7 +65,7 @@ model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   firstName     String
   lastName      String
-  username      String
+  username      String    @unique
   birthDay      String
   role          String
   gender        String

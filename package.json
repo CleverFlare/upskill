@@ -34,6 +34,7 @@
     "@trpc/next": "^10.43.6",
     "@trpc/react-query": "^10.43.6",
     "@trpc/server": "^10.43.6",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^3.6.0",
@@ -51,6 +52,7 @@
     "react-icons": "^4.12.0",
     "react-number-format": "^5.3.4",
     "server-only": "^0.0.1",
+    "sonner": "^1.4.41",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
@@ -59,6 +61,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.3",
+    "@types/bcrypt": "^5.0.2",
     "@types/eslint": "^8.44.7",
     "@types/lodash": "^4.17.0",
     "@types/node": "^18.17.0",

@@ -12,6 +12,10 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { api } from "@/trpc/react";
 import { LuLoader2 } from "react-icons/lu";
+import { signIn } from "next-auth/react";
+import { toast } from "sonner";
+import { HiExclamationTriangle } from "react-icons/hi2";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [stepNumber, setStepNumber] = useState<number>(0);
@@ -19,6 +23,7 @@ export default function Page() {
     control,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
   });
@@ -29,9 +34,38 @@ export default function Page() {
   const lastStep = stepNumber >= steps.length - 1;
   const firstStep = stepNumber <= 0;
 
-  const { mutate, isLoading } = api.post.register.useMutation();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
+
+  const { mutate } = api.post.register.useMutation({
+    onSuccess: async () => {
+      try {
+        const values = getValues();
+        const res = await signIn("credentials", {
+          username: values.username,
+          password: values.password,
+          redirect: false,
+        });
+        setIsLoading(false);
+        if (!res?.ok)
+          toast(
+            <div className="flex gap-2">
+              <HiExclamationTriangle className="text-2xl text-destructive" />
+              <p className="text-destructive">Something Went Wrong!</p>
+            </div>,
+          );
+        else {
+          router.refresh();
+          router.push("/");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
 
   function submitData(data: z.infer<typeof RegisterSchema>) {
+    setIsLoading(true);
     mutate(data);
   }
 

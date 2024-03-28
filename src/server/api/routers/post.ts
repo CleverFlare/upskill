@@ -10,6 +10,7 @@ import { imagekit, db } from "@/server/db";
 import _ from "lodash";
 import LoginSchema from "@/schema/login";
 import RegisterSchema from "@/schema/register";
+import bcrypt from "bcrypt";
 
 export const postRouter = createTRPCRouter({
   createCourse: publicProcedure
@@ -182,13 +183,38 @@ export const postRouter = createTRPCRouter({
         ),
       );
     }),
-  login: publicProcedure.input(LoginSchema).mutation(async ({ input }) => {
-    console.log(input);
-  }),
   register: publicProcedure
     .input(RegisterSchema)
     .mutation(async ({ input }) => {
-      console.log(input);
+      const {
+        role,
+        email,
+        firstName,
+        lastName,
+        phone,
+        gender,
+        birthDay,
+        username,
+        password,
+      } = input;
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const createdUser = await db.user.create({
+        data: {
+          role,
+          email,
+          firstName,
+          lastName,
+          gender,
+          phone,
+          birthDay: birthDay.toISOString(),
+          username,
+          password: hashedPassword,
+        },
+      });
+
+      return createdUser;
     }),
   // hello: publicProcedure
   //   .input(z.object({ text: z.string() }))

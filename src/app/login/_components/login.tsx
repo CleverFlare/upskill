@@ -10,12 +10,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useController, useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
 import {
   HiArrowLeftOnRectangle,
-  HiArrowRightOnRectangle,
+  HiExclamationCircle,
+  HiExclamationTriangle,
   HiOutlineUser,
 } from "react-icons/hi2";
 import type { z } from "zod";
+import { useState } from "react";
+import { LuLoader2 } from "react-icons/lu";
+import { toast } from "sonner";
 
 export default function Login() {
   const {
@@ -48,17 +53,34 @@ export default function Login() {
     name: "password",
   });
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const router = useRouter();
 
-  const { mutate: login } = api.post.login.useMutation({
-    onSuccess: () => {
-      router.refresh();
-      router.push("/");
-    },
-  });
+  async function submitData(data: z.infer<typeof LoginSchema>) {
+    try {
+      setIsLoading(true);
 
-  function submitData(data: z.infer<typeof LoginSchema>) {
-    login(data);
+      const res = await signIn("credentials", {
+        username: data.username,
+        password: data.password,
+        redirect: false,
+      });
+
+      setIsLoading(false);
+
+      if (!res?.ok)
+        toast.error(
+          <div className="flex gap-2">
+            <HiExclamationCircle className="text-2xl text-destructive" />
+            <p className="font-bold text-destructive">{res?.error}</p>
+          </div>,
+        );
+      else router.refresh();
+      router.push("/");
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -94,6 +116,7 @@ export default function Login() {
         <Input
           placeholder="password..."
           id="password-field"
+          type="password"
           value={passwordValue}
           onChange={(e) => passwordChange(e.target.value)}
           onBlur={() => passwordBlur()}
@@ -111,8 +134,9 @@ export default function Login() {
       <Link href="/" className="text-sm text-primary hover:underline">
         Not ready to login? Go home.
       </Link>
-      <Button className="flex gap-2">
-        <HiArrowLeftOnRectangle className="text-base" />
+      <Button className="flex gap-2" disabled={isLoading}>
+        {!isLoading && <HiArrowLeftOnRectangle className="text-base" />}
+        {isLoading && <LuLoader2 className="animate-spin" />}
         Login
       </Button>
       <Button variant="outline" className="flex gap-2" asChild>
