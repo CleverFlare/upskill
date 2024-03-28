@@ -186,30 +186,14 @@ export const postRouter = createTRPCRouter({
   register: publicProcedure
     .input(RegisterSchema)
     .mutation(async ({ input }) => {
-      const {
-        role,
-        email,
-        firstName,
-        lastName,
-        phone,
-        gender,
-        birthDay,
-        username,
-        password,
-      } = input;
+      const { birthDay, password, ...restInput } = input;
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const createdUser = await db.user.create({
         data: {
-          role,
-          email,
-          firstName,
-          lastName,
-          gender,
-          phone,
+          ...restInput,
           birthDay: birthDay.toISOString(),
-          username,
           password: hashedPassword,
         },
       });

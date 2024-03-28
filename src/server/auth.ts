@@ -83,9 +83,12 @@ export const authOptions: NextAuthOptions = {
 
           if (!isCorrectPassword) throw new Error("Invalid password");
 
+          if (user.role === "instructor" && !user.isActive)
+            throw new Error("Invalid username");
+
           return { username: user.username, id: user.id, role: user.role };
         } catch (err) {
-          throw Error("Invalid username");
+          throw new Error("Invalid username");
         }
       },
     }),

@@ -14,7 +14,6 @@ import { signIn } from "next-auth/react";
 import {
   HiArrowLeftOnRectangle,
   HiExclamationCircle,
-  HiExclamationTriangle,
   HiOutlineUser,
 } from "react-icons/hi2";
 import type { z } from "zod";
@@ -76,8 +75,10 @@ export default function Login() {
             <p className="font-bold text-destructive">{res?.error}</p>
           </div>,
         );
-      else router.refresh();
-      router.push("/");
+      else {
+        router.refresh();
+        router.push("/");
+      }
     } catch (err) {
       console.log(err);
     }

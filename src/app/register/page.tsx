@@ -56,7 +56,8 @@ export default function Page() {
           );
         else {
           router.refresh();
-          router.push("/");
+          if (values.role === "instructor") router.push("/submit-success");
+          else router.push("/");
         }
       } catch (err) {
         console.log(err);

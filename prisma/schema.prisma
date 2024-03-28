@@ -71,7 +71,8 @@ model User {
   gender        String
   phone         String
   password      String
-  email         String?   @unique
+  email         String    @unique
+  isActive      Boolean   @default(false)
   emailVerified DateTime?
   image         String?
   accounts      Account[]
