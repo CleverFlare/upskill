@@ -65,7 +65,7 @@ export default function SelectInput<T extends FieldValues>({
             !!error
               ? "border border-destructive focus:ring-destructive"
               : "focus:ring-primary",
-            error ? "" : "text-gray-500",
+            value ? "" : "text-gray-500",
           )}
           ref={ref}
           onBlur={() => onBlur()}
