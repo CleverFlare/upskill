@@ -5,7 +5,7 @@ import StepLine from "./_components/step-line";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import RegisterSchema from "@/schema/register";
-import { useState } from "react";
+import { LegacyRef, useRef, useState } from "react";
 import steps from "./_components/steps";
 import type { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [stepNumber, setStepNumber] = useState<number>(0);
+  const formRef = useRef<HTMLFormElement | undefined>();
   const {
     control,
     handleSubmit,
@@ -75,6 +76,7 @@ export default function Page() {
       <form
         className="flex w-full max-w-[400px] flex-col gap-4"
         onSubmit={handleSubmit(submitData)}
+        ref={formRef as LegacyRef<HTMLFormElement>}
       >
         <div className="flex w-full items-center">
           {steps.map(({ error }, index: number) => {
@@ -120,9 +122,12 @@ export default function Page() {
             Previous
           </Button>
           <Button
-            type={lastStep ? "submit" : "button"}
+            type="button"
             disabled={isLoading}
-            onClick={() => setStepNumber((num) => (lastStep ? num : ++num))}
+            onClick={() => {
+              setStepNumber((num) => (lastStep ? num : ++num));
+              if (lastStep) formRef.current?.requestSubmit();
+            }}
           >
             {isLoading && <LuLoader2 className="me-2 animate-spin" />}
             {stepNumber >= steps.length - 1 ? "Submit" : "Next"}
