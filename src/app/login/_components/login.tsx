@@ -1,15 +1,10 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import LoginSchema from "@/schema/login";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useController, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import {
   HiArrowLeftOnRectangle,
@@ -20,36 +15,11 @@ import type { z } from "zod";
 import { useState } from "react";
 import { LuLoader2 } from "react-icons/lu";
 import { toast } from "sonner";
+import FieldInput from "@/components/input/field";
 
 export default function Login() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<z.infer<typeof LoginSchema>>({
+  const { control, handleSubmit } = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
-  });
-  const {
-    field: {
-      value: usernameValue,
-      onChange: usernameChange,
-      onBlur: usernameBlur,
-      ref: usernameRef,
-    },
-  } = useController({
-    control,
-    name: "username",
-  });
-  const {
-    field: {
-      value: passwordValue,
-      onChange: passwordChange,
-      onBlur: passwordBlur,
-      ref: passwordRef,
-    },
-  } = useController({
-    control,
-    name: "password",
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -89,49 +59,21 @@ export default function Login() {
       onSubmit={handleSubmit(submitData)}
       className="flex flex-col gap-[inherit]"
     >
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="username-field" required>
-          Username
-        </Label>
-        <Input
-          placeholder="username..."
-          id="username-field"
-          value={usernameValue}
-          onChange={(e) => usernameChange(e.target.value)}
-          onBlur={() => usernameBlur()}
-          ref={usernameRef}
-          className={cn(
-            errors?.username
-              ? "border border-destructive focus-visible:ring-destructive"
-              : "",
-          )}
-        />
-        {!!errors?.username && (
-          <p className="text-sm text-destructive">{errors.username.message}</p>
-        )}
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="password-field" required>
-          Password
-        </Label>
-        <Input
-          placeholder="password..."
-          id="password-field"
-          type="password"
-          value={passwordValue}
-          onChange={(e) => passwordChange(e.target.value)}
-          onBlur={() => passwordBlur()}
-          ref={passwordRef}
-          className={cn(
-            errors?.password
-              ? "border border-destructive focus-visible:ring-destructive"
-              : "",
-          )}
-        />
-        {!!errors?.password && (
-          <p className="text-sm text-destructive">{errors.password.message}</p>
-        )}
-      </div>
+      <FieldInput
+        control={control}
+        name="username"
+        label="Username"
+        placeholder="username..."
+        required
+      />
+      <FieldInput
+        control={control}
+        name="password"
+        label="Password"
+        placeholder="password..."
+        type="password"
+        required
+      />
       <Link href="/" className="text-sm text-primary hover:underline">
         Not ready to login? Go home.
       </Link>

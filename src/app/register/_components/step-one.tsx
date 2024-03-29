@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type RegisterSchema from "@/schema/register";
 import Image from "next/image";
-import { useController, type Control, type FieldErrors } from "react-hook-form";
+import { useController, type Control } from "react-hook-form";
 import type { z } from "zod";
 
 export interface StepType {
