@@ -37,7 +37,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const { mutate } = api.post.register.useMutation({
+  const { mutate } = api.auth.register.useMutation({
     onSuccess: async () => {
       try {
         const values = getValues();

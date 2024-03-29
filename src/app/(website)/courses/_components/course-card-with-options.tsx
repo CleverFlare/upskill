@@ -28,7 +28,7 @@ export default function CourseCardWithActions({
 }: CourseCardWithActionsProps) {
   const [deleted, setDeleted] = useState<boolean>(false);
   const router = useRouter();
-  const { mutate } = api.post.deleteCourse.useMutation({
+  const { mutate } = api.course.delete.useMutation({
     onSuccess: () => {
       router.refresh();
     },

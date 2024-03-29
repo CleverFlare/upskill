@@ -46,7 +46,7 @@ export default function ClientPage({
 
   const router = useRouter();
 
-  const updateCourse = api.post.updateCourse.useMutation({
+  const updateCourse = api.course.update.useMutation({
     onSuccess: () => {
       router.push("/courses");
     },

@@ -33,7 +33,7 @@ export default function Page() {
 
   const router = useRouter();
 
-  const createCourse = api.post.createCourse.useMutation({
+  const createCourse = api.course.create.useMutation({
     onSuccess: () => {
       router.refresh();
       router.push("/courses");
