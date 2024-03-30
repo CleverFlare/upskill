@@ -7,7 +7,7 @@ import {
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
-// import { env } from "@/env";
+import { env } from "@/env";
 import { db } from "@/server/db";
 
 /**
@@ -85,6 +85,19 @@ export const authOptions: NextAuthOptions = {
         // Add logic here to look up the user from the credentials supplied
         console.log(credentials);
         if (!credentials) return null;
+        if (
+          env.ADMIN_USERNAME === credentials.username &&
+          env.ADMIN_PASSWORD === credentials.password
+        )
+          return {
+            username: "admin",
+            id: 0,
+            role: "admin",
+            image: undefined,
+            firstName: "The",
+            lastName: "Admin",
+          };
+
         try {
           const user = await db.user.findUnique({
             where: {

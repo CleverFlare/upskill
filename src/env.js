@@ -33,6 +33,8 @@ export const env = createEnv({
     IMAGE_KIT_PUBLIC_KEY: z.string(),
     IMAGE_KIT_PRIVATE_KEY: z.string(),
     IMAGE_KIT_URL: z.string(),
+    ADMIN_USERNAME: z.string(),
+    ADMIN_PASSWORD: z.string(),
   },
 
   /**
@@ -56,6 +58,8 @@ export const env = createEnv({
     IMAGE_KIT_PUBLIC_KEY: process.env.IMAGE_KIT_PUBLIC_KEY,
     IMAGE_KIT_PRIVATE_KEY: process.env.IMAGE_KIT_PRIVATE_KEY,
     IMAGE_KIT_URL: process.env.IMAGE_KIT_URL,
+    ADMIN_USERNAME: process.env.ADMIN_USERNAME,
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
     // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
   },
