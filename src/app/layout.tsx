@@ -1,13 +1,12 @@
 import "@/app/globals.css";
-
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
-
 import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Provider } from "jotai";
 import { Toaster } from "@/components/ui/sonner";
+import Providers from "./session-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,12 +31,14 @@ export default function RootLayout({
         className={cn("flex min-h-screen flex-col font-sans", inter.variable)}
       >
         <Provider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <TRPCReactProvider cookies={cookies().toString()}>
-              {children}
-              <Toaster />
-            </TRPCReactProvider>
-          </ThemeProvider>
+          <Providers>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <TRPCReactProvider cookies={cookies().toString()}>
+                {children}
+                <Toaster />
+              </TRPCReactProvider>
+            </ThemeProvider>
+          </Providers>
         </Provider>
       </body>
     </html>

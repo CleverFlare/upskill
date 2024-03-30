@@ -1,6 +1,6 @@
 "use client";
 import Link, { type LinkProps } from "next/link";
-import { Button, type ButtonProps } from "./ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 
 type NavlinkProps = ButtonProps & LinkProps & { buttonClassName?: string };

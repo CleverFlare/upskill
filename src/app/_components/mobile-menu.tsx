@@ -1,10 +1,10 @@
 "use client";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { HiArrowRightOnRectangle, HiBars3 } from "react-icons/hi2";
-import EclipseButton from "./eclipse-button";
-import Navlink from "./navlink";
-import { Separator } from "./ui/separator";
+import EclipseButton from "@/app/_components/_parts/eclipse-button";
+import Navlink from "@/app/_components/_parts/navlink";
+import { Separator } from "@/components/ui/separator";
 import { useAtom } from "jotai";
 import { navigationLinks } from "@/data/navigation";
 

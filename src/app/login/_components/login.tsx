@@ -16,6 +16,7 @@ import { useState } from "react";
 import { LuLoader2 } from "react-icons/lu";
 import { toast } from "sonner";
 import FieldInput from "@/components/input/field";
+import { revalidatePath } from "next/cache";
 
 export default function Login() {
   const { control, handleSubmit } = useForm<z.infer<typeof LoginSchema>>({
@@ -47,7 +48,7 @@ export default function Login() {
         );
       else {
         router.refresh();
-        router.push("/");
+        revalidatePath("/");
       }
     } catch (err) {
       console.log(err);

@@ -1,6 +1,6 @@
 "use client";
 import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi2";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 
 export default function EclipseButton() {

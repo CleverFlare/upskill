@@ -1,19 +1,20 @@
-// import Link from "next/link";
-
 import Container from "@/components/container";
 import HomeSVG from "@/components/home-svg";
 import { Button } from "@/components/ui/button";
+import { getServerAuthSession } from "@/server/auth";
 import Link from "next/link";
-import { HiArrowLeftOnRectangle, HiArrowRight } from "react-icons/hi2";
+import {
+  HiArrowLeftOnRectangle,
+  HiArrowRight,
+  HiOutlineWindow,
+} from "react-icons/hi2";
 
 // import { CreatePost } from "@/app/_components/create-post";
 // import { getServerAuthSession } from "@/server/auth";
 // import { api } from "@/trpc/server";
 
 export default async function Home() {
-  // const hello = await api.post.hello.query({ text: "from tRPC" });
-  // const session = await getServerAuthSession();
-
+  const session = await getServerAuthSession();
   return (
     <main className="flex flex-1 overflow-hidden">
       <Container className="relative flex h-auto flex-1 flex-col py-5">
@@ -35,12 +36,22 @@ export default async function Home() {
                 <HiArrowRight className="text-lg" />
               </Link>
             </Button>
-            <Button className="flex gap-2" asChild>
-              <Link href="/login">
-                <HiArrowLeftOnRectangle className="text-lg" />
-                Sign in now
-              </Link>
-            </Button>
+            {!session && (
+              <Button className="flex gap-2" asChild>
+                <Link href="/login">
+                  <HiArrowLeftOnRectangle className="text-lg" />
+                  Sign in now
+                </Link>
+              </Button>
+            )}
+            {!!session && (
+              <Button className="flex gap-2" asChild>
+                <Link href="/workspace">
+                  <HiOutlineWindow className="text-base" />
+                  Your Workspace
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
         <div className="absolute -right-[600px] -top-[100px] hidden aspect-square h-[1360px] lg:block">

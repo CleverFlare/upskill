@@ -21,14 +21,27 @@ declare module "next-auth" {
     user: {
       id: string;
       // ...other properties
-      // role: UserRole;
+      role: "student" | "instructor" | "admin";
+      username: string;
+      firstName: string;
+      lastName: string;
+      image?: string;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    // ...other properties
+    // role: "student" | "instructor" | "admin";
+    // username: string;
+    id: string;
+    role: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    image?: string;
+    // username: string;
+    // password: string;
+  }
 }
 
 /**
@@ -38,18 +51,22 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: async ({ session, token }) => {
+      session.user = token.user;
+      return Promise.resolve(session);
+    },
+    jwt: async ({ token, user }) => {
+      user && (token.user = user);
+      return Promise.resolve(token);
+    },
+  },
+  session: {
+    strategy: "jwt",
   },
   adapter: PrismaAdapter(db),
   providers: [
     CredentialsProvider({
-      id: "credentials",
+      // id: "credentials",
       name: "Credentials",
       credentials: {
         username: {
@@ -66,6 +83,7 @@ export const authOptions: NextAuthOptions = {
 
       async authorize(credentials, _) {
         // Add logic here to look up the user from the credentials supplied
+        console.log(credentials);
         if (!credentials) return null;
         try {
           const user = await db.user.findUnique({
@@ -86,7 +104,16 @@ export const authOptions: NextAuthOptions = {
           if (user.role === "instructor" && !user.isActive)
             throw new Error("Invalid username");
 
-          return { username: user.username, id: user.id, role: user.role };
+          const result = {
+            username: user.username,
+            id: user.id,
+            role: user.role,
+            image: user.image,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          };
+          console.log(result);
+          return result;
         } catch (err) {
           throw new Error("Invalid username");
         }
