@@ -3,7 +3,7 @@ import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
-  TokenSet,
+  Awaitable,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
@@ -28,7 +28,7 @@ declare module "next-auth" {
       firstName: string;
       lastName: string;
       image?: string;
-    } & DefaultSession["user"];
+    };
   }
 
   interface User {
@@ -98,6 +98,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
 
+      // @ts-expect-error Out of my hand, the maintainers of NextAuth should solve this TypeScript error
       async authorize(credentials, _) {
         // Add logic here to look up the user from the credentials supplied
         console.log(credentials);
@@ -108,7 +109,7 @@ export const authOptions: NextAuthOptions = {
         )
           return {
             username: "admin",
-            id: 0,
+            id: "0",
             role: "admin",
             image: undefined,
             firstName: "The",
@@ -142,7 +143,6 @@ export const authOptions: NextAuthOptions = {
             firstName: user.firstName,
             lastName: user.lastName,
           };
-          console.log(result);
           return result;
         } catch (err) {
           throw new Error("Invalid username");
