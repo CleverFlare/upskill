@@ -3,12 +3,14 @@ import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
+  TokenSet,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
 import { env } from "@/env";
 import { db } from "@/server/db";
+import { type JWT } from "next-auth/jwt";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -17,7 +19,7 @@ import { db } from "@/server/db";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  interface Session extends DefaultSession {
+  interface Session {
     user: {
       id: string;
       // ...other properties
@@ -34,7 +36,7 @@ declare module "next-auth" {
     // role: "student" | "instructor" | "admin";
     // username: string;
     id: string;
-    role: string;
+    role: "student" | "instructor" | "admin";
     username: string;
     firstName: string;
     lastName: string;
@@ -42,6 +44,21 @@ declare module "next-auth" {
     // username: string;
     // password: string;
   }
+}
+
+interface Token extends JWT {
+  sub?: string;
+  name?: string;
+  email?: string;
+  picture?: string;
+  user: {
+    id: string;
+    role: "student" | "instructor" | "admin";
+    username: string;
+    firstName: string;
+    lastName: string;
+    image?: string;
+  };
 }
 
 /**
@@ -52,7 +69,7 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, token }) => {
-      session.user = token.user;
+      session.user = (token as Token).user;
       return Promise.resolve(session);
     },
     jwt: async ({ token, user }) => {
