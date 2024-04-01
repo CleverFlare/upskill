@@ -20,7 +20,7 @@ export default function StepLine({
           ? isError
             ? "bg-destructive"
             : "bg-primary"
-          : "bg-gray-200 dark:bg-gray-500",
+          : "bg-[hsl(var(--border))]",
         className,
       )}
       {...props}
