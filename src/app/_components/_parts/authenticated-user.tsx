@@ -82,7 +82,7 @@ export default function AuthenticatedUser({
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="text-destructive focus:bg-destructive-foreground focus:text-destructive"
+          className="text-destructive focus:bg-destructive/10 focus:text-destructive"
           onClick={handleSignOut}
         >
           <HiArrowRightOnRectangle className="me-2 text-base" />
