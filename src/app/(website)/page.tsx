@@ -18,18 +18,18 @@ export default async function Home() {
   return (
     <main className="flex flex-1 overflow-hidden">
       <Container className="relative flex h-auto flex-1 flex-col py-5">
-        <div className="z-10 mt-[150px] flex w-full flex-col gap-6 lg:w-1/2">
-          <h1 className="text-4xl font-bold sm:text-6xl">
+        <div className="z-10 flex h-full w-full flex-col items-center justify-center gap-6 lg:mt-[150px] lg:h-auto lg:w-1/2 lg:items-start lg:justify-normal">
+          <h1 className="text-center text-4xl font-bold sm:text-6xl lg:text-start">
             <span className="text-primary">Learn from the best</span> and get
             ahead in your field
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-center text-gray-600 lg:text-start dark:text-gray-400">
             Welcome to Upskill, the only platform you need to unlock your true
             potential and land your dream job, you’ll find all the necessary
             skills required for your career in comprehensible set of courses
             instructed by leading names in the fields.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <Button variant="ghost" asChild className="flex gap-2">
               <Link href="about-us">
                 Learn More About Us
