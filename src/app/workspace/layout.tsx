@@ -10,7 +10,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
   if (!session) redirect("/");
 
   return (
-    <div className="grid h-screen grid-cols-[270px_1fr] grid-rows-[auto_1fr]">
+    <div className="flex h-screen flex-col lg:grid lg:grid-cols-[270px_1fr] lg:grid-rows-[auto_1fr]">
       <Sidebar />
       <Topbar />
       <div className="col-start-2 row-start-2 overflow-y-auto px-4 py-4">
