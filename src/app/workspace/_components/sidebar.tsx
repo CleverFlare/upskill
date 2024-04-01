@@ -1,7 +1,10 @@
+"use client";
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   HiArrowRightOnRectangle,
   HiArrowUturnLeft,
@@ -9,9 +12,14 @@ import {
   HiOutlineMegaphone,
 } from "react-icons/hi2";
 
-export default function Sidebar() {
+function SidebarItems() {
+  const router = useRouter();
+  async function handleSignOut() {
+    await signOut({ redirect: false });
+    router.refresh();
+  }
   return (
-    <div className="row-span-2 flex h-full w-[270px] flex-col gap-6 bg-gray-50 p-5">
+    <>
       <Logo />
       <div className="flex flex-col gap-2">
         <p className="text-xs font-bold uppercase text-gray-700 dark:text-gray-400">
@@ -39,11 +47,27 @@ export default function Sidebar() {
             Back to website
           </Link>
         </Button>
-        <Button variant="destructive" className="flex w-full gap-2">
+        <Button
+          variant="destructive"
+          className="flex w-full gap-2"
+          onClick={() => handleSignOut()}
+        >
           <HiArrowRightOnRectangle />
           Sign Out
         </Button>
       </div>
+    </>
+  );
+}
+
+export default function Sidebar() {
+  return (
+    <div className="row-span-2 flex h-full w-[270px] flex-col gap-6 bg-slate-50 p-5 dark:bg-gray-900">
+      <SidebarItems />
     </div>
   );
+}
+
+export function SidebarDrawerButton() {
+  return <></>;
 }
