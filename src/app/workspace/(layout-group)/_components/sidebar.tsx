@@ -14,24 +14,48 @@ import {
 } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
 import tabs from "./tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface TabButtonProps {
   checkedIcon: ReactNode;
   uncheckedIcon: ReactNode;
   name: string;
   href: string;
+  isAdmin?: boolean;
 }
 
-function TabButton({ uncheckedIcon, checkedIcon, name, href }: TabButtonProps) {
+function TabButton({
+  uncheckedIcon,
+  checkedIcon,
+  isAdmin,
+  name,
+  href,
+}: TabButtonProps) {
   const [checked, setChecked] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const path: string = usePathname();
+  const pathArray = path
+    .trim()
+    .replace(/^\/+|\/+$/g, "")
+    .split("/");
+
+  const currentPath = `/${pathArray[0]}/${pathArray[1]}${href.replace(
+    /\/+$/g,
+    "",
+  )}`;
 
   useEffect(() => {
-    if (path.includes(`/workspace${href}`)) setChecked(true);
+    if (path === currentPath) setChecked(true);
     else setChecked(false);
-    console.log(path);
+
+    setIsLoading(false);
   }, [path]);
+
+  if (isAdmin && pathArray[1] !== "admin") return;
+  if (!isAdmin && pathArray[1] === "admin") return;
+
+  if (isLoading) return <Skeleton className="h-10 w-full rounded-lg" />;
 
   return (
     <Button
@@ -40,7 +64,7 @@ function TabButton({ uncheckedIcon, checkedIcon, name, href }: TabButtonProps) {
       size="lg"
       asChild
     >
-      <Link href={`/workspace${href}`}>
+      <Link href={currentPath}>
         {checked && checkedIcon}
         {!checked && uncheckedIcon}
         {name}
@@ -57,6 +81,7 @@ function SidebarItems() {
     await signOut({ redirect: false });
     router.refresh();
   }
+  const path = usePathname();
   return (
     <>
       <Logo />
@@ -70,9 +95,8 @@ function SidebarItems() {
         <p className="text-xs font-bold uppercase text-gray-700 dark:text-gray-400">
           section
         </p>
-        {tabs.map((tab) => (
-          <TabButton {...tab} />
-        ))}
+        {!path && "Loading..."}
+        {!!path && tabs.map((tab) => <TabButton {...tab} />)}
       </div>
       <div className="mt-auto flex w-full flex-col gap-3">
         <Button variant="outline" className="flex w-full gap-2" asChild>
