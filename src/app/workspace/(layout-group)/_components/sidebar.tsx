@@ -11,6 +11,7 @@ import {
   HiArrowRightOnRectangle,
   HiArrowUturnLeft,
   HiBars3,
+  HiOutlineUser,
 } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
 import tabs from "./tabs";
@@ -82,24 +83,36 @@ function SidebarItems() {
     router.refresh();
   }
   const path = usePathname();
+  const pathArray = path
+    .trim()
+    .replace(/^\/+|\/$/g, "")
+    .split("/");
+  const isAdmin = pathArray[1] === "admin";
   return (
     <>
       <Logo />
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-bold uppercase text-gray-700 dark:text-gray-400">
-          progress
-        </p>
-        <Progress value={50} />
-      </div>
+      {!isAdmin && (
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-bold uppercase text-gray-700 dark:text-gray-400">
+            progress
+          </p>
+          <Progress value={50} />
+        </div>
+      )}
       <div className="flex flex-col gap-3">
         <p className="text-xs font-bold uppercase text-gray-700 dark:text-gray-400">
           section
         </p>
-        {!path && "Loading..."}
-        {!!path && tabs.map((tab) => <TabButton {...tab} />)}
+        {tabs.map((tab) => (
+          <TabButton {...tab} />
+        ))}
       </div>
       <div className="mt-auto flex w-full flex-col gap-3">
-        <Button variant="outline" className="flex w-full gap-2" asChild>
+        <Button
+          variant="outline"
+          className="flex w-full gap-2 capitalize"
+          asChild
+        >
           <Link href="/">
             <HiArrowUturnLeft />
             Back to website
