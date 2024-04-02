@@ -1,13 +1,7 @@
-import { getServerAuthSession } from "@/server/auth";
-import CourseDetails from "@/app/_components/course-details";
-import { redirect } from "next/navigation";
+import { adminOnly } from "@/server/auth";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Record<string, string | string[]>;
-}) {
-  const session = await getServerAuthSession();
+export default async function Page() {
+  await adminOnly();
 
   return <div>Courses</div>;
 }
