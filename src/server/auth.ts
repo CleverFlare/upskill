@@ -106,7 +106,7 @@ export const authOptions: NextAuthOptions = {
             username: "admin",
             id: "0",
             role: "admin",
-            image: undefined,
+            image: "/avatars/admin.jpg",
             firstName: "The",
             lastName: "Admin",
           };

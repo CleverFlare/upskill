@@ -1,14 +1,8 @@
 import type { ReactNode } from "react";
 import Sidebar from "./_components/sidebar";
 import Topbar from "./_components/topbar";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 
 export default async function Layout({ children }: { children: ReactNode }) {
-  const session = await getServerSession();
-
-  if (!session) redirect("/");
-
   return (
     <div className="flex h-screen flex-col lg:grid lg:grid-cols-[270px_1fr] lg:grid-rows-[auto_1fr]">
       <Sidebar />

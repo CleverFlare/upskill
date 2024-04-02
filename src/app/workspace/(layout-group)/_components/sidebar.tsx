@@ -5,21 +5,55 @@ import { Progress } from "@/components/ui/progress";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { type ReactNode, useState, useEffect } from "react";
 import {
   HiArrowRightOnRectangle,
   HiArrowUturnLeft,
   HiBars3,
-  HiHome,
-  HiOutlineMegaphone,
 } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
+import tabs from "./tabs";
+
+interface TabButtonProps {
+  checkedIcon: ReactNode;
+  uncheckedIcon: ReactNode;
+  name: string;
+  href: string;
+}
+
+function TabButton({ uncheckedIcon, checkedIcon, name, href }: TabButtonProps) {
+  const [checked, setChecked] = useState<boolean>(false);
+
+  const path: string = usePathname();
+
+  useEffect(() => {
+    if (path.includes(`/workspace${href}`)) setChecked(true);
+    else setChecked(false);
+    console.log(path);
+  }, [path]);
+
+  return (
+    <Button
+      variant={checked ? "default" : "ghost"}
+      className="justify-start gap-2 px-4"
+      size="lg"
+      asChild
+    >
+      <Link href={`/workspace${href}`}>
+        {checked && checkedIcon}
+        {!checked && uncheckedIcon}
+        {name}
+      </Link>
+    </Button>
+  );
+}
 
 function SidebarItems() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   async function handleSignOut() {
+    setIsLoading(true);
     await signOut({ redirect: false });
     router.refresh();
   }
@@ -36,14 +70,9 @@ function SidebarItems() {
         <p className="text-xs font-bold uppercase text-gray-700 dark:text-gray-400">
           section
         </p>
-        <Button className="justify-start gap-2 px-4" size="lg">
-          <HiHome className="text-base" />
-          Home
-        </Button>
-        <Button variant="ghost" className="justify-start gap-2 px-4" size="lg">
-          <HiOutlineMegaphone className="text-base" />
-          Announcements
-        </Button>
+        {tabs.map((tab) => (
+          <TabButton {...tab} />
+        ))}
       </div>
       <div className="mt-auto flex w-full flex-col gap-3">
         <Button variant="outline" className="flex w-full gap-2" asChild>
