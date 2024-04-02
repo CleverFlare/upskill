@@ -6,12 +6,14 @@ import { HiPlus } from "react-icons/hi2";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import CourseCardWithActions from "./_components/course-card-with-options";
+import { getServerAuthSession } from "@/server/auth";
 
 export default async function Courses({
   searchParams,
 }: {
   searchParams: Record<string, string | string[]>;
 }) {
+  const session = await getServerAuthSession();
   const searchParam = !!searchParams?.search
     ? Array.isArray(searchParams.search)
       ? searchParams.search[0]
@@ -25,6 +27,8 @@ export default async function Courses({
       },
     },
   });
+
+  const isAdmin = !!session && session.user.role === "admin";
 
   return (
     <Container className="flex flex-col gap-8 py-10">
@@ -45,21 +49,12 @@ export default async function Courses({
             <CourseCardWithActions
               key={`Course ${course.id}`}
               id={course.id}
-              href={`/courses/${course.id}`}
+              href={`/${isAdmin ? "workspace" : "course"}/${course.id}`}
               thumbnailUrl={course.thumbnail}
             >
               {course.name}
             </CourseCardWithActions>
           ))}
-        <Button
-          variant="outline"
-          className="aspect-video h-full w-full rounded-xl border-2 border-dashed border-primary text-primary hover:text-primary"
-          asChild
-        >
-          <Link href="/courses/create" className="flex flex-col gap-4">
-            <HiPlus className="text-3xl" />
-          </Link>
-        </Button>
       </div>
     </Container>
   );

@@ -1,16 +1,16 @@
 import CourseDetails from "@/app/_components/course-details";
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
+import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
 import type { Course } from "@prisma/client";
-import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { HiArrowLeftOnRectangle } from "react-icons/hi2";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   let databaseCourseData: Course | null;
-  const session = await getServerSession();
+  const session = await getServerAuthSession();
 
   try {
     databaseCourseData = await db.course.findUnique({
