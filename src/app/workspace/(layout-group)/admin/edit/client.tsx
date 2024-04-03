@@ -17,6 +17,7 @@ import updateCourseSchema from "@/schema/update-course";
 import filterChange from "@/lib/filter-changes";
 import { toBase64 } from "@/lib/to-base64";
 import { useRouter } from "next/navigation";
+import Breadcrumbs from "../../_components/breadcrumbs";
 
 interface DefaultValuesType {
   banner: string;
@@ -86,6 +87,10 @@ export default function ClientPage({
 
   return (
     <div className="py-5">
+      <Breadcrumbs
+        items={[{ name: "Courses", href: "/workspace/admin" }, "Edit"]}
+        className="mb-4"
+      />
       <form
         className="flex flex-col gap-10"
         onSubmit={handleSubmit(submitData)}

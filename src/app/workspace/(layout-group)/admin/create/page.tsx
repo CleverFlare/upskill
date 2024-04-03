@@ -1,5 +1,4 @@
 "use client";
-import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +15,7 @@ import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
 import Link from "next/link";
+import Breadcrumbs from "../../_components/breadcrumbs";
 
 export default function Page() {
   const {
@@ -71,6 +71,10 @@ export default function Page() {
 
   return (
     <div className="py-5">
+      <Breadcrumbs
+        items={[{ name: "Courses", href: "/workspace/admin" }, "Create"]}
+        className="mb-4"
+      />
       <form
         className="flex flex-col gap-10"
         onSubmit={handleSubmit(submitData)}

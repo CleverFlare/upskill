@@ -15,17 +15,17 @@ type NavigationLinkType = {
 export const navigationLinks = atom<NavigationLinkType[]>([
   {
     title: "Home",
-    icon: <HiOutlineHome className="text-lg" />,
+    icon: <HiOutlineHome className="text-base" />,
     href: "/",
   },
   {
     title: "About Us",
-    icon: <HiOutlineInformationCircle className="text-lg" />,
+    icon: <HiOutlineInformationCircle className="text-base" />,
     href: "/about-us",
   },
   {
     title: "Courses",
-    icon: <HiOutlineRectangleGroup className="text-lg" />,
+    icon: <HiOutlineRectangleGroup className="text-base" />,
     href: "/courses",
   },
 ]);
