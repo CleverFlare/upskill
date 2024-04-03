@@ -85,7 +85,7 @@ export default function ClientPage({
   }
 
   return (
-    <Container className="py-5">
+    <div className="py-5">
       <form
         className="flex flex-col gap-10"
         onSubmit={handleSubmit(submitData)}
@@ -147,6 +147,6 @@ export default function ClientPage({
           </Button>
         </div>
       </form>
-    </Container>
+    </div>
   );
 }

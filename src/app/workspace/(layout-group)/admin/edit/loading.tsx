@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Page() {
   return (
-    <Container className="flex flex-col gap-10 py-5">
+    <div className="flex flex-col gap-10 py-5">
       <div className="flex flex-col gap-10">
         <Skeleton className="h-[217px] w-full" />
         <div className="flex flex-col gap-4">
@@ -57,6 +57,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </Container>
+    </div>
   );
 }
