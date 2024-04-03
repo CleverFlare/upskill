@@ -2,10 +2,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { SidebarDrawerButton } from "./sidebar";
+import { getServerAuthSession } from "@/server/auth";
+import EclipseButton from "@/app/_components/_parts/eclipse-button";
 
-export default function Topbar() {
+export default async function Topbar() {
+  const session = await getServerAuthSession();
   return (
-    <div className="col-end-3 row-start-1 flex w-full gap-4 px-4 py-4">
+    <div className="col-end-3 row-start-1 flex w-full items-center gap-4 px-4 py-4">
       <div className="flex flex-1 items-center gap-4">
         <SidebarDrawerButton />
         <form className="relative w-full max-w-[300px]">
@@ -13,9 +16,13 @@ export default function Topbar() {
           <Input placeholder="Search..." className="w-full ps-8" />
         </form>
       </div>
-      <Avatar>
-        <AvatarImage />
-        <AvatarFallback>AV</AvatarFallback>
+      <EclipseButton />
+      <Avatar className="h-9 w-9">
+        <AvatarImage src={session?.user.image} />
+        <AvatarFallback>
+          {session?.user.firstName[0]?.toUpperCase() ?? "A"}
+          {session?.user.firstName[1]?.toUpperCase() ?? "V"}
+        </AvatarFallback>
       </Avatar>
     </div>
   );

@@ -32,6 +32,8 @@ model Course {
   prerequisites String[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
+  userIDs       String[]     @db.ObjectId
+  users         User[]       @relation(fields: [userIDs], references: [id])
 }
 
 // Necessary for Next auth
@@ -77,6 +79,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  courseIDs     String[]  @db.ObjectId
+  courses       Course[]  @relation(fields: [courseIDs], references: [id])
 }
 
 model VerificationToken {
