@@ -1,9 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { HiMagnifyingGlass } from "react-icons/hi2";
-import { SidebarDrawerButton } from "./sidebar";
 import { getServerAuthSession } from "@/server/auth";
 import EclipseButton from "@/app/_components/_parts/eclipse-button";
+import { SidebarDrawerButton } from "./sidebar";
 
 export default async function Topbar() {
   const session = await getServerAuthSession();

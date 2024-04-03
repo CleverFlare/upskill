@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import Sidebar from "./_components/sidebar";
 import Topbar from "./_components/topbar";
 import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
+import Sidebar from "./_components/sidebar";
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const session = await getServerAuthSession();
