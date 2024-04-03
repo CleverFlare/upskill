@@ -32,7 +32,7 @@ export default async function Page({
   });
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <h2 className="text-4xl font-bold">Courses</h2>
       <p className="text-gray-500">
         Here you can manage all the courses on the platform.

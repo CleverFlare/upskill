@@ -13,6 +13,7 @@ interface Tab {
   checkedIcon: ReactNode;
   permissions: ("admin" | "instructor" | "student")[];
   isAdmin?: boolean;
+  activeOn?: string[];
 }
 
 const tabs: Tab[] = [
@@ -30,6 +31,7 @@ const tabs: Tab[] = [
     checkedIcon: <HiRectangleGroup className="text-base" />,
     permissions: ["admin"],
     isAdmin: true,
+    activeOn: ["/workspace/admin/create", "/workspace/admin/edit"],
   },
 ];
 

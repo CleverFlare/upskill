@@ -11,7 +11,6 @@ import {
   HiArrowRightOnRectangle,
   HiArrowUturnLeft,
   HiBars3,
-  HiOutlineUser,
 } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
 import tabs from "./tabs";
@@ -23,6 +22,7 @@ interface TabButtonProps {
   name: string;
   href: string;
   isAdmin?: boolean;
+  activeOn?: string[];
 }
 
 function TabButton({
@@ -30,6 +30,7 @@ function TabButton({
   checkedIcon,
   isAdmin,
   name,
+  activeOn,
   href,
 }: TabButtonProps) {
   const [checked, setChecked] = useState<boolean>(false);
@@ -47,7 +48,8 @@ function TabButton({
   )}`;
 
   useEffect(() => {
-    if (path === currentPath) setChecked(true);
+    if (path === currentPath || (activeOn && activeOn.includes(path)))
+      setChecked(true);
     else setChecked(false);
 
     setIsLoading(false);
