@@ -53,10 +53,26 @@ export default function CourseDetails({
           team
         </p>
         <div className="box-content flex w-full snap-x snap-mandatory flex-wrap gap-4 overflow-x-auto pb-2 md:overflow-x-visible">
-          <TeamMemberCard />
-          <TeamMemberCard />
-          <TeamMemberCard />
-          <TeamMemberCard />
+          <TeamMemberCard
+            image="/avatars/avatar.jpg"
+            name="Instructor One"
+            role="Head"
+          />
+          <TeamMemberCard
+            image="/avatars/avatar.jpg"
+            name="Instructor One"
+            role="Instructor"
+          />
+          <TeamMemberCard
+            image="/avatars/avatar.jpg"
+            name="Instructor One"
+            role="Instructor"
+          />
+          <TeamMemberCard
+            image="/avatars/avatar.jpg"
+            name="Instructor One"
+            role="Instructor"
+          />
         </div>
       </div>
       <div className="flex flex-col gap-4">

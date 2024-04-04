@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
 import Link from "next/link";
 import Breadcrumbs from "../../_components/breadcrumbs";
+import Instructors from "./_parts/instructors";
 
 export default function Page() {
   const {
@@ -28,6 +29,7 @@ export default function Page() {
     defaultValues: {
       technologies: {},
       prerequisites: [],
+      instructors: [],
     },
   });
 
@@ -119,6 +121,7 @@ export default function Page() {
           name="technologies"
           error={errors?.technologies?.message as string | undefined}
         />
+        <Instructors control={control} name="instructors" />
         <Prerequisites control={control} name="prerequisites" />
         <div className="flex justify-end gap-4">
           <Button variant="outline" type="button" asChild>
