@@ -10,30 +10,32 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import type updateCourseSchema from "@/schema/update-course";
 import Image from "next/image";
 import { type ComponentProps, type ChangeEvent, createRef } from "react";
-import { useController, type Control } from "react-hook-form";
+import {
+  useController,
+  type Control,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 import { HiPhoto } from "react-icons/hi2";
-import type { z } from "zod";
 
-interface ThumbnailProps
+interface ThumbnailProps<T extends FieldValues>
   extends Omit<ComponentProps<"input">, "onChange" | "onError" | "value"> {
   onError: (message: string) => void;
-  control: Control<z.infer<typeof updateCourseSchema>>;
-  name: keyof z.infer<typeof updateCourseSchema>;
-  markError?: boolean;
+  control: Control<T>;
+  name: Path<T>;
 }
 
-export default function Thumbnail({
+export default function Thumbnail<T extends FieldValues>({
   onError,
-  markError,
   control,
   name,
   ...rest
-}: ThumbnailProps) {
+}: ThumbnailProps<T>) {
   const {
     field: { value, onChange, ref, ...field },
+    fieldState: { error },
   } = useController({
     control,
     name,
@@ -47,7 +49,7 @@ export default function Thumbnail({
     if (!e.target.files?.[0]?.type.includes("image"))
       return onError("Non-image file in thumbnail");
     else if (size > 20)
-      return onError(`Your thumbnail image is over 20MB in size`);
+      return onError("Your thumbnail image is over 20MB in size");
 
     onChange(e.target.files[0]);
   }
@@ -58,7 +60,7 @@ export default function Thumbnail({
         <Button
           variant="secondary"
           size="icon"
-          className={cn(markError ? "border border-destructive" : "")}
+          className={cn(!!error ? "border border-destructive" : "")}
         >
           <HiPhoto />
         </Button>
@@ -72,8 +74,8 @@ export default function Thumbnail({
         </DialogHeader>
         <div
           className={cn(
-            "relative aspect-video h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-200",
-            markError ? "border border-destructive" : "",
+            "relative aspect-video max-h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-200",
+            !!error ? "border border-destructive" : "",
           )}
           onClick={() => labelRef.current?.click()}
         >
@@ -85,9 +87,9 @@ export default function Thumbnail({
           {!!value && (
             <Image
               src={
-                value instanceof Blob
-                  ? URL.createObjectURL(value)
-                  : (value as string)
+                typeof value === "string"
+                  ? value
+                  : URL.createObjectURL(value as Blob)
               }
               layout="fill"
               objectFit="cover"
@@ -105,7 +107,7 @@ export default function Thumbnail({
             {...rest}
           />
         </div>
-        <DialogFooter>
+        <DialogFooter className="flex gap-y-4">
           <Button
             variant="outline"
             onClick={() => onChange(undefined)}

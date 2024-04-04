@@ -2,6 +2,7 @@ import { z } from "zod";
 import { publicProcedure } from "@/server/api/trpc";
 import { db, imagekit } from "@/server/db";
 import _ from "lodash";
+// import { Prisma, UserCourse } from "@prisma/client";
 
 export default publicProcedure
   .input(
@@ -20,6 +21,10 @@ export default publicProcedure
         .array()
         .optional(),
       prerequisites: z.string().array().optional(),
+      instructors: z
+        .object({ id: z.string(), role: z.string() })
+        .array()
+        .optional(),
     }),
   )
   .mutation(async ({ input }) => {
@@ -93,9 +98,25 @@ export default publicProcedure
       modifiedData.thumbnailId = storedThumbnail.fileId;
     }
 
+    if (input?.instructors) {
+      await db.userCourse.deleteMany({ where: { courseId: input.id } });
+
+      const instructorRelations = input.instructors.map(({ role, id }) => ({
+        userId: id,
+        role,
+      }));
+
+      modifiedData.users = {
+        createMany: {
+          data: instructorRelations,
+        },
+      };
+    }
+
     modifiedData = { ...input, ...modifiedData };
 
     delete modifiedData.id;
+    delete modifiedData.instructors;
 
     return await db.course.update({
       where: { id: input.id },

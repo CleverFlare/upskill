@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type createCourseSchema from "@/schema/create-course";
 import Image from "next/image";
 import {
   type ComponentProps,
@@ -8,37 +7,40 @@ import {
   type ChangeEvent,
   type ReactNode,
 } from "react";
-import { type Control, useController } from "react-hook-form";
+import {
+  type Control,
+  useController,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 import { HiPencil } from "react-icons/hi2";
-import type { z } from "zod";
 
-interface BannerProps
+interface BannerProps<T extends FieldValues>
   extends Omit<
     ComponentProps<"input">,
     "onChange" | "onError" | "value" | "name"
   > {
-  error?: string;
   onError: (message: string) => void;
-  markError?: boolean;
+  error?: string;
   NameInput?: ReactNode;
   ActionButtons?: ReactNode;
-  control: Control<z.infer<typeof createCourseSchema>>;
-  name: keyof z.infer<typeof createCourseSchema>;
+  control: Control<T>;
+  name: Path<T>;
 }
 
-export default function Banner({
-  error,
+export default function Banner<T extends FieldValues>({
   onError,
-  markError,
+  error: additionalError,
   NameInput,
   ActionButtons,
   control,
   name,
   ...rest
-}: BannerProps) {
+}: BannerProps<T>) {
   const labelRef = createRef<HTMLLabelElement>();
   const {
     field: { onChange, value, ref, ...field },
+    fieldState: { error },
   } = useController({ control, name });
 
   async function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -47,7 +49,7 @@ export default function Banner({
     if (!e.target.files?.[0]?.type.includes("image"))
       return onError("Non-image file in banner");
     else if (size > 20)
-      return onError(`Your banner image is over 20MB in size`);
+      return onError("Your banner image is over 20MB in size");
 
     onChange(e.target.files[0]);
   }
@@ -58,7 +60,7 @@ export default function Banner({
         className={cn(
           "relative h-[217px] w-full overflow-hidden rounded-xl p-5",
           value ? "" : "bg-gray-200 dark:bg-gray-500",
-          markError ? "border border-destructive" : "",
+          !!error ? "border border-destructive" : "",
         )}
       >
         {NameInput}
@@ -72,7 +74,7 @@ export default function Banner({
           <Button
             variant="secondary"
             size="icon"
-            className={cn(markError ? "border border-destructive" : "")}
+            className={cn(!!error ? "border border-destructive" : "")}
             onClick={() => labelRef.current?.click()}
             type="button"
           >
@@ -90,7 +92,11 @@ export default function Banner({
         />
         {!!value && (
           <Image
-            src={URL.createObjectURL(value as Blob)}
+            src={
+              typeof value === "string"
+                ? value
+                : URL.createObjectURL(value as Blob)
+            }
             className="absolute bottom-0 left-0 right-0 top-0 -z-10 h-full w-full bg-gray-200 object-cover object-center"
             width={1168}
             height={217}
@@ -98,9 +104,9 @@ export default function Banner({
           />
         )}
       </div>
-      {!!error && (
+      {(!!error || !!additionalError) && (
         <p className="text-sm text-destructive">
-          {typeof error === "object" ? JSON.stringify(error) : error}
+          {error?.message ?? additionalError}
         </p>
       )}
     </div>

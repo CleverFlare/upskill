@@ -1,15 +1,14 @@
 "use client";
-import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Banner from "./_parts/banner";
-import NameField from "./_parts/name-field";
-import Thumbnail from "./_parts/thumbnail";
-import DescriptionField from "./_parts/description-field";
+import Banner from "../_components/course-manipulation/banner";
+import NameField from "../_components/course-manipulation/name-field";
+import Thumbnail from "../_components/course-manipulation/thumbnail";
+import DescriptionField from "../_components/course-manipulation/description-field";
 import type { z } from "zod";
-import Technologies from "./_parts/technologies";
-import Prerequisites from "./_parts/prerequisites";
+import Technologies from "../_components/course-manipulation/technologies";
+import Prerequisites from "../_components/course-manipulation/prerequisites";
 import { api } from "@/trpc/react";
 import { LuLoader2 } from "react-icons/lu";
 import Link from "next/link";
@@ -18,6 +17,9 @@ import filterChange from "@/lib/filter-changes";
 import { toBase64 } from "@/lib/to-base64";
 import { useRouter } from "next/navigation";
 import Breadcrumbs from "../../_components/breadcrumbs";
+import Instructors, {
+  type InstructorType,
+} from "../_components/course-manipulation/instructors";
 
 interface DefaultValuesType {
   banner: string;
@@ -26,6 +28,7 @@ interface DefaultValuesType {
   description: string;
   technologies: Record<string, { name: string; logo: string }>;
   prerequisites: string[];
+  instructors: { name: string; image?: string; role: string }[];
 }
 
 export default function ClientPage({
@@ -44,6 +47,8 @@ export default function ClientPage({
     resolver: zodResolver(updateCourseSchema),
     defaultValues,
   });
+
+  console.log(errors);
 
   const router = useRouter();
 
@@ -82,6 +87,15 @@ export default function ClientPage({
           return data;
         }),
       );
+
+    if (changes?.instructors)
+      changes.instructors = (changes.instructors as InstructorType[]).map(
+        ({ id, role }) => ({
+          id,
+          role,
+        }),
+      );
+
     updateCourse.mutate({ id, ...changes });
   }
 
@@ -101,21 +115,10 @@ export default function ClientPage({
           }
           control={control}
           name="banner"
-          error={
-            errors?.banner?.message ??
-            errors?.name?.message ??
-            errors?.thumbnail?.message
-          }
-          NameInput={
-            <NameField
-              markError={!!errors?.name}
-              control={control}
-              name="name"
-            />
-          }
+          error={errors?.name?.message ?? errors?.thumbnail?.message}
+          NameInput={<NameField control={control} name="name" />}
           ActionButtons={
             <Thumbnail
-              markError={!!errors?.thumbnail}
               control={control}
               name="thumbnail"
               onError={(message: string) =>
@@ -123,18 +126,10 @@ export default function ClientPage({
               }
             />
           }
-          markError={!!errors?.banner}
         />
-        <DescriptionField
-          control={control}
-          name="description"
-          error={errors?.description?.message}
-        />
-        <Technologies
-          control={control}
-          name="technologies"
-          error={errors?.technologies?.message as string | undefined}
-        />
+        <DescriptionField control={control} name="description" />
+        <Technologies control={control} name="technologies" />
+        <Instructors control={control} name="instructors" />
         <Prerequisites control={control} name="prerequisites" />
         <div className="flex justify-end gap-4">
           <Button variant="outline" type="button" asChild>

@@ -2,17 +2,26 @@ import { Input, type InputProps } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type createTechnologySchema from "@/schema/create-technology";
 import type { ChangeEvent } from "react";
-import { useController, type Control } from "react-hook-form";
+import {
+  useController,
+  type Control,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 import type { z } from "zod";
 
-interface NameFieldProps extends Omit<InputProps, "onChange" | "value"> {
-  control: Control<z.infer<typeof createTechnologySchema>>;
-  name: keyof z.infer<typeof createTechnologySchema>;
-  error?: string;
+interface NameFieldProps<T extends FieldValues>
+  extends Omit<InputProps, "onChange" | "value"> {
+  control: Control<T>;
+  name: Path<T>;
 }
-export function NameField({ control, name, error }: NameFieldProps) {
+export function NameField<T extends FieldValues>({
+  control,
+  name,
+}: NameFieldProps<T>) {
   const {
     field: { value, onChange, ref, ...field },
+    fieldState: { error },
   } = useController({
     control,
     name,
@@ -31,11 +40,7 @@ export function NameField({ control, name, error }: NameFieldProps) {
           ref={ref}
           {...field}
         />
-        {!!error && (
-          <p className="text-sm text-destructive">
-            {typeof error === "object" ? JSON.stringify(error) : error}
-          </p>
-        )}
+        {!!error && <p className="text-sm text-destructive">{error.message}</p>}
       </div>
     </div>
   );
@@ -45,12 +50,12 @@ interface LogoFieldProps
   extends Omit<InputProps, "onChange" | "value" | "onError"> {
   control: Control<z.infer<typeof createTechnologySchema>>;
   name: keyof z.infer<typeof createTechnologySchema>;
-  error?: string;
   onError: (message: string) => void;
 }
-export function LogoField({ control, name, onError, error }: LogoFieldProps) {
+export function LogoField({ control, name, onError }: LogoFieldProps) {
   const {
     field: { value: _, onChange, ref, ...field },
+    fieldState: { error },
   } = useController({
     control,
     name,

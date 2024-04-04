@@ -11,6 +11,13 @@ export default async function Page({
 
   const dbCourseData = await db.course.findUnique({
     where: { id: searchParams.id as string },
+    include: {
+      users: {
+        include: {
+          user: true,
+        },
+      },
+    },
   });
 
   if (!dbCourseData) return redirect("/not-found");
@@ -28,6 +35,20 @@ export default async function Page({
     };
   }
 
+  const filteredInstructors = dbCourseData.users.map(({ user, role }) => ({
+    name: `${user.firstName} ${user.lastName}`,
+    image: user.image,
+    username: user.username,
+    role,
+    id: user.id,
+  })) as {
+    name: string;
+    image?: string;
+    role: string;
+    username: string;
+    id: string;
+  }[];
+
   const defaultValues = {
     name: dbCourseData.name,
     banner: dbCourseData.banner,
@@ -35,6 +56,7 @@ export default async function Page({
     thumbnail: dbCourseData.thumbnail,
     prerequisites: dbCourseData.prerequisites,
     technologies: technologies,
+    instructors: filteredInstructors,
   };
 
   return (

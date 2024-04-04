@@ -1,7 +1,13 @@
 import type createCourseSchema from "@/schema/create-course";
 import createTechnologySchema from "@/schema/create-technology";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type Control, useController } from "react-hook-form";
+import {
+  useForm,
+  type Control,
+  useController,
+  type Path,
+  type FieldValues,
+} from "react-hook-form";
 import type { z } from "zod";
 import { LogoField, NameField } from "./create-tech-fields";
 import {
@@ -20,18 +26,16 @@ import { useState } from "react";
 
 export type PropertyType<T, K extends keyof T> = T[K]; // Generic to represent property type
 
-interface TechnologiesProps {
-  control: Control<z.infer<typeof createCourseSchema>>;
-  name: keyof z.infer<typeof createCourseSchema>;
-  error?: string;
+interface TechnologiesProps<T extends FieldValues> {
+  control: Control<T>;
+  name: Path<T>;
   isEdit?: boolean;
 }
 
-export default function Technologies({
+export default function Technologies<T extends FieldValues>({
   control: externalControl,
   name: externalName,
-  error,
-}: TechnologiesProps) {
+}: TechnologiesProps<T>) {
   const {
     control,
     handleSubmit,
@@ -46,6 +50,7 @@ export default function Technologies({
 
   const {
     field: { value: unknownValue, onChange },
+    fieldState: { error },
   } = useController({
     control: externalControl,
     name: externalName,
@@ -85,7 +90,9 @@ export default function Technologies({
           {Object?.entries(value ?? {})?.map(([id, { name, logo }]) => (
             <TechnologyCard
               key={id}
-              logoUrl={URL.createObjectURL(logo)}
+              logoUrl={
+                typeof logo === "string" ? logo : URL.createObjectURL(logo)
+              }
               name={name}
               onDelete={() => handleDeleteTechnology(id)}
             />
@@ -115,18 +122,13 @@ export default function Technologies({
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                  <NameField
-                    control={control}
-                    name="name"
-                    error={errors?.name?.message}
-                  />
+                  <NameField control={control} name="name" />
                   <LogoField
                     control={control}
                     name="logo"
                     onError={(message) =>
                       setError("logo", { type: "custom", message })
                     }
-                    error={errors?.logo?.message}
                   />
                 </div>
                 <DialogFooter>
@@ -136,11 +138,7 @@ export default function Technologies({
             </DialogContent>
           </Dialog>
         </div>
-        {!!error && (
-          <p className="text-sm text-destructive">
-            {typeof error === "object" ? JSON.stringify(error) : error}
-          </p>
-        )}
+        {!!error && <p className="text-sm text-destructive">{error.message}</p>}
       </div>
     </div>
   );

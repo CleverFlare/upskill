@@ -9,10 +9,6 @@ export default async function Page({
   params: Record<string, string | string[]> & { slug: string };
 }) {
   try {
-    type CourseWithUsers = Prisma.CourseGetPayload<{
-      include: { users: { include: { user: true } } };
-    }>;
-
     type UserCourseWithUser = Prisma.UserCourseGetPayload<{
       include: {
         user: { select: { firstName: true; lastName: true; image: true } };

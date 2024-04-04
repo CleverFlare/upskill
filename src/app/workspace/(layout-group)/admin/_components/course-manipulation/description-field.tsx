@@ -1,23 +1,26 @@
 import { Textarea, type TextareaProps } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import type createCourseSchema from "@/schema/create-course";
-import { useController, type Control } from "react-hook-form";
-import type { z } from "zod";
+import {
+  useController,
+  type Control,
+  type Path,
+  type FieldValues,
+} from "react-hook-form";
 
-interface DescriptionField extends Omit<TextareaProps, "value" | "onChange"> {
-  control: Control<z.infer<typeof createCourseSchema>>;
-  name: keyof z.infer<typeof createCourseSchema>;
-  error?: string;
+interface DescriptionField<T extends FieldValues>
+  extends Omit<TextareaProps, "value" | "onChange"> {
+  control: Control<T>;
+  name: Path<T>;
 }
 
-export default function DescriptionField({
-  error,
+export default function DescriptionField<T extends FieldValues>({
   control,
   name,
   ...rest
-}: DescriptionField) {
+}: DescriptionField<T>) {
   const {
     field: { value, onChange, ref, ...field },
+    fieldState: { error },
   } = useController({
     control,
     name,
@@ -44,11 +47,7 @@ export default function DescriptionField({
           {...field}
           {...rest}
         />
-        {!!error && (
-          <p className="text-sm text-destructive">
-            {typeof error === "object" ? JSON.stringify(error) : error}
-          </p>
-        )}
+        {!!error && <p className="text-sm text-destructive">{error.message}</p>}
       </div>
     </div>
   );

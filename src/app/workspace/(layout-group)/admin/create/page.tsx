@@ -3,20 +3,20 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import createCourseSchema from "@/schema/create-course";
-import Banner from "./_parts/banner";
-import NameField from "./_parts/name-field";
-import Thumbnail from "./_parts/thumbnail";
-import DescriptionField from "./_parts/description-field";
 import type { z } from "zod";
-import Technologies from "./_parts/technologies";
-import Prerequisites from "./_parts/prerequisites";
 import { toBase64 } from "@/lib/to-base64";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
 import Link from "next/link";
 import Breadcrumbs from "../../_components/breadcrumbs";
-import Instructors from "./_parts/instructors";
+import Prerequisites from "../_components/course-manipulation/prerequisites";
+import Instructors from "../_components/course-manipulation/instructors";
+import Technologies from "../_components/course-manipulation/technologies";
+import DescriptionField from "../_components/course-manipulation/description-field";
+import NameField from "../_components/course-manipulation/name-field";
+import Thumbnail from "../_components/course-manipulation/thumbnail";
+import Banner from "../_components/course-manipulation/banner";
 
 export default function Page() {
   const {
@@ -96,21 +96,10 @@ export default function Page() {
           }
           control={control}
           name="banner"
-          error={
-            errors?.banner?.message ??
-            errors?.name?.message ??
-            errors?.thumbnail?.message
-          }
-          NameInput={
-            <NameField
-              markError={!!errors?.name}
-              control={control}
-              name="name"
-            />
-          }
+          error={errors?.name?.message ?? errors?.thumbnail?.message}
+          NameInput={<NameField control={control} name="name" />}
           ActionButtons={
             <Thumbnail
-              markError={!!errors?.thumbnail}
               control={control}
               name="thumbnail"
               onError={(message: string) =>
@@ -118,18 +107,9 @@ export default function Page() {
               }
             />
           }
-          markError={!!errors?.banner}
         />
-        <DescriptionField
-          control={control}
-          name="description"
-          error={errors?.description?.message}
-        />
-        <Technologies
-          control={control}
-          name="technologies"
-          error={errors?.technologies?.message as string | undefined}
-        />
+        <DescriptionField control={control} name="description" />
+        <Technologies control={control} name="technologies" />
         <Instructors control={control} name="instructors" />
         <Prerequisites control={control} name="prerequisites" />
         <div className="flex justify-end gap-4">

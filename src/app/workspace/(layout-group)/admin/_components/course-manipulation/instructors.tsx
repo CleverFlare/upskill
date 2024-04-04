@@ -1,15 +1,18 @@
-import type createCourseSchema from "@/schema/create-course";
-import { useController, type Control } from "react-hook-form";
-import type { z } from "zod";
+import {
+  useController,
+  type Control,
+  type Path,
+  type FieldValues,
+} from "react-hook-form";
 import ManageInstructorsButton from "../../_components/manage-instructors-button";
 import TeamMemberCard from "@/components/team-member-card";
 
-interface InstructorsProps {
-  control: Control<z.infer<typeof createCourseSchema>>;
-  name: keyof z.infer<typeof createCourseSchema>;
+interface InstructorsProps<T extends FieldValues> {
+  control: Control<T>;
+  name: Path<T>;
 }
 
-type InstructorType = {
+export type InstructorType = {
   name: string;
   id: string;
   role: string;
@@ -17,13 +20,14 @@ type InstructorType = {
   image: string;
 };
 
-export default function Instructors({ name, control }: InstructorsProps) {
+export default function Instructors<T extends FieldValues>({
+  name,
+  control,
+}: InstructorsProps<T>) {
   const {
     field: { value, onChange },
     fieldState: { error },
   } = useController({ name, control });
-
-  console.log("error", error);
 
   return (
     <div className="flex flex-col gap-4">

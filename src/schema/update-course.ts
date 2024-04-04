@@ -28,6 +28,15 @@ const updateCourseSchema = z.object({
     .refine((data) => Object.keys(data).length > 0, {
       message: "Record must contain at least one technology",
     }),
+  instructors: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      username: z.string(),
+      role: z.string(),
+      image: z.union([z.string().optional(), z.undefined(), z.null()]),
+    })
+    .array(),
 });
 
 export default updateCourseSchema;

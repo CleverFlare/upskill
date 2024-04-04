@@ -1,22 +1,25 @@
 import { cn } from "@/lib/utils";
-import type updateCourseSchema from "@/schema/update-course";
 import { type ComponentProps } from "react";
-import { useController, type Control } from "react-hook-form";
-import type { z } from "zod";
+import {
+  useController,
+  type Control,
+  type Path,
+  type FieldValues,
+} from "react-hook-form";
 
-interface NameFieldProps extends ComponentProps<"textarea"> {
-  markError?: boolean;
-  control: Control<z.infer<typeof updateCourseSchema>>;
-  name: keyof z.infer<typeof updateCourseSchema>;
+interface NameFieldProps<T extends FieldValues>
+  extends ComponentProps<"textarea"> {
+  control: Control<T>;
+  name: Path<T>;
 }
-export default function NameField({
-  markError,
+export default function NameField<T extends FieldValues>({
   control,
   name,
   ...rest
-}: NameFieldProps) {
+}: NameFieldProps<T>) {
   const {
     field: { value, onChange, ref, ...field },
+    fieldState: { error },
   } = useController({
     control,
     name,
@@ -26,7 +29,7 @@ export default function NameField({
       className={cn(
         "z-20 h-full w-1/2 resize-none rounded-md bg-transparent text-4xl text-white caret-gray-500 outline-none dark:caret-white",
         "text-border",
-        markError ? "text-fill-destructive" : "",
+        !!error ? "text-fill-destructive" : "",
       )}
       placeholder="Title"
       value={value as string}
