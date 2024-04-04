@@ -49,6 +49,7 @@ export default function Page() {
     prerequisites,
     name,
     description,
+    instructors,
   }: z.infer<typeof createCourseSchema>) {
     const encodedThumbnail = await toBase64(thumbnail);
     const encodedBanner = await toBase64(banner);
@@ -61,6 +62,10 @@ export default function Page() {
         };
       }),
     );
+    const filteredInstructors = instructors.map(({ id, role }) => ({
+      id,
+      role,
+    }));
     createCourse.mutate({
       name,
       prerequisites,
@@ -68,6 +73,10 @@ export default function Page() {
       description,
       thumbnail: encodedThumbnail as string,
       banner: encodedBanner as string,
+      instructors: filteredInstructors as [
+        { id: string; role: string },
+        ...{ id: string; role: string }[],
+      ],
     });
   }
 

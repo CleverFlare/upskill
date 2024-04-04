@@ -11,6 +11,10 @@ export default publicProcedure
       description: z.string(),
       technologies: z.object({ logo: z.string(), name: z.string() }).array(),
       prerequisites: z.string().array(),
+      instructors: z
+        .object({ id: z.string(), role: z.string() })
+        .array()
+        .nonempty(),
     }),
   )
   .mutation(async ({ input }) => {
@@ -39,6 +43,11 @@ export default publicProcedure
         ),
       );
 
+      const instructorRelations = input.instructors.map(({ role, id }) => ({
+        userId: id,
+        role,
+      }));
+
       const createdCourse = await db.course.create({
         data: {
           banner: uploadedBanner.url,
@@ -53,6 +62,11 @@ export default publicProcedure
           name: input.name,
           description: input.description,
           prerequisites: input.prerequisites,
+          users: {
+            createMany: {
+              data: instructorRelations,
+            },
+          },
         },
       });
 

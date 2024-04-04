@@ -25,8 +25,9 @@ const createCourseSchema = z.object({
     .object({
       id: z.string(),
       name: z.string(),
+      username: z.string(),
       role: z.string(),
-      image: z.string(),
+      image: z.union([z.string().optional(), z.undefined(), z.null()]),
     })
     .array()
     .nonempty(),
