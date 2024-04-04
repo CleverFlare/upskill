@@ -37,8 +37,8 @@ export default function Page() {
 
   const createCourse = api.course.create.useMutation({
     onSuccess: () => {
-      router.refresh();
       router.push("/workspace/admin");
+      router.refresh();
     },
   });
 

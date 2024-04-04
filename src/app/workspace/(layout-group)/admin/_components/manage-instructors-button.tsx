@@ -35,7 +35,7 @@ function SelectRole({
   username: string;
   image?: string;
   role: string;
-  onRoleChange: (value: string) => void;
+  onRoleChange: (value: "head" | "instructor" | "none") => void;
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ function SelectRole({
   );
 }
 
-type Instructors = {
+type Instructor = {
   id: string;
   name: string;
   username: string;
@@ -77,8 +77,8 @@ type Instructors = {
 };
 
 interface ManageInstructorsButtonProps {
-  value: Instructors[];
-  onChange: (value: Instructors[]) => void;
+  value: Instructor[];
+  onChange: (value: Instructor[]) => void;
 }
 
 export default function ManageInstructorsButton({
@@ -86,53 +86,101 @@ export default function ManageInstructorsButton({
   onChange,
 }: ManageInstructorsButtonProps) {
   const [search, setSearch] = useState<string>("");
-  const [instructors, setInstructors] = useState(value ?? []);
 
-  const { mutateAsync, isLoading } = api.user.getInstructors.useMutation();
+  const [roles, setRoles] = useState<Record<string, string>>({});
+  const [instructors, setInstructors] = useState<Omit<Instructor, "role">[]>(
+    [],
+  );
 
-  function handleRoleChange(id: string, role: string) {
+  const [open, setOpen] = useState<boolean>(false);
+
+  function setReceivedInstructor() {
+    const instructorsWithoutRoles = value.map(({ role: _, ...rest }) => ({
+      ...rest,
+    }));
+
+    setInstructors(instructorsWithoutRoles);
+  }
+
+  const { mutateAsync, isLoading, data, reset } =
+    api.user.getInstructors.useMutation();
+
+  useEffect(() => {
+    if (!open) return;
+    reset();
+    setSearch("");
+    setReceivedInstructor();
+
+    const modifiedRoles: Record<string, string> = {};
+
+    value.map(({ id, role }) => {
+      modifiedRoles[id] = role;
+    });
+
+    setRoles(modifiedRoles);
+  }, [open]);
+
+  function handleRoleChange(id: string, role: "instructor" | "head" | "none") {
     const isNone = role === "none";
+    setRoles((prevRoles) => ({ ...prevRoles, [id]: isNone ? "" : role }));
 
-    if (isNone && !search)
-      setInstructors((users) => users.filter((user) => user.id !== id));
-    else
-      setInstructors((users) =>
-        users.map((user) =>
-          user.id === id ? { ...user, role: isNone ? "" : role } : { ...user },
-        ),
+    if (isNone)
+      setInstructors((prevInstructors) =>
+        prevInstructors.filter((instructor) => instructor.id !== id),
       );
+    else if (!instructors.filter((instructor) => instructor.id === id).length)
+      setInstructors((prevInstructors) => {
+        const instructor = data?.find((instructor) => instructor.id === id);
+        if (!instructor) return prevInstructors;
+        return [
+          ...prevInstructors,
+          {
+            name: `${instructor.firstName} ${instructor.lastName}`,
+            username: instructor.username,
+            image: instructor.image,
+            id: instructor.id,
+          } as Omit<Instructor, "role">,
+        ];
+      });
+
+    console.log(roles);
+
+    console.log(instructors);
   }
 
   function handleSave() {
-    console.log(instructors);
-    onChange(instructors.filter((instructor) => !!instructor.role));
+    const fullInstructorValues = instructors
+      .map((instructor) => ({
+        ...instructor,
+        role: roles[instructor.id],
+      }))
+      .filter((instructor) => !!instructor.role) as Instructor[];
+    onChange(fullInstructorValues);
   }
 
   async function handleSubmitSearch(e: FormEvent<HTMLFormElement>) {
     e.stopPropagation();
     e.preventDefault();
-    const instructorsReturned = await mutateAsync(search);
 
-    setInstructors(
-      instructorsReturned.map(
-        ({ firstName, id, lastName, image, username }) => ({
-          name: firstName + " " + lastName,
-          image,
-          username,
-          role: "",
-          id,
-        }),
-      ) as Instructors[],
-    );
+    if (!search) {
+      reset();
+      return;
+    }
+
+    const queriedInstructors = await mutateAsync(search);
+
+    const modifiedInstructors = queriedInstructors.map((instructor) => ({
+      name: `${instructor.firstName} ${instructor.lastName}`,
+      username: instructor.username,
+      id: instructor.id,
+      image: instructor.image ?? undefined,
+    }));
+
+    setInstructors(modifiedInstructors);
   }
 
-  useEffect(() => {
-    if (!search)
-      setInstructors((prev) => prev.filter((instructor) => !!instructor.role));
-  }, [search]);
-
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
           <HiOutlineCog6Tooth className="me-2 text-base" />
@@ -144,7 +192,7 @@ export default function ManageInstructorsButton({
           <DialogTitle>This is the dialog</DialogTitle>
           <DialogDescription>Manage course instructors here.</DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 overflow-x-visible">
           <form
             className="flex w-full rounded-md focus-within:ring-2 focus-within:ring-primary"
             onSubmit={handleSubmitSearch}
@@ -170,20 +218,32 @@ export default function ManageInstructorsButton({
               <p className="text-xl font-bold">No Users Found</p>
             )}
             {!isLoading &&
+              !!data &&
+              data.map((instructor) => (
+                <SelectRole
+                  name={`${instructor.firstName} ${instructor.lastName}`}
+                  username={instructor.username}
+                  image={instructor.image ?? undefined}
+                  role={roles?.[instructor.id] ?? ""}
+                  onRoleChange={(value: "head" | "instructor" | "none") =>
+                    handleRoleChange(instructor.id, value)
+                  }
+                />
+              ))}
+            {!isLoading &&
+              !data &&
               !!instructors.length &&
-              instructors.map((instructor) => {
-                return (
-                  <SelectRole
-                    name={instructor.name}
-                    username={instructor.username}
-                    image={instructor.image}
-                    role={instructor.role}
-                    onRoleChange={(value) =>
-                      handleRoleChange(instructor.id, value)
-                    }
-                  />
-                );
-              })}
+              instructors.map((instructor) => (
+                <SelectRole
+                  name={instructor.name}
+                  username={instructor.username}
+                  image={instructor.image}
+                  role={roles?.[instructor.id] ?? ""}
+                  onRoleChange={(value: "head" | "instructor" | "none") =>
+                    handleRoleChange(instructor.id, value)
+                  }
+                />
+              ))}
           </div>
         </div>
         <DialogFooter>

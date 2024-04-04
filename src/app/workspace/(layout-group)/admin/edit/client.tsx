@@ -54,8 +54,8 @@ export default function ClientPage({
 
   const updateCourse = api.course.update.useMutation({
     onSuccess: () => {
-      router.refresh();
       router.push("/workspace/admin");
+      router.refresh();
     },
   });
 
