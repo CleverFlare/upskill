@@ -40,7 +40,7 @@ export default async function Page() {
           courses.map((course) => (
             <CourseCard
               href={`/workspace/${course.id}`}
-              thumbnailUrl={`/thumbnails/${course.thumbnail}`}
+              thumbnailUrl={course.thumbnail}
             >
               {course.name}
             </CourseCard>
