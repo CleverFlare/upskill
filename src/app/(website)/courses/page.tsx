@@ -3,14 +3,12 @@ import { db } from "@/server/db";
 import type { Course } from "@prisma/client";
 import SearchBar from "./_components/search-bar";
 import CourseCardWithActions from "./_components/course-card-with-options";
-import { getServerAuthSession } from "@/server/auth";
 
 export default async function Courses({
   searchParams,
 }: {
   searchParams: Record<string, string | string[]>;
 }) {
-  const session = await getServerAuthSession();
   const searchParam = !!searchParams?.search
     ? Array.isArray(searchParams.search)
       ? searchParams.search[0]
@@ -24,8 +22,6 @@ export default async function Courses({
       },
     },
   });
-
-  const isAdmin = !!session && session.user.role === "admin";
 
   return (
     <Container className="flex flex-col gap-8 py-10">
@@ -46,7 +42,7 @@ export default async function Courses({
             <CourseCardWithActions
               key={`Course ${course.id}`}
               id={course.id}
-              href={`/${isAdmin ? "workspace" : "course"}/${course.id}`}
+              href={`/courses/${course.id}`}
               thumbnailUrl={course.thumbnail}
             >
               {course.name}
@@ -56,10 +52,3 @@ export default async function Courses({
     </Container>
   );
 }
-
-// {!databaseCoursesData.length && (
-//   <p className="text-xl text-gray-500">
-//     <HiOutlineExclamationTriangle className="inline" /> No Course
-//     Available
-//   </p>
-// )}

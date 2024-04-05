@@ -40,7 +40,7 @@ export default async function Page({
       ({ user, role }: UserCourseWithUser) => ({
         name: `${(user as User).firstName} ${(user as User).lastName}`,
         image: (user as User).image,
-        role: role as string,
+        role: role,
       }),
     );
 
