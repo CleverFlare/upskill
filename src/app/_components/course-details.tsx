@@ -56,7 +56,11 @@ export default function CourseDetails({
         </p>
         <div className="box-content flex w-full snap-x snap-mandatory flex-wrap gap-4 overflow-x-auto pb-2 md:overflow-x-visible">
           {instructors.map((instructor) => (
-            <TeamMemberCard {...instructor} />
+            <TeamMemberCard
+              role={instructor.role}
+              name={instructor.name}
+              image={instructor.image ?? undefined}
+            />
           ))}
         </div>
       </div>
