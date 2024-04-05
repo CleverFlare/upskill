@@ -74,7 +74,7 @@ export default function Thumbnail<T extends FieldValues>({
         </DialogHeader>
         <div
           className={cn(
-            "relative aspect-video max-h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-200",
+            "relative aspect-video max-h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-800",
             !!error ? "border border-destructive" : "",
           )}
           onClick={() => labelRef.current?.click()}
