@@ -2,9 +2,6 @@ import Container from "@/components/container";
 import { db } from "@/server/db";
 import type { Course } from "@prisma/client";
 import SearchBar from "./_components/search-bar";
-import { HiPlus } from "react-icons/hi2";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import CourseCardWithActions from "./_components/course-card-with-options";
 import { getServerAuthSession } from "@/server/auth";
 
