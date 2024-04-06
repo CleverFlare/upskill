@@ -63,16 +63,3 @@ export const api = createTRPCProxyClient<AppRouter>({
         }),
   ],
 });
-
-import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-
-addEventListener("fetch", (event) => {
-  return event.respondWith(
-    fetchRequestHandler({
-      endpoint: "/trpc",
-      req: event.request,
-      router: appRouter,
-      createContext,
-    }),
-  );
-});
