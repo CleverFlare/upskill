@@ -71,9 +71,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
           instructors={instructors ?? []}
         />
         {!session && (
-          <Button variant="outline" className="flex gap-2" asChild>
+          <Button variant="outline" asChild>
             <Link href="/login">
-              <HiArrowLeftOnRectangle />
+              <HiArrowLeftOnRectangle className="me-2 text-base" />
               <p>Sign in to enroll</p>
             </Link>
           </Button>
