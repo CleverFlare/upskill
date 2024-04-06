@@ -1,4 +1,3 @@
-import { adminOnly } from "@/server/auth";
 import SearchBar from "./_components/search-bar";
 import { Button } from "@/components/ui/button";
 import { HiPlus } from "react-icons/hi2";

@@ -1,21 +1,16 @@
+import { type NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getServerAuthSession } from "./server/auth";
 
-// This function can be marked `async` if using `await` inside
-export async function middleware(request: NextRequest) {
-  const session = await getServerAuthSession();
-  if (!session) return NextResponse.redirect(new URL("/", request.url));
-  const isAdmin = session.user.role === "admin";
-  const isAdminPanel = request.nextUrl.pathname.startsWith("/workspace/admin");
+export default withAuth(async function middleware({
+  url,
+  nextUrl,
+  nextauth: { token },
+}: NextRequestWithAuth) {
+  // admin panel logic
+  const isAdmin = token?.user.role === "admin";
+  const isAdminPanel = nextUrl.pathname.startsWith("/workspace/admin");
+  if (!isAdmin && isAdminPanel)
+    return NextResponse.rewrite(new URL("/not-found", url));
+});
 
-  return NextResponse.redirect(new URL("/", request.url));
-
-  // if (!isAdmin && isAdminPanel)
-  //   return NextResponse.rewrite(new URL("/not-found", request.url));
-}
-
-// See "Matching Paths" below to learn more
-export const config = {
-  matcher: ["/workspace/:path*"],
-};
+export const config = { matcher: ["/workspace/:path*"] };

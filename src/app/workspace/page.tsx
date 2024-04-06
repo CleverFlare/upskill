@@ -8,8 +8,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
-  const session = await getServerAuthSession();
-  if (!session) redirect("/");
+  const session = (await getServerAuthSession())!;
 
   if (session.user.role === "admin") redirect("/workspace/admin");
 

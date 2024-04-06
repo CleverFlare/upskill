@@ -42,19 +42,21 @@ declare module "next-auth" {
   }
 }
 
-interface Token extends JWT {
-  sub?: string;
-  name?: string;
-  email?: string;
-  picture?: string;
-  user: {
-    id: string;
-    role: "student" | "instructor" | "admin";
-    username: string;
-    firstName: string;
-    lastName: string;
-    image?: string;
-  };
+declare module "next-auth/jwt" {
+  interface JWT {
+    sub?: string;
+    name?: string;
+    email?: string;
+    picture?: string;
+    user: {
+      id: string;
+      role: "student" | "instructor" | "admin";
+      username: string;
+      firstName: string;
+      lastName: string;
+      image?: string;
+    };
+  }
 }
 
 /**
@@ -65,7 +67,7 @@ interface Token extends JWT {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, token }) => {
-      session.user = (token as Token).user;
+      session.user = token.user;
       return Promise.resolve(session);
     },
     jwt: async ({ token, user }) => {
@@ -77,6 +79,10 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   adapter: PrismaAdapter(db),
+  pages: {
+    signIn: "/login",
+    signOut: "/",
+  },
   providers: [
     CredentialsProvider({
       // id: "credentials",

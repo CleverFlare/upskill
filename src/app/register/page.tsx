@@ -5,7 +5,7 @@ import StepLine from "./_components/step-line";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import RegisterSchema from "@/schema/register";
-import { LegacyRef, useRef, useState } from "react";
+import { type LegacyRef, useRef, useState } from "react";
 import steps from "./_components/steps";
 import type { z } from "zod";
 import { Button } from "@/components/ui/button";
