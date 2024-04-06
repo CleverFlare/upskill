@@ -2,10 +2,8 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { getServerSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-
 import { env } from "@/env";
 import { db } from "@/server/db";
-import { type JWT } from "next-auth/jwt";
 import { redirect } from "next/navigation";
 
 /**

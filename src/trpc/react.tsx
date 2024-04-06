@@ -46,3 +46,17 @@ export function TRPCReactProvider(props: {
     </QueryClientProvider>
   );
 }
+
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+
+// @ts-expect-error This error is caused by an unknown type
+addEventListener("fetch", (event) => {
+  return event.respondWith(
+    fetchRequestHandler({
+      endpoint: "/trpc",
+      req: event.request,
+      router: appRouter,
+      createContext: createTRPCContext,
+    }),
+  );
+});

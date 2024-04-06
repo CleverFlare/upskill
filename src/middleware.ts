@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest, _next: NextFetchEvent) {
   for (const fn of middlewareFunctions) {
     const result = await fn;
 
-    if (!result.ok) {
+    if (!result || !result.ok) {
       return result;
     }
   }
