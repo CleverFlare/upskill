@@ -16,7 +16,7 @@ export default (req: NextRequestWithAuth, _next: NextFetchEvent) =>
 
     // handle unregistered course access
     const isWorkspaceCourseRoute = /\/workspace\/+/g.test(nextUrl.pathname);
-    if (!isWorkspaceCourseRoute) return NextResponse.next();
+    if (!isWorkspaceCourseRoute || isAdmin) return NextResponse.next();
     const courseId = nextUrl.pathname.replace(/^\/|\/$/g, "").split("/");
     const hasCourseReqData = {
       courseId,
