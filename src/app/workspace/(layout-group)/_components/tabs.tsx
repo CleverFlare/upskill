@@ -1,7 +1,9 @@
 import { type ReactNode } from "react";
 import {
   HiHome,
+  HiMegaphone,
   HiOutlineHome,
+  HiOutlineMegaphone,
   HiOutlineRectangleGroup,
   HiRectangleGroup,
 } from "react-icons/hi2";
@@ -32,6 +34,13 @@ const tabs: Tab[] = [
     permissions: ["admin"],
     isAdmin: true,
     activeOn: ["/workspace/admin/create", "/workspace/admin/edit"],
+  },
+  {
+    name: "Announcements",
+    href: "/announcements",
+    uncheckedIcon: <HiOutlineMegaphone className="text-base" />,
+    checkedIcon: <HiMegaphone className="text-base" />,
+    permissions: ["admin", "student", "instructor"],
   },
 ];
 
