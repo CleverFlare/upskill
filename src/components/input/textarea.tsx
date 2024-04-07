@@ -4,12 +4,12 @@ import {
   type FieldValues,
   type Path,
 } from "react-hook-form";
-import { Input, type InputProps } from "../ui/input";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
+import { Textarea, type TextareaProps } from "../ui/textarea";
 
-interface FieldInputProps<T extends FieldValues>
-  extends Omit<InputProps, "onChange" | "onError" | "value" | "name"> {
+interface TextareaInputProps<T extends FieldValues>
+  extends Omit<TextareaProps, "onChange" | "onError" | "value" | "name"> {
   control: Control<T>;
   name: Path<T>;
   label?: string;
@@ -17,7 +17,7 @@ interface FieldInputProps<T extends FieldValues>
   noHelperText?: boolean;
 }
 
-export default function FieldInput<T extends FieldValues>({
+export default function TextareaInput<T extends FieldValues>({
   control,
   name,
   label,
@@ -25,7 +25,7 @@ export default function FieldInput<T extends FieldValues>({
   className,
   noHelperText,
   ...props
-}: FieldInputProps<T>) {
+}: TextareaInputProps<T>) {
   const {
     field: { value, onChange, onBlur, ref },
     fieldState: { error },
@@ -42,7 +42,7 @@ export default function FieldInput<T extends FieldValues>({
           {label}
         </Label>
       )}
-      <Input
+      <Textarea
         id={labelId}
         className={cn(
           !!error

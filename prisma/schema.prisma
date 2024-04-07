@@ -47,6 +47,15 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Announcement {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  content  String
+  image    String?
+  courseId String  @db.ObjectId
+  course   Course  @relation(fields: [courseId], references: [id])
+}
+
 model UserCourse {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   userId   String @db.ObjectId
@@ -57,7 +66,7 @@ model UserCourse {
 }
 
 model Course {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   thumbnailId   String
   thumbnail     String
@@ -66,9 +75,10 @@ model Course {
   description   String
   technologies  Technology[]
   prerequisites String[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   users         UserCourse[]
+  announcements Announcement[]
 }
 
 model User {

@@ -24,6 +24,7 @@ interface SelectInputProps<T extends FieldValues>
   label?: string;
   required?: boolean;
   placeholder?: string;
+  noHelperText?: boolean;
 }
 
 export default function SelectInput<T extends FieldValues>({
@@ -33,6 +34,7 @@ export default function SelectInput<T extends FieldValues>({
   required,
   children,
   placeholder,
+  noHelperText,
   ...props
 }: SelectInputProps<T>) {
   const {
@@ -75,7 +77,9 @@ export default function SelectInput<T extends FieldValues>({
         <SelectContent>{children}</SelectContent>
       </Select>
 
-      {!!error && <p className="text-sm text-destructive">{error.message}</p>}
+      {!!error && !noHelperText && (
+        <p className="text-sm text-destructive">{error.message}</p>
+      )}
     </div>
   );
 }

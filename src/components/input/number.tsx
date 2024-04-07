@@ -18,6 +18,7 @@ interface NumberInputProps<T extends FieldValues>
   name: Path<T>;
   label?: string;
   required?: boolean;
+  noHelperText?: boolean;
 }
 
 export default function NumberInput<T extends FieldValues>({
@@ -26,6 +27,7 @@ export default function NumberInput<T extends FieldValues>({
   label,
   required,
   className,
+  noHelperText,
   ...props
 }: NumberInputProps<T>) {
   const {
@@ -64,7 +66,9 @@ export default function NumberInput<T extends FieldValues>({
         onBlur={() => onBlur()}
         {...props}
       />
-      {!!error && <p className="text-sm text-destructive">{error.message}</p>}
+      {!!error && !noHelperText && (
+        <p className="text-sm text-destructive">{error.message}</p>
+      )}
     </div>
   );
 }

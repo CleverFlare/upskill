@@ -1,18 +1,36 @@
 import Announcement from "@/components/announcement";
+import { db } from "@/server/db";
+import AnnouncementForm from "./_component/announcement-form";
 
-export default function Page() {
+export default async function Page({
+  params,
+}: {
+  params: Record<string, string | string[]> & { slug: string };
+}) {
+  const announcementsData = await db.announcement.findMany({
+    where: { courseId: params.slug },
+  });
+
   return (
     <div className="flex h-full w-full flex-col justify-end">
       <div className="flex w-full flex-1 gap-4 overflow-auto py-4">
-        <Announcement
-          title="Breaking News!"
-          createdAt={new Date().toISOString()}
-          image="/banners/4e99044f-c339-4aa7-ba92-cc64c08614cb.jpg"
-        >
-          Hi there!
-        </Announcement>
+        {!announcementsData.length && (
+          <div className="flex h-full w-full items-center justify-center">
+            <p className="text-3xl font-bold text-gray-400">Empty</p>
+          </div>
+        )}
+        {announcementsData.map(({ title, image, content, id }) => (
+          <Announcement
+            key={id}
+            title={title}
+            createdAt={new Date().toISOString()}
+            image={image ?? undefined}
+          >
+            {content}
+          </Announcement>
+        ))}
       </div>
-      <div></div>
+      <AnnouncementForm />
     </div>
   );
 }

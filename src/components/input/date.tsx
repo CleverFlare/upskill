@@ -23,6 +23,7 @@ interface DateInputProps<T extends FieldValues>
   label?: string;
   required?: boolean;
   placeholder?: string;
+  noHelperText?: boolean;
 }
 
 export default function DateInput<T extends FieldValues>({
@@ -31,6 +32,7 @@ export default function DateInput<T extends FieldValues>({
   label,
   required,
   placeholder,
+  noHelperText,
   ...props
 }: DateInputProps<T>) {
   const {
@@ -97,7 +99,9 @@ export default function DateInput<T extends FieldValues>({
         </PopoverContent>
       </Popover>
 
-      {!!error && <p className="text-sm text-destructive">{error.message}</p>}
+      {!!error && !noHelperText && (
+        <p className="text-sm text-destructive">{error.message}</p>
+      )}
     </div>
   );
 }
