@@ -15,7 +15,7 @@ export default publicProcedure
       });
 
       if (announcement.imageId)
-        await imagekit.deleteFile(announcement.imageId as string);
+        await imagekit.deleteFile(announcement.imageId );
 
       return announcement;
     } catch (err) {

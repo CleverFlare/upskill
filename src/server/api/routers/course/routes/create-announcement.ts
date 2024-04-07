@@ -40,7 +40,7 @@ export default publicProcedure
         title: announcement.title,
         content: announcement.content,
         image: announcement.image,
-        createdAt: (announcement.createdAt as Date).toISOString(),
+        createdAt: announcement.createdAt.toISOString(),
       };
     } catch (err) {
       console.log(err);
