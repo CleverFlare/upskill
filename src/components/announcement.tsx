@@ -4,7 +4,7 @@ import Image from "next/image";
 import { type ReactNode, type ComponentProps } from "react";
 import { HiOutlineMegaphone } from "react-icons/hi2";
 
-interface AnnouncementProps extends ComponentProps<"div"> {
+export interface AnnouncementProps extends ComponentProps<"div"> {
   title: string;
   children: ReactNode | string;
   image?: string;
