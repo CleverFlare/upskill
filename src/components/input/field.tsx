@@ -53,7 +53,7 @@ export default function FieldInput<T extends FieldValues>({
         ref={ref}
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => onBlur()}
-        value={value}
+        value={value ?? ""}
         {...props}
       />
       {!!error && !noHelperText && (

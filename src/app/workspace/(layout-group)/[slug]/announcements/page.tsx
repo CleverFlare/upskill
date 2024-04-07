@@ -9,11 +9,12 @@ export default async function Page({
 }) {
   const announcementsData = await db.announcement.findMany({
     where: { courseId: params.slug },
+    orderBy: { createdAt: "desc" },
   });
 
   return (
     <div className="flex h-full w-full flex-col justify-end">
-      <div className="flex w-full flex-1 gap-4 overflow-auto py-4">
+      <div className="flex w-full flex-1 flex-col gap-4 overflow-auto py-4">
         {!announcementsData.length && (
           <div className="flex h-full w-full items-center justify-center">
             <p className="text-3xl font-bold text-gray-400">Empty</p>
@@ -30,7 +31,7 @@ export default async function Page({
           </Announcement>
         ))}
       </div>
-      <AnnouncementForm />
+      <AnnouncementForm courseId={params.slug} />
     </div>
   );
 }

@@ -22,13 +22,13 @@ export default function Announcement({
   return (
     <div
       className={cn(
-        "flex h-max w-full flex-col gap-3 rounded-lg border p-5 shadow",
+        "flex h-max w-full flex-col gap-3 rounded-lg border-s-4 border-yellow-300 bg-yellow-50 p-5",
         className,
       )}
       {...props}
     >
       <div className="flex gap-4">
-        <HiOutlineMegaphone className="text-6xl text-gray-400" />
+        <HiOutlineMegaphone className="text-6xl text-yellow-500" />
         <div className="flex flex-col">
           <p className="text-xl font-bold">{title}</p>
           <p className="text-gray-500">{children}</p>
@@ -40,7 +40,7 @@ export default function Announcement({
           alt="image"
           width={800}
           height={800}
-          className="w-full rounded-lg object-cover"
+          className="w-[800px] rounded-lg object-cover"
         />
       )}
       <div className="flex justify-end">

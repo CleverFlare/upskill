@@ -2,18 +2,23 @@
 import FieldInput from "@/components/input/field";
 import TextareaInput from "@/components/input/textarea";
 import { Button } from "@/components/ui/button";
+import { toBase64 } from "@/lib/to-base64";
 import { cn } from "@/lib/utils";
 import createPostSchema from "@/schema/create-post";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { FormEvent, createRef } from "react";
+import { useRouter } from "next/navigation";
+import { createRef } from "react";
 import { useController, useForm } from "react-hook-form";
 import { HiOutlinePhoto, HiPaperAirplane } from "react-icons/hi2";
+import { LuLoader2 } from "react-icons/lu";
 import type { z } from "zod";
 
-export default function AnnouncementForm() {
+export default function AnnouncementForm({ courseId }: { courseId: string }) {
   const {
     control,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<z.infer<typeof createPostSchema>>({
@@ -29,8 +34,26 @@ export default function AnnouncementForm() {
 
   const imageRef = createRef<HTMLLabelElement>();
 
-  function submitData(data: z.infer<typeof createPostSchema>) {
-    console.log(data);
+  const router = useRouter();
+
+  const { mutate, isLoading } = api.course.createAnnouncement.useMutation({
+    onSuccess() {
+      reset();
+      router.refresh();
+    },
+  });
+
+  async function submitData(data: z.infer<typeof createPostSchema>) {
+    const image = !!data?.image
+      ? ((await toBase64(data.image)) as string)
+      : undefined;
+
+    mutate({
+      title: data.title,
+      content: data.content,
+      image,
+      courseId,
+    });
   }
 
   return (
@@ -83,8 +106,9 @@ export default function AnnouncementForm() {
           noHelperText
         />
       </div>
-      <Button size="icon">
-        <HiPaperAirplane className="text-base" />
+      <Button size="icon" disabled={isLoading}>
+        {!isLoading && <HiPaperAirplane className="text-base" />}
+        {isLoading && <LuLoader2 className="animate-spin text-base" />}
       </Button>
     </form>
   );

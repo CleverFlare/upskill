@@ -8,7 +8,7 @@ import {
   HiSparkles,
   HiUserGroup,
 } from "react-icons/hi2";
-import { IconType } from "react-icons";
+import { type IconType } from "react-icons";
 
 type ValuesType = {
   headline: string;
