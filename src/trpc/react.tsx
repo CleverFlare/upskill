@@ -27,10 +27,11 @@ const getQueryClient = () => {
 };
 
 function getEndingLink(): TRPCLink<AppRouter> {
+  const baseUrl = getBaseUrl();
   if (typeof window === "undefined") {
     return httpBatchLink({
       transformer: superjson,
-      url: getBaseUrl() + "/api/trpc",
+      url: baseUrl + "/api/trpc",
       headers: () => {
         const headers = new Headers();
         headers.set("x-trpc-source", "nextjs-react");
@@ -39,8 +40,13 @@ function getEndingLink(): TRPCLink<AppRouter> {
     });
   }
 
+  const wsUrl = baseUrl
+    .replace(/http:/g, "ws:")
+    .replace(/https:/g, "wss:")
+    .replace(/:3000/g, ":3001");
+
   const client = createWSClient({
-    url: process.env.WS_URL ?? "ws://localhost:3001",
+    url: wsUrl,
   });
   return wsLink({
     client,
