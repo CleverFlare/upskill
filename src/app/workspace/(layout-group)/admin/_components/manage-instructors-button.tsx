@@ -102,7 +102,7 @@ export default function ManageInstructorsButton({
     setInstructors(instructorsWithoutRoles);
   }
 
-  const { mutateAsync, isLoading, data, reset } =
+  const { mutateAsync, isPending, data, reset } =
     api.user.getInstructors.useMutation();
 
   useEffect(() => {
@@ -213,11 +213,11 @@ export default function ManageInstructorsButton({
             </Button>
           </form>
           <div className="flex max-h-[200px] flex-col gap-[inherit] overflow-y-auto">
-            {isLoading && <LuLoader2 className="animate-spin text-2xl" />}
-            {!isLoading && !instructors.length && (
+            {isPending && <LuLoader2 className="animate-spin text-2xl" />}
+            {!isPending && !instructors.length && (
               <p className="text-xl font-bold">No Users Found</p>
             )}
-            {!isLoading &&
+            {!isPending &&
               !!data &&
               data.map((instructor) => (
                 <SelectRole
@@ -230,7 +230,7 @@ export default function ManageInstructorsButton({
                   }
                 />
               ))}
-            {!isLoading &&
+            {!isPending &&
               !data &&
               !!instructors.length &&
               instructors.map((instructor) => (
