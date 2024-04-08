@@ -1,6 +1,6 @@
 import CourseDetails from "@/app/_components/course-details";
 import { db } from "@/server/db";
-import type { Course, Prisma, User, UserCourse } from "@prisma/client";
+import type { Prisma, User } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 export default async function Page({

@@ -15,7 +15,7 @@ export default function AnnouncementWithActions({
 }: AnnouncementProps & { id: string }) {
   const [deleted, setDeleted] = useState<boolean>(false);
   const router = useRouter();
-  const { mutate, isLoading } = api.course.deleteAnnouncement.useMutation({
+  const { mutate, isPending } = api.course.deleteAnnouncement.useMutation({
     onSuccess: () => {
       setDeleted(true);
       router.refresh();
@@ -32,7 +32,7 @@ export default function AnnouncementWithActions({
         <div
           className={cn(
             "group relative",
-            isLoading ? "pointer-events-none opacity-50" : "",
+            isPending ? "pointer-events-none opacity-50" : "",
           )}
         >
           <Announcement {...props} />

@@ -118,10 +118,10 @@ export default function Page() {
           </Button>
           <Button
             type="submit"
-            disabled={createCourse.isLoading}
-            aria-disabled={createCourse.isLoading}
+            disabled={createCourse.isPending}
+            aria-disabled={createCourse.isPending}
           >
-            {createCourse.isLoading && (
+            {createCourse.isPending && (
               <LuLoader2 className="me-2 animate-spin" />
             )}
             Create

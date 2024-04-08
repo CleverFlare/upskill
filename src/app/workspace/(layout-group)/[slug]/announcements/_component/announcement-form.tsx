@@ -36,13 +36,12 @@ export default function AnnouncementForm({ courseId }: { courseId: string }) {
 
   const router = useRouter();
 
-  const { mutate, isPending: isLoading } =
-    api.course.createAnnouncement.useMutation({
-      onSuccess() {
-        reset();
-        router.refresh();
-      },
-    });
+  const { mutate, isPending } = api.course.createAnnouncement.useMutation({
+    onSuccess() {
+      reset();
+      router.refresh();
+    },
+  });
 
   async function submitData(data: z.infer<typeof createPostSchema>) {
     const image = !!data?.image
@@ -109,9 +108,9 @@ export default function AnnouncementForm({ courseId }: { courseId: string }) {
           noHelperText
         />
       </div>
-      <Button size="icon" disabled={isLoading}>
-        {!isLoading && <HiPaperAirplane className="text-base" />}
-        {isLoading && <LuLoader2 className="animate-spin text-base" />}
+      <Button size="icon" disabled={isPending}>
+        {!isPending && <HiPaperAirplane className="text-base" />}
+        {isPending && <LuLoader2 className="animate-spin text-base" />}
       </Button>
     </form>
   );

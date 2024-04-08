@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import Navlink from "@/app/_components/_parts/navlink";
-import { HiArrowLeftOnRectangle, HiOutlineUser } from "react-icons/hi2";
+import { HiArrowLeftOnRectangle } from "react-icons/hi2";
 import EclipseButton from "@/app/_components/_parts/eclipse-button";
 import { useAtom } from "jotai";
 import { navigationLinks } from "@/data/navigation";
