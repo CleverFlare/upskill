@@ -36,17 +36,20 @@ export default function AnnouncementForm({ courseId }: { courseId: string }) {
 
   const router = useRouter();
 
-  const { mutate, isLoading } = api.course.createAnnouncement.useMutation({
-    onSuccess() {
-      reset();
-      router.refresh();
-    },
-  });
+  const { mutate, isPending: isLoading } =
+    api.course.createAnnouncement.useMutation({
+      onSuccess() {
+        reset();
+        router.refresh();
+      },
+    });
 
   async function submitData(data: z.infer<typeof createPostSchema>) {
     const image = !!data?.image
       ? ((await toBase64(data.image)) as string)
       : undefined;
+
+    console.log("Should call");
 
     mutate({
       title: data.title,

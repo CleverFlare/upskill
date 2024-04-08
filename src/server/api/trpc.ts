@@ -10,9 +10,10 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { type Context } from "./context";
+import EventEmitter from "events";
 
-import { getServerAuthSession } from "@/server/auth";
-import { db } from "@/server/db";
+export const ee = new EventEmitter();
 
 /**
  * 1. CONTEXT
@@ -26,15 +27,6 @@ import { db } from "@/server/db";
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = await getServerAuthSession();
-
-  return {
-    db,
-    session,
-    ...opts,
-  };
-};
 
 /**
  * 2. INITIALIZATION
@@ -43,7 +35,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-const t = initTRPC.context<typeof createTRPCContext>().create({
+const t = initTRPC.context<Context>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
     return {
@@ -79,6 +71,8 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+export const createCallerFactory = t.createCallerFactory;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {

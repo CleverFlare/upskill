@@ -137,10 +137,10 @@ export default function ClientPage({
           </Button>
           <Button
             type="submit"
-            disabled={updateCourse.isLoading}
-            aria-disabled={updateCourse.isLoading}
+            disabled={updateCourse.isPending}
+            aria-disabled={updateCourse.isPending}
           >
-            {updateCourse.isLoading && (
+            {updateCourse.isPending && (
               <LuLoader2 className="me-2 animate-spin" />
             )}
             Update

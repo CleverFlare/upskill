@@ -1,4 +1,4 @@
-import { createTRPCRouter } from "@/server/api/trpc";
+import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import course from "./routers/course/index";
 import auth from "./routers/auth/index";
 import user from "./routers/user";
@@ -16,3 +16,5 @@ export const appRouter = createTRPCRouter({
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
+
+export const createCaller = createCallerFactory(appRouter);

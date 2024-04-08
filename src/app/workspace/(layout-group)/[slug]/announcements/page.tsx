@@ -1,6 +1,7 @@
 import { db } from "@/server/db";
 import AnnouncementForm from "./_component/announcement-form";
 import AnnouncementWithActions from "./_component/announcement-with-actions";
+import TestComp from "./_component/test-comp";
 
 export default async function Page({
   params,
@@ -32,6 +33,7 @@ export default async function Page({
           </AnnouncementWithActions>
         ))}
       </div>
+      <TestComp />
       <AnnouncementForm courseId={params.slug} />
     </div>
   );
