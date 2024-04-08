@@ -22,16 +22,16 @@ export default function Announcement({
   return (
     <div
       className={cn(
-        "flex h-max w-full flex-col gap-3 rounded-lg border-s-4 border-yellow-300 bg-yellow-50 p-5",
+        "flex h-max w-full flex-col gap-3 rounded-lg border-s-4 border-yellow-300 bg-yellow-500/10 p-5",
         className,
       )}
       {...props}
     >
-      <div className="flex gap-4">
-        <HiOutlineMegaphone className="text-6xl text-yellow-500" />
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <HiOutlineMegaphone className="text-5xl text-yellow-500 sm:text-6xl" />
         <div className="flex flex-col">
           <p className="text-xl font-bold">{title}</p>
-          <p className="text-gray-500">{children}</p>
+          <p className="text-muted-foreground">{children}</p>
         </div>
       </div>
       {!!image && (
@@ -44,7 +44,9 @@ export default function Announcement({
         />
       )}
       <div className="flex justify-end">
-        <p className="text-sm text-gray-500">{format(createdAt, "PPp")}</p>
+        <p className="text-sm text-muted-foreground">
+          {format(createdAt, "PPp")}
+        </p>
       </div>
     </div>
   );
