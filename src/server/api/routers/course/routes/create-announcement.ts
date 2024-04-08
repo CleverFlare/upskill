@@ -11,7 +11,7 @@ export default publicProcedure
       image: z.string().optional(),
     }),
   )
-  .mutation(async ({ input, ctx }) => {
+  .mutation(async ({ input }) => {
     try {
       const randomUUID = crypto.randomUUID();
       const image = input?.image
@@ -35,8 +35,6 @@ export default publicProcedure
           createdAt: new Date(),
         },
       });
-
-      ctx.ee.emit("TEST");
 
       return {
         title: announcement.title,
