@@ -1,6 +1,5 @@
 import "@/app/globals.css";
 import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
 import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -33,7 +32,7 @@ export default function RootLayout({
         <Provider>
           <Providers>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <TRPCReactProvider cookies={cookies().toString()}>
+              <TRPCReactProvider>
                 {children}
                 <Toaster />
               </TRPCReactProvider>
