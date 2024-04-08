@@ -101,7 +101,6 @@ export const authOptions: NextAuthOptions = {
       // @ts-expect-error Out of my hand, the maintainers of NextAuth should solve this TypeScript error
       async authorize(credentials, _) {
         // Add logic here to look up the user from the credentials supplied
-        console.log(credentials);
         if (!credentials) return null;
         if (
           env.ADMIN_USERNAME === credentials.username &&

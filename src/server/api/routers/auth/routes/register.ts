@@ -6,17 +6,24 @@ import bcrypt from "bcrypt";
 export default publicProcedure
   .input(RegisterSchema)
   .mutation(async ({ input }) => {
-    const { birthDay, password, ...restInput } = input;
+    try {
+      const { birthDay, password, ...restInput } = input;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-    const createdUser = await db.user.create({
-      data: {
-        ...restInput,
-        birthDay: birthDay.toISOString(),
-        password: hashedPassword,
-      },
-    });
+      const createdUser = await db.user.create({
+        data: {
+          ...restInput,
+          birthDay: birthDay.toISOString(),
+          password: hashedPassword,
+        },
+      });
 
-    return createdUser;
+      console.log(createdUser)
+
+      return createdUser;
+    } catch (err) {
+      console.log(err);
+      throw Error("Some data are invalid");
+    }
   });

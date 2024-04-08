@@ -42,12 +42,14 @@ export default function Page() {
     onSuccess: async () => {
       try {
         const values = getValues();
+        if (values.role === "instructor") return router.push("/submit-success");
         const res = await signIn("credentials", {
           username: values.username,
           password: values.password,
           redirect: false,
         });
         setIsLoading(false);
+        console.log(res);
         if (!res?.ok)
           toast(
             <div className="flex gap-2">
@@ -56,9 +58,8 @@ export default function Page() {
             </div>,
           );
         else {
+          router.push("/");
           router.refresh();
-          if (values.role === "instructor") router.push("/submit-success");
-          else router.push("/");
         }
       } catch (err) {
         console.log(err);
