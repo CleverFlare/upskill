@@ -1,17 +1,16 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useState } from "react";
-
-interface TabButtonProps {
-  checkedIcon: ReactNode;
-  uncheckedIcon: ReactNode;
-  name: string;
-  href: string;
-  isAdmin?: boolean;
-  activeOn?: string[];
-}
+import { useParams, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { type Tab } from "../tabs";
+import { type Channel } from "pusher-js";
+import {
+  notifications as courseNotifications,
+  type CourseNotification,
+} from "@/data/notifications";
+import { useAtom } from "jotai";
 
 export default function TabButton({
   uncheckedIcon,
@@ -19,10 +18,36 @@ export default function TabButton({
   isAdmin,
   name,
   activeOn,
+  notificationsName,
   href,
-}: TabButtonProps) {
+}: Tab & {
+  channel?: Channel;
+}) {
   const [checked, setChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const params: { slug: string } = useParams();
+
+  const [storedNotifications, setStoredNotifications] =
+    useAtom(courseNotifications);
+
+  let notifications: Record<string, number> | undefined;
+
+  if (storedNotifications.hasOwnProperty(params.slug))
+    notifications = storedNotifications[params.slug];
+
+  function handleSetNotifications(
+    name: keyof CourseNotification,
+    value: number,
+  ) {
+    setStoredNotifications((prev) => {
+      const current: CourseNotification =
+        prev[params?.slug] ?? ({} as CourseNotification);
+
+      current[name] = value;
+
+      return { ...prev, [name]: current };
+    });
+  }
 
   const path: string = usePathname();
   const pathArray = path
@@ -36,9 +61,10 @@ export default function TabButton({
   )}`;
 
   useEffect(() => {
-    if (path === currentPath || (activeOn && activeOn.includes(path)))
+    if (path === currentPath || (activeOn && activeOn.includes(path))) {
       setChecked(true);
-    else setChecked(false);
+      if (notificationsName) handleSetNotifications(notificationsName, 0);
+    } else setChecked(false);
 
     setIsLoading(false);
   }, [path]);
@@ -59,6 +85,15 @@ export default function TabButton({
         {checked && checkedIcon}
         {!checked && uncheckedIcon}
         {name}
+        {!!notifications?.[String(notificationsName)] &&
+          path !== currentPath && (
+            <Badge
+              variant="destructive"
+              className="pointer-events-none ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
+            >
+              {notifications[notificationsName!]}
+            </Badge>
+          )}
       </Link>
     </Button>
   );

@@ -46,6 +46,7 @@ export default publicProcedure
       const instructorRelations = input.instructors.map(({ role, id }) => ({
         userId: id,
         role,
+        notifications: { announcements: 0 },
       }));
 
       const createdCourse = await db.course.create({

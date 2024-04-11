@@ -60,12 +60,13 @@ model Announcement {
 }
 
 model UserCourse {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String @db.ObjectId
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId String @db.ObjectId
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  role     String @default("instructor")
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String @unique @db.ObjectId
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId      String @unique @db.ObjectId
+  course        Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  role          String @default("instructor")
+  announcements Int    @default(0)
 }
 
 model Course {

@@ -1,9 +1,9 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import { signOut, useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-import tabs from "../tabs";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import tabs, { pusher } from "../tabs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -14,9 +14,37 @@ import {
 import { LuLoader2 } from "react-icons/lu";
 import Logo from "@/components/logo";
 import TabButton from "./tab-button";
+import { useAtom } from "jotai";
+import {
+  type CourseNotification,
+  notifications as courseNotifications,
+} from "@/data/notifications";
 
 export default function SidebarItems() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const params: Record<string, string | string[]> & { slug: string } =
+    useParams();
+
+  const [storedNotifications, setStoredNotifications] =
+    useAtom(courseNotifications);
+
+  const handleAddNotifications = useCallback(
+    (name: keyof CourseNotification, value: number) => {
+      setStoredNotifications((prev: Record<string, CourseNotification>) => {
+        const current: CourseNotification =
+          prev[params?.slug] ?? ({} as CourseNotification);
+
+        if (current[name]) current[name] += value;
+        else current[name] = value;
+
+        return { ...prev, [params?.slug]: current };
+      });
+    },
+    [],
+  );
+
+  console.log(storedNotifications);
 
   const router = useRouter();
 
@@ -27,17 +55,32 @@ export default function SidebarItems() {
   }
 
   const path = usePathname();
+  const { data: session } = useSession();
 
   const pathArray = path
     .trim()
     .replace(/^\/+|\/$/g, "")
     .split("/");
 
-  const { data: session } = useSession();
-
   const isAdminPath = pathArray[1] === "admin";
 
   const isAdmin = session?.user.role === "admin";
+
+  const channel = useMemo(
+    () => (params?.slug ? pusher.subscribe(params.slug) : undefined),
+    [isAdminPath],
+  );
+
+  useEffect(() => {
+    if (!!channel)
+      channel.bind(
+        "notifications",
+        (data: { name: string; notifications: number }) => {
+          handleAddNotifications(data.name, data.notifications);
+          console.log(data.notifications);
+        },
+      );
+  }, [channel]);
 
   return (
     <>
@@ -55,7 +98,7 @@ export default function SidebarItems() {
           section
         </p>
         {tabs.map((tab) => (
-          <TabButton {...tab} />
+          <TabButton {...tab} channel={channel} />
         ))}
       </div>
       <div className="mt-auto flex w-full flex-col gap-3">

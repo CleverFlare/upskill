@@ -1,3 +1,4 @@
+"use client";
 import { type ReactNode } from "react";
 import {
   HiHome,
@@ -7,8 +8,14 @@ import {
   HiOutlineRectangleGroup,
   HiRectangleGroup,
 } from "react-icons/hi2";
+import Pusher from "pusher-js";
+import { type CourseNotification } from "@/data/notifications";
 
-interface Tab {
+export const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+  cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+});
+
+export interface Tab {
   name: string;
   href: string;
   uncheckedIcon: ReactNode;
@@ -16,6 +23,7 @@ interface Tab {
   permissions: ("admin" | "instructor" | "student")[];
   isAdmin?: boolean;
   activeOn?: string[];
+  notificationsName?: keyof CourseNotification;
 }
 
 const tabs: Tab[] = [
@@ -41,6 +49,7 @@ const tabs: Tab[] = [
     uncheckedIcon: <HiOutlineMegaphone className="text-base" />,
     checkedIcon: <HiMegaphone className="text-base" />,
     permissions: ["admin", "student", "instructor"],
+    notificationsName: "announcements",
   },
 ];
 

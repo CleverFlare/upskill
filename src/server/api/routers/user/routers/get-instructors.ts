@@ -3,7 +3,6 @@ import { db } from "@/server/db";
 import { z } from "zod";
 
 export default publicProcedure.input(z.string()).mutation(async ({ input }) => {
-  console.log(input);
   const instructors = await db.user.findMany({
     where: {
       role: "instructor",
@@ -35,6 +34,5 @@ export default publicProcedure.input(z.string()).mutation(async ({ input }) => {
     take: 10,
   });
 
-  console.log(instructors);
   return instructors;
 });

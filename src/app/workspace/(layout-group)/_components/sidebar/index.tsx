@@ -22,6 +22,7 @@ export function SidebarDrawerButton() {
       <SheetContent
         side="left"
         className="flex w-[270px] flex-col gap-6 bg-gray-50 p-5 dark:bg-gray-900 "
+        forceMount
       >
         <SidebarItems />
       </SheetContent>

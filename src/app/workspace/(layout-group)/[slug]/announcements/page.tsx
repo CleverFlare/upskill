@@ -10,6 +10,7 @@ export default async function Page({
   const announcementsData = await db.announcement.findMany({
     where: { courseId: params.slug },
     orderBy: { createdAt: "desc" },
+    take: 6,
   });
 
   return (
@@ -36,3 +37,5 @@ export default async function Page({
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

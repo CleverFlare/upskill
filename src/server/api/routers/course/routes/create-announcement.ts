@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { publicProcedure } from "@/server/api/trpc";
 import { db, imagekit } from "@/server/db";
+import { pusher } from "@/server/pusher";
 
 export default publicProcedure
   .input(
@@ -34,6 +35,11 @@ export default publicProcedure
           content: input.content,
           createdAt: new Date(),
         },
+      });
+
+      await pusher.trigger(input.courseId, "notifications", {
+        name: "announcements",
+        notifications: 1,
       });
 
       return {

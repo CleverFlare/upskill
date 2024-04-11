@@ -35,6 +35,10 @@ export const env = createEnv({
     IMAGE_KIT_URL: z.string(),
     ADMIN_USERNAME: z.string(),
     ADMIN_PASSWORD: z.string(),
+    PUSHER_CLUSTER: z.string(),
+    PUSHER_KEY: z.string(),
+    PUSHER_SECRET: z.string(),
+    PUSHER_APP_ID: z.string(),
   },
 
   /**
@@ -60,8 +64,10 @@ export const env = createEnv({
     IMAGE_KIT_URL: process.env.IMAGE_KIT_URL,
     ADMIN_USERNAME: process.env.ADMIN_USERNAME,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
-    // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
-    // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+    PUSHER_CLUSTER: process.env.PUSHER_CLUSTER,
+    PUSHER_KEY: process.env.PUSHER_KEY,
+    PUSHER_SECRET: process.env.PUSHER_SECRET,
+    PUSHER_APP_ID: process.env.PUSHER_APP_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

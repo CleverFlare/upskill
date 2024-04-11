@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import Topbar from "./_components/topbar";
 import Sidebar from "./_components/sidebar";
 
-export default async function Layout({ children }: { children: ReactNode }) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-screen flex-col lg:grid lg:grid-cols-[270px_1fr] lg:grid-rows-[auto_1fr]">
       <Sidebar />
