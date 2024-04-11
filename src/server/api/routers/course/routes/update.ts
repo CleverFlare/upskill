@@ -28,7 +28,6 @@ export default publicProcedure
     }),
   )
   .mutation(async ({ input }) => {
-    // console.log(input);
     const course = await db.course.findUnique({ where: { id: input.id } });
     if (!course) throw Error("Invalid ID!");
 

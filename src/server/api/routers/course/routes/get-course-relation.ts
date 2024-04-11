@@ -9,7 +9,6 @@ export default publicProcedure
       const courseRelation = await db.userCourse.findUnique({
         where: { courseId: input.courseId, userId: input.userId },
       });
-      console.log("course results", courseRelation);
       return courseRelation;
     } catch (err) {
       console.log(err);

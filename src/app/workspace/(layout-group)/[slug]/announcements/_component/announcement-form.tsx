@@ -48,8 +48,6 @@ export default function AnnouncementForm({ courseId }: { courseId: string }) {
       ? ((await toBase64(data.image)) as string)
       : undefined;
 
-    console.log("Should call");
-
     mutate({
       title: data.title,
       content: data.content,
