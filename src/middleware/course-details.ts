@@ -1,36 +1,31 @@
-import { type NextRequestWithAuth, withAuth } from "next-auth/middleware";
-import { NextResponse, type NextFetchEvent } from "next/server";
+import { env } from "@/env";
+import { getToken } from "next-auth/jwt";
+import { NextResponse, type NextRequest } from "next/server";
 
-export default (req: NextRequestWithAuth, _next: NextFetchEvent) =>
-  withAuth(async function middleware({
-    url,
-    nextUrl,
-    nextauth: { token },
-  }: NextRequestWithAuth) {
-    const { origin } = new URL(url);
-    // admin panel logic
-    const isAdmin = token?.user.role === "admin";
-    const isAdminPanel = nextUrl.pathname.startsWith("/workspace/admin");
-    if (!isAdmin && isAdminPanel)
-      return NextResponse.rewrite(new URL("/not-found", url));
+export default async function middleware(request: NextRequest) {
+  const url = new URL(request.url);
+  const session = await getToken({ req: request, secret: env.NEXTAUTH_SECRET });
 
-    // handle unregistered course access
-    const isWorkspaceCourseRoute = /\/workspace\/+/g.test(nextUrl.pathname);
-    if (!isWorkspaceCourseRoute || isAdmin) return NextResponse.next();
-    const courseId = nextUrl.pathname.replace(/^\/|\/$/g, "").split("/");
-    const hasCourseReqData = {
-      courseId,
-      userId: token?.user.id,
-    };
+  if (!session) return;
 
-    const hasCourseRes = await fetch(origin + "/api/has-course", {
-      method: "POST",
-      body: JSON.stringify(hasCourseReqData),
-    });
+  const isAdmin = session.user.role === "admin";
+  const courseId = request.nextUrl.pathname
+    .replace(/^\/|\/$/g, "")
+    .split("/")[1];
 
-    const hasCourse = hasCourseRes.ok;
+  const hasCourseRes = await fetch(url.origin + "/api/has-course", {
+    method: "POST",
+    body: JSON.stringify({ courseId, userId: session.user.id }),
+  });
 
-    if (!hasCourse) return NextResponse.redirect(new URL("/not-found", url));
-  })(req, _next);
+  const hasCourse = hasCourseRes.ok;
+
+  console.log(hasCourseRes.status);
+
+  if (hasCourse || isAdmin)
+    return NextResponse.redirect(
+      new URL(`/workspace/${courseId}`, request.url),
+    );
+}
 
 export const matcher = "/courses/+";
