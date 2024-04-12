@@ -96,7 +96,7 @@ const tabs: Tab[] = [
     checkedIcon: <HiBars3BottomLeft className="text-base" />,
     permissions: ["instructor"],
     notificationsName: "classes",
-    activeOn: [/^\/workspace\/(.*?)\/classes\/(.*?)/g],
+    activeOn: [/^\/workspace\/(.*?)\/classes\/(.*?)$/g],
   },
   {
     name: "Leaderboard",
