@@ -35,7 +35,7 @@ export interface Tab {
   checkedIcon: ReactNode;
   permissions: ("admin" | "instructor" | "student")[];
   isAdmin?: boolean;
-  activeOn?: string[];
+  activeOn?: (string | RegExp)[];
   notificationsName?: keyof CourseNotification;
 }
 
@@ -96,6 +96,7 @@ const tabs: Tab[] = [
     checkedIcon: <HiBars3BottomLeft className="text-base" />,
     permissions: ["instructor"],
     notificationsName: "classes",
+    activeOn: [/^\/workspace\/(.*?)\/classes\/(.*?)/g],
   },
   {
     name: "Leaderboard",
