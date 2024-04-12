@@ -61,15 +61,16 @@ export default function TabButton({
   )}`;
 
   useEffect(() => {
-    if (activeOn) {
+    if (path === currentPath) {
+      setChecked(true);
+      if (notificationsName) handleSetNotifications(notificationsName, 0);
+    } else if (activeOn) {
       for (const activePath of activeOn)
         if (activePath instanceof RegExp && activePath.test(path))
           setChecked(true);
         else if (typeof activePath === "string" && path === activePath)
           setChecked(true);
-    } else if (path === currentPath) {
-      setChecked(true);
-      if (notificationsName) handleSetNotifications(notificationsName, 0);
+        else setChecked(false);
     } else setChecked(false);
 
     setIsLoading(false);
