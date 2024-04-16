@@ -1,56 +1,45 @@
-"use client";
-import { HiChevronDown, HiChevronUp, HiHashtag } from "react-icons/hi2";
+import { HiOutlineCheckCircle, HiOutlineMinusCircle } from "react-icons/hi2";
 import { Button, type ButtonProps } from "./ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "./ui/collapsible";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import Link from "next/link";
 
-interface TopicProps extends ButtonProps {
-  locked?: boolean;
-  title: string;
+interface SubTopicProps extends ButtonProps {
+  href: string;
+  completed?: boolean;
 }
 
 export default function Topic({
-  children,
+  href,
+  completed,
   className,
-  locked,
-  variant = "ghost",
+  variant = "outline",
+  children,
   title,
   ...props
-}: TopicProps) {
-  const [open, setOpen] = useState<boolean>(false);
+}: SubTopicProps) {
   return (
-    <Collapsible
-      open={open}
-      onOpenChange={(val: boolean) => setOpen(val)}
-      className="flex flex-col gap-4"
+    <Button
+      variant={variant}
+      className={cn(
+        "h-max justify-start rounded-lg px-4 py-1 text-base shadow",
+        completed
+          ? "border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-blue-700 dark:bg-blue-950 dark:hover:bg-blue-900"
+          : "",
+        className,
+      )}
+      title={title ?? String(children)}
+      {...props}
+      asChild
     >
-      <CollapsibleTrigger asChild>
-        <Button
-          variant={variant}
-          className={cn(
-            "flex w-full justify-between bg-transparent p-0 hover:bg-transparent",
-            locked ? "opacity-50" : "",
-            className,
-          )}
-          {...props}
-        >
-          <p className="flex items-center text-xl font-bold">
-            <HiHashtag className="me-2 text-xl" />
-            {title}
-          </p>
-          {open ? <HiChevronUp /> : <HiChevronDown />}
-        </Button>
-      </CollapsibleTrigger>
-      <CollapsibleContent
-        className={cn("ms-10 flex-col gap-2", open ? "flex" : "hidden")}
-      >
-        {children}
-      </CollapsibleContent>
-    </Collapsible>
+      <Link href={href}>
+        {completed && (
+          <HiOutlineCheckCircle className="me-2 text-lg text-primary" />
+        )}
+        {!completed && (
+          <HiOutlineMinusCircle className="me-2 text-lg text-gray-500" />
+        )}
+        <p className="w-full overflow-hidden text-ellipsis">{children}</p>
+      </Link>
+    </Button>
   );
 }
