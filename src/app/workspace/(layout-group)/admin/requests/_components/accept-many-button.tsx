@@ -14,8 +14,8 @@ export default function AcceptManyButton({
   const router = useRouter();
   const { mutate, isPending } = api.user.acceptInstructors.useMutation({
     onSuccess: () => {
-      router.refresh();
       router.push("?");
+      router.refresh();
       !!onSuccess && onSuccess();
     },
   });

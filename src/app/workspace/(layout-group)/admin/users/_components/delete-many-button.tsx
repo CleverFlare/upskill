@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
-import { HiOutlineXCircle } from "react-icons/hi2";
+import { HiOutlineTrash } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
 
-export default function DenyManyButton({
+export default function DeleteManyButton({
   ids,
   onSuccess,
 }: {
@@ -26,9 +26,9 @@ export default function DenyManyButton({
       variant="outline"
       className="text-destructive hover:text-destructive"
     >
-      {!isPending && <HiOutlineXCircle className="me-2 text-base" />}
+      {!isPending && <HiOutlineTrash className="me-2 text-base" />}
       {isPending && <LuLoader2 className="me-2 animate-spin text-base" />}
-      Deny
+      Delete
     </Button>
   );
 }

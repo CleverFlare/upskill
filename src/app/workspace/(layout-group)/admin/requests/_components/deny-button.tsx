@@ -8,8 +8,8 @@ export default function DenyButton({ id }: { id: string }) {
   const router = useRouter();
   const { mutate, isPending } = api.user.deleteUsers.useMutation({
     onSuccess: () => {
-      router.refresh();
       router.push("?");
+      router.refresh();
     },
   });
   return (

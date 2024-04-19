@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { HiOutlineCheckCircle, HiOutlineXCircle } from "react-icons/hi2";
 import DataTable from "./_organisms/table";
 import { type Request, columns } from "./_components/columns";
 import Paginator from "@/components/pagination";
@@ -82,3 +79,5 @@ export default async function Page({
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

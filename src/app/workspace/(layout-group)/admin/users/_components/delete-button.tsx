@@ -1,34 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
-import { HiOutlineXCircle } from "react-icons/hi2";
+import { HiOutlineTrash } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
 
-export default function DenyManyButton({
-  ids,
-  onSuccess,
-}: {
-  ids: string[];
-  onSuccess?: () => void;
-}) {
+export default function DeleteButton({ id }: { id: string }) {
   const router = useRouter();
   const { mutate, isPending } = api.user.deleteUsers.useMutation({
     onSuccess: () => {
       router.push("?");
       router.refresh();
-      !!onSuccess && onSuccess();
     },
   });
   return (
     <Button
-      onClick={() => mutate(ids as [string, ...string[]])}
-      disabled={!ids.length || isPending}
+      size="icon"
       variant="outline"
       className="text-destructive hover:text-destructive"
+      onClick={() => mutate([id])}
+      disabled={isPending}
     >
-      {!isPending && <HiOutlineXCircle className="me-2 text-base" />}
-      {isPending && <LuLoader2 className="me-2 animate-spin text-base" />}
-      Deny
+      {!isPending && <HiOutlineTrash className="text-base" />}
+      {isPending && <LuLoader2 className="animate-spin text-base" />}
     </Button>
   );
 }
