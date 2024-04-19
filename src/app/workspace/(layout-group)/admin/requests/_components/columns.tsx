@@ -13,7 +13,7 @@ export type Request = {
   firstName: string;
   lastName: string;
   username: string;
-  avatar?: string | null;
+  avatar?: string;
   requestDate: string;
 };
 

@@ -66,7 +66,7 @@ export default async function Page({
       lastName,
       id,
       username,
-      avatar: image,
+      avatar: image ?? undefined,
       requestDate: format(createdAt, "PPP"),
     }),
   );
