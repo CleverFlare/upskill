@@ -6,6 +6,7 @@ import Link from "next/link";
 interface SubTopicProps extends ButtonProps {
   href: string;
   completed?: boolean;
+  locked?: boolean;
 }
 
 export default function Topic({
@@ -15,6 +16,7 @@ export default function Topic({
   variant = "outline",
   children,
   title,
+  locked,
   ...props
 }: SubTopicProps) {
   return (
@@ -25,6 +27,7 @@ export default function Topic({
         completed
           ? "border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-blue-700 dark:bg-blue-950 dark:hover:bg-blue-900"
           : "",
+        locked ? "pointer-events-none opacity-50" : "",
         className,
       )}
       title={title ?? String(children)}

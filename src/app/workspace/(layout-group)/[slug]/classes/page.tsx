@@ -64,7 +64,7 @@ export default function Page() {
           </Topic>
           <Topic href="classes/class">Variable Declaration</Topic>
           <Topic href="classes/class">Function Declaration</Topic>
-          <Topic href="classes/class">
+          <Topic href="classes/class" disabled>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit,
             maiores!
           </Topic>
