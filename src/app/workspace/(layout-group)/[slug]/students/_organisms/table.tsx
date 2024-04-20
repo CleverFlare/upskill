@@ -15,9 +15,9 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import DenyManyButton from "../_components/deny-many-button";
-import AcceptManyButton from "../_components/accept-many-button";
 import Search from "../_components/search";
+import ModifyPointsManyButton from "../_components/modify-points-many-button";
+import KickManyButton from "../_components/kick-many-button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -49,12 +49,12 @@ export default function DataTable<TData, TValue>({
       <div className="flex justify-between">
         <Search />
         <div className="flex gap-2">
-          <AcceptManyButton
-            ids={Object.keys(rowSelection)}
+          <ModifyPointsManyButton
+            ids={Object.keys(rowSelection) as [string, ...string[]]}
             onSuccess={resetSelection}
           />
-          <DenyManyButton
-            ids={Object.keys(rowSelection)}
+          <KickManyButton
+            ids={Object.keys(rowSelection) as [string, ...string[]]}
             onSuccess={resetSelection}
           />
         </div>

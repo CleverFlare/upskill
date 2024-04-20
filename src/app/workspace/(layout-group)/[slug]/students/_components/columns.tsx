@@ -3,10 +3,12 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ModifyPointsButton from "./modify-points-button";
+import KickButton from "./kick-button";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Request = {
+export type Student = {
   id: string;
   firstName: string;
   lastName: string;
@@ -15,7 +17,7 @@ export type Request = {
   points: number;
 };
 
-export const columns: ColumnDef<Request>[] = [
+export const columns: ColumnDef<Student>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -76,8 +78,8 @@ export const columns: ColumnDef<Request>[] = [
       row;
       return (
         <div className="flex gap-2">
-          <EditPoints id={row.original.id} />
-          <DeleteButton id={row.original.id} />
+          <ModifyPointsButton id={row.original.id} />
+          <KickButton id={row.original.id} />
         </div>
       );
     },

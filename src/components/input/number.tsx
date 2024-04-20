@@ -19,6 +19,7 @@ interface NumberInputProps<T extends FieldValues>
   label?: string;
   required?: boolean;
   noHelperText?: boolean;
+  valueAsNumber?: boolean;
 }
 
 export default function NumberInput<T extends FieldValues>({
@@ -28,6 +29,7 @@ export default function NumberInput<T extends FieldValues>({
   required,
   className,
   noHelperText,
+  valueAsNumber,
   ...props
 }: NumberInputProps<T>) {
   const {
@@ -61,7 +63,13 @@ export default function NumberInput<T extends FieldValues>({
             : "",
           className,
         )}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) =>
+          onChange(
+            valueAsNumber
+              ? Number(e.currentTarget.value)
+              : e.currentTarget.value,
+          )
+        }
         value={value}
         onBlur={() => onBlur()}
         {...props}
