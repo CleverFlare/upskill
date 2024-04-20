@@ -88,7 +88,7 @@ export default async function Page({
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-4xl font-bold">Students</h1>
+      <h1 className="text-4xl font-bold">Requests</h1>
       <DataTable data={data} columns={columns} />
       {requestsCount > 1 && <Paginator total={requestsCount} />}
     </div>

@@ -115,6 +115,14 @@ const tabs: Tab[] = [
     notificationsName: "students",
   },
   {
+    name: "Requests",
+    href: "/requests",
+    uncheckedIcon: <HiOutlineUserPlus className="text-base" />,
+    checkedIcon: <HiUserPlus className="text-base" />,
+    permissions: ["instructor"],
+    notificationsName: "requests",
+  },
+  {
     name: "Attendance",
     href: "/attendance",
     uncheckedIcon: <HiOutlineClipboardDocumentCheck className="text-base" />,
