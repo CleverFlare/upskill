@@ -1,12 +1,12 @@
-import { type Request } from "./columns";
+import { type Student } from "./columns";
 
-export const data: Request[] = [
+export const data: Student[] = [
   {
     id: "1",
     firstName: "Muhammad",
     lastName: "Maher",
     avatar: "/avatars/avatar.jpg",
     username: "flare",
-    requestDate: "10/1/2021",
+    points: 10,
   },
 ];
