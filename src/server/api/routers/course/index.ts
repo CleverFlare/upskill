@@ -5,6 +5,9 @@ import deleteRoute from "./routes/delete";
 import createAnnouncement from "./routes/create-announcement";
 import deleteAnnouncement from "./routes/delete-announcement";
 import getCourseRelation from "./routes/get-course-relation";
+import createClass from "./routes/create-class";
+import deleteClass from "./routes/delete-class";
+import toggleClassLock from "./routes/toggle-class-lock";
 
 const courseRouter = createTRPCRouter({
   create,
@@ -13,6 +16,9 @@ const courseRouter = createTRPCRouter({
   createAnnouncement,
   deleteAnnouncement,
   getCourseRelation,
+  createClass,
+  deleteClass,
+  toggleClassLock,
 });
 
 export default courseRouter;

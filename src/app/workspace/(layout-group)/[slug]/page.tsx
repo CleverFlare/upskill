@@ -21,6 +21,16 @@ export default async function Page({
       },
       include: {
         users: {
+          where: {
+            OR: [
+              {
+                role: "instructor",
+              },
+              {
+                role: "head",
+              },
+            ],
+          },
           include: {
             user: {
               select: {
