@@ -4,7 +4,7 @@ import {
   type Path,
   type FieldValues,
 } from "react-hook-form";
-import ManageInstructorsButton from "../../_components/manage-instructors-button";
+import ManageInstructorsButton from "../manage-instructors-button";
 import TeamMemberCard from "@/components/team-member-card";
 
 interface InstructorsProps<T extends FieldValues> {

@@ -13,6 +13,16 @@ export default async function Page({
     where: { id: searchParams.id as string },
     include: {
       users: {
+        where: {
+          OR: [
+            {
+              role: "instructor",
+            },
+            {
+              role: "head",
+            },
+          ],
+        },
         include: {
           user: true,
         },

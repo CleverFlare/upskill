@@ -98,7 +98,12 @@ export default publicProcedure
     }
 
     if (input?.instructors) {
-      await db.userCourse.deleteMany({ where: { courseId: input.id } });
+      await db.userCourse.deleteMany({
+        where: {
+          courseId: input.id,
+          OR: [{ role: "head" }, { role: "instructor" }],
+        },
+      });
 
       const instructorRelations = input.instructors.map(({ role, id }) => ({
         userId: id,
