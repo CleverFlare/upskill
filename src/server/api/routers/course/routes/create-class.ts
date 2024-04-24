@@ -27,6 +27,7 @@ export default publicProcedure
           description: input.description,
           resources: input.resources,
           locked: isFirstClass ? false : true,
+          videoId: input.videoId,
           course: {
             connect: {
               id: input.courseId,

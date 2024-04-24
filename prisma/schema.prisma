@@ -133,6 +133,7 @@ model Class {
   locked      Boolean     @default(true)
   resources   Resource[]
   users       UserClass[]
+  videoId     String
   courseId    String      @db.ObjectId
   course      Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }

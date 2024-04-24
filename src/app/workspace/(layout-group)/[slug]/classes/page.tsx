@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { HiLink, HiOutlineCheckCircle } from "react-icons/hi2";
+import { HiLink } from "react-icons/hi2";
 import AddButton from "./_components/add-button";
 import TopicWithControls from "./_components/topic-with-control";
-import YouTube from "./_components/youtube-player";
 import { db } from "@/server/db";
 import { getServerAuthSession } from "@/server/auth";
 import { cn } from "@/lib/utils";
 import Topic from "@/components/topic";
 import { type Resource } from "@prisma/client";
+import YouTube from "./_components/youtube-player";
 
 export default async function Page({
   params,
@@ -38,18 +38,20 @@ export default async function Page({
     <div className="flex flex-wrap gap-4">
       {!!currentCourse && (
         <div className="flex flex-1 flex-col items-start gap-4">
-          <YouTube
-            videoId={currentCourse?.id}
-            title="YouTube video player"
-            opts={{
-              allow:
-                "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
-              referrerPolicy: "strict-origin-when-cross-origin",
-              allowFullScreen: true,
-            }}
-            className="w-full"
-            iframeClassName="aspect-[2/1] max-h-[600px] h-screen w-full rounded-lg border-none"
-          />
+          {
+            <YouTube
+              videoId={currentCourse?.videoId ?? ""}
+              title="YouTube video player"
+              opts={{
+                allow:
+                  "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+                referrerpolicy: "strict-origin-when-cross-origin",
+                allowfullscreen: true,
+              }}
+              className="w-full"
+              iframeClassName="aspect-[2/1] max-h-[600px] h-screen w-full rounded-lg border-none"
+            />
+          }
           <div className={cn("flex w-full items-center")}>
             <h2 className="text-2xl font-bold">{currentCourse?.title}</h2>
           </div>
