@@ -1,4 +1,3 @@
-import { HiOutlineCheckCircle, HiOutlineMinusCircle } from "react-icons/hi2";
 import { Button, type ButtonProps } from "./ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
