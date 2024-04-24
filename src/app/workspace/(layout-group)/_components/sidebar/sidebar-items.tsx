@@ -20,7 +20,7 @@ import {
   notifications as courseNotifications,
 } from "@/data/notifications";
 
-export default function SidebarItems() {
+export default function SidebarItems({ progress }: { progress: number }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params: Record<string, string | string[]> & { slug: string } =
@@ -90,7 +90,7 @@ export default function SidebarItems() {
           <p className="text-xs font-bold uppercase text-gray-700 dark:text-gray-400">
             progress
           </p>
-          <Progress value={50} />
+          <Progress value={progress} />
         </div>
       )}
       <div className="flex flex-col gap-3">
