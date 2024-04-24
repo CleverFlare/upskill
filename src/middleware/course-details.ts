@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { type UserCourse } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -9,6 +10,7 @@ export default async function middleware(request: NextRequest) {
   if (!session) return;
 
   const isAdmin = session.user.role === "admin";
+  const isStudent = session.user.role === "student";
   const courseId = request.nextUrl.pathname
     .replace(/^\/|\/$/g, "")
     .split("/")[1];
@@ -20,7 +22,9 @@ export default async function middleware(request: NextRequest) {
 
   const hasCourse = hasCourseRes.ok;
 
-  console.log(hasCourseRes.status);
+  const courseData = (await hasCourseRes.json()) as { data: UserCourse } | null;
+
+  if (hasCourse && isStudent && !courseData?.data?.isAccepted) return;
 
   if (hasCourse || isAdmin)
     return NextResponse.redirect(

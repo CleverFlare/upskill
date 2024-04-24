@@ -23,14 +23,7 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  if (!userCourse)
-    return NextResponse.json(
-      { message: "User doesn't have this course" },
-      { status: 401 },
-    );
+  if (!userCourse) return NextResponse.json({ data: null }, { status: 401 });
 
-  return NextResponse.json(
-    { message: "User has this course" },
-    { status: 200 },
-  );
+  return NextResponse.json({ data: userCourse }, { status: 200 });
 }

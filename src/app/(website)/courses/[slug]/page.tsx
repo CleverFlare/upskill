@@ -7,6 +7,8 @@ import type { Prisma, User } from "@prisma/client";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { HiArrowLeftOnRectangle, HiOutlineWindow } from "react-icons/hi2";
+import EnrollButton from "./_components/enroll-button";
+import UnenrollButton from "./_components/unenroll-button";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   try {
@@ -18,6 +20,16 @@ export default async function Page({ params }: { params: { slug: string } }) {
       },
       include: {
         users: {
+          where: {
+            OR: [
+              {
+                role: "instructor",
+              },
+              {
+                role: "head",
+              },
+            ],
+          },
           include: {
             user: true,
           },
@@ -60,6 +72,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
     const hasCourse = !!userCourseRecord || session?.user.role === "admin";
 
+    const isAccepted = userCourseRecord?.isAccepted;
+
     return (
       <Container className="flex flex-col gap-10 py-5">
         <CourseDetails
@@ -78,13 +92,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
             </Link>
           </Button>
         )}
-        {!!session && !hasCourse && (
-          <Button>
-            <HiArrowLeftOnRectangle className="me-2 text-base" />
-            Enroll to this course
-          </Button>
-        )}
-        {!!session && hasCourse && (
+        {!!session && !hasCourse && <EnrollButton />}
+        {!!session && hasCourse && !isAccepted && <UnenrollButton />}
+        {!!session && hasCourse && isAccepted && (
           <Button asChild>
             <Link href={`/workspace/${databaseCourseData.id}`}>
               <HiOutlineWindow className="me-2 text-base" />

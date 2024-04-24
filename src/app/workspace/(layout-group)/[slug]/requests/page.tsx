@@ -19,7 +19,13 @@ export default async function Page({
       AND: [
         {
           courses: {
-            some: { AND: [{ courseId: params.slug }, { isAccepted: false }] },
+            some: {
+              AND: [
+                { courseId: params.slug },
+                { isAccepted: false },
+                { role: "student" },
+              ],
+            },
           },
         },
         {
