@@ -9,6 +9,8 @@ import createClass from "./routes/create-class";
 import deleteClass from "./routes/delete-class";
 import toggleClassLock from "./routes/toggle-class-lock";
 import enrollRequest from "./routes/enroll-request";
+import attend from "./routes/attend";
+import absent from "./routes/absent";
 
 const courseRouter = createTRPCRouter({
   create,
@@ -21,6 +23,8 @@ const courseRouter = createTRPCRouter({
   deleteClass,
   toggleClassLock,
   enrollRequest,
+  attend,
+  absent,
 });
 
 export default courseRouter;
