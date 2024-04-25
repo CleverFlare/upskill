@@ -4,6 +4,10 @@ import Paginator from "@/components/pagination";
 import { db } from "@/server/db";
 import { format } from "date-fns";
 import ClassDropDown from "./_components/class-drop-down";
+import {
+  HiExclamationCircle,
+  HiOutlineExclamationCircle,
+} from "react-icons/hi2";
 
 export default async function Page({
   searchParams,
@@ -106,6 +110,12 @@ export default async function Page({
       <ClassDropDown
         classes={classes.map((item) => ({ id: item.id, name: item.title }))}
       />
+      {!searchParams.id && (
+        <p className="flex items-center">
+          <HiOutlineExclamationCircle className="me-2 animate-pulse text-xl" />
+          You must select a class first to manage its attendance.
+        </p>
+      )}
       {!!searchParams.id && (
         <>
           <DataTable data={data} columns={columns} />
