@@ -87,28 +87,30 @@ model Course {
   users         UserCourse[]
   announcements Announcement[]
   classes       Class[]
+  assignments   Assignment[]
 }
 
 model User {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
-  firstName     String
-  lastName      String
-  username      String       @unique
-  birthDay      String
-  role          String
-  gender        String
-  phone         String
-  password      String
-  email         String       @unique
-  isActive      Boolean      @default(false)
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  courses       UserCourse[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  classes       UserClass[]
+  id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+  firstName            String
+  lastName             String
+  username             String                 @unique
+  birthDay             String
+  role                 String
+  gender               String
+  phone                String
+  password             String
+  email                String                 @unique
+  isActive             Boolean                @default(false)
+  emailVerified        DateTime?
+  image                String?
+  accounts             Account[]
+  sessions             Session[]
+  courses              UserCourse[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  classes              UserClass[]
+  AssignmentSubmission AssignmentSubmission[]
 }
 
 model UserClass {
@@ -136,6 +138,27 @@ model Class {
   videoId     String
   courseId    String      @db.ObjectId
   course      Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model AssignmentSubmission {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String      @db.ObjectId
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime    @default(now())
+  link         String
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  assignmentId String?     @db.ObjectId
+}
+
+model Assignment {
+  id          String                 @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  dueDate     DateTime
+  createdAt   DateTime               @default(now())
+  courseId    String                 @db.ObjectId
+  course      Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  submissions AssignmentSubmission[]
 }
 
 model VerificationToken {

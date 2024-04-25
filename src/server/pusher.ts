@@ -1,10 +1,16 @@
 import { env } from "@/env";
 import Pusher from "pusher";
 
-export const pusher = new Pusher({
-  appId: env.PUSHER_APP_ID,
-  key: env.PUSHER_KEY,
-  secret: env.PUSHER_SECRET,
-  cluster: env.PUSHER_CLUSTER,
-  useTLS: true,
-});
+// export const pusher = new Pusher({
+//   appId: env.PUSHER_APP_ID,
+//   key: env.PUSHER_KEY,
+//   secret: env.PUSHER_SECRET,
+//   cluster: env.PUSHER_CLUSTER,
+//   useTLS: true,
+// });
+
+export const pusher = {
+  trigger: async (channel: string, event: string, data) => {
+    // something
+  },
+};

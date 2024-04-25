@@ -26,8 +26,7 @@ export default function SidebarItems({ progress }: { progress: number }) {
   const params: Record<string, string | string[]> & { slug: string } =
     useParams();
 
-  const [storedNotifications, setStoredNotifications] =
-    useAtom(courseNotifications);
+  const [_, setStoredNotifications] = useAtom(courseNotifications);
 
   const handleAddNotifications = useCallback(
     (name: keyof CourseNotification, value: number) => {
@@ -43,8 +42,6 @@ export default function SidebarItems({ progress }: { progress: number }) {
     },
     [],
   );
-
-  console.log(storedNotifications);
 
   const router = useRouter();
 

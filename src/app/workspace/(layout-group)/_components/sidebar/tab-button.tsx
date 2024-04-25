@@ -50,6 +50,7 @@ export default function TabButton({
   }
 
   const path: string = usePathname();
+
   const pathArray = path
     .trim()
     .replace(/^\/+|\/+$/g, "")
@@ -60,18 +61,35 @@ export default function TabButton({
     "",
   )}`;
 
-  useEffect(() => {
-    if (path === currentPath) {
+  function checkActive() {
+    const pathMatches = (pattern: string | RegExp) => {
+      if (typeof pattern === "string") {
+        return path === pattern;
+      } else if (pattern instanceof RegExp) {
+        return pattern.test(path);
+      }
+      return false;
+    };
+
+    // Check if the current path matches the 'path' prop
+    if (path && currentPath === path) {
       setChecked(true);
-      if (notificationsName) handleSetNotifications(notificationsName, 0);
-    } else if (activeOn) {
-      for (const activePath of activeOn)
-        if (activePath instanceof RegExp && activePath.test(path))
+      return;
+    }
+
+    // Check if the current path matches any item in the 'activeOn' prop array
+    if (activeOn && Array.isArray(activeOn)) {
+      for (const pattern of activeOn) {
+        if (pathMatches(pattern)) {
           setChecked(true);
-        else if (typeof activePath === "string" && path === activePath)
-          setChecked(true);
-        else setChecked(false);
-    } else setChecked(false);
+          return;
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    checkActive();
 
     setIsLoading(false);
   }, [path]);

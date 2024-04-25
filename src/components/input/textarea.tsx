@@ -46,7 +46,7 @@ export default function TextareaInput<T extends FieldValues>({
         id={labelId}
         className={cn(
           !!error
-            ? "border border-destructive focus-visible:ring-destructive"
+            ? "whitespace-pre-wrap border border-destructive focus-visible:ring-destructive"
             : "",
           className,
         )}

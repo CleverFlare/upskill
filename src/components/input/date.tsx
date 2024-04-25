@@ -24,6 +24,8 @@ interface DateInputProps<T extends FieldValues>
   required?: boolean;
   placeholder?: string;
   noHelperText?: boolean;
+  fromYear?: number;
+  toYear?: number;
 }
 
 export default function DateInput<T extends FieldValues>({
@@ -32,6 +34,8 @@ export default function DateInput<T extends FieldValues>({
   label,
   required,
   placeholder,
+  fromYear,
+  toYear,
   noHelperText,
   ...props
 }: DateInputProps<T>) {
@@ -90,8 +94,8 @@ export default function DateInput<T extends FieldValues>({
           <Calendar
             mode="single"
             captionLayout="dropdown-buttons"
-            fromYear={1600}
-            toYear={2015}
+            fromYear={fromYear ?? 1600}
+            toYear={toYear ?? 2015}
             onSelect={(value) => onChange(value)}
             selected={value}
             {...props}

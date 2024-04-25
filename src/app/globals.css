@@ -89,6 +89,15 @@
     -webkit-text-fill-color: initial;
     font-weight: normal;
   }
+  .inline-code-paragraph code {
+    @apply rounded-md bg-blue-950 p-1 text-sm text-white;
+  }
+  .code-block {
+    @apply w-full;
+  }
+  .code-block code {
+    @apply block rounded-lg bg-blue-950 p-3 text-sm text-white;
+  }
   .text-fill-destructive {
     -webkit-text-fill-color: hsl(var(--destructive));
   }

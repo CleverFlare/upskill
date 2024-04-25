@@ -24,9 +24,19 @@ import {
 import Pusher from "pusher-js";
 import { type CourseNotification } from "@/data/notifications";
 
-export const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-  cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-});
+// export const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+//   cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+// });
+
+export const pusher = {
+  subscribe: (_: string) => {
+    return {
+      bind: (_: string, callback: (data) => void) => {
+        // callback()
+      },
+    };
+  },
+};
 
 export interface Tab {
   name: string;
@@ -137,6 +147,7 @@ const tabs: Tab[] = [
     checkedIcon: <HiClipboardDocumentList className="text-base" />,
     permissions: ["instructor"],
     notificationsName: "assignments",
+    activeOn: [/^\/workspace\/(.*?)\/assignments\/(.*?)$/gi],
   },
   {
     name: "Quizzes",
