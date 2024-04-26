@@ -1,6 +1,9 @@
 import { db } from "@/server/db";
 import Quiz, { type QuizProps } from "./_components/quiz";
 import { getServerAuthSession } from "@/server/auth";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { HiPlus } from "react-icons/hi2";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await getServerAuthSession();
@@ -67,16 +70,24 @@ export default async function Page({ params }: { params: { slug: string } }) {
       createdAt: quiz.createdAt,
       defaultOpen: index === 0,
       questions,
-
       isCollected: quiz.UserQuiz[0]?.collected ?? false,
     };
   }) as unknown as QuizProps[];
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="relative flex flex-col gap-2">
       {data.map((quiz) => (
-        <Quiz {...quiz} />
+        <Quiz {...quiz} isDeletable />
       ))}
+      <Button
+        size="icon"
+        asChild
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 shadow-lg"
+      >
+        <Link href="quizzes/create">
+          <HiPlus className="text-base" />
+        </Link>
+      </Button>
     </div>
   );
 }

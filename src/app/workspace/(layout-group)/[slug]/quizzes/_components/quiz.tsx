@@ -13,7 +13,7 @@ import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { LuLoader2 } from "react-icons/lu";
-import collectPoints from "@/server/api/routers/quiz/routers/collect-points";
+import DeleteButton from "./delete-button";
 
 export interface QuizProps {
   id: string;
@@ -23,6 +23,7 @@ export interface QuizProps {
   questions: QuestionProps[];
   defaultOpen?: boolean;
   isCollected?: boolean;
+  isDeletable?: boolean;
 }
 
 export default function Quiz({
@@ -33,6 +34,7 @@ export default function Quiz({
   questions,
   defaultOpen,
   isCollected,
+  isDeletable,
 }: QuizProps) {
   const [open, setOpen] = useState<boolean>(defaultOpen ?? false);
   const [timeLeft, setTimeLeft] = useState<string | null>();
@@ -129,7 +131,7 @@ export default function Quiz({
             <HiChevronDown className="text-xl font-bold" />
           </Button>
         </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-2 p-3">
+        <CollapsibleContent className="group relative space-y-2 p-3">
           {questions.map((question) => (
             <Question
               key={question.id}
@@ -157,6 +159,11 @@ export default function Quiz({
               )}
               Submit
             </Button>
+          )}
+          {isDeletable && (
+            <div className="absolute right-1 top-1 opacity-0 transition-opacity group-hover:opacity-100">
+              <DeleteButton id={id} />
+            </div>
           )}
         </CollapsibleContent>
       </Collapsible>
