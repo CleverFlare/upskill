@@ -88,6 +88,7 @@ model Course {
   announcements Announcement[]
   classes       Class[]
   assignments   Assignment[]
+  Quiz          Quiz[]
 }
 
 model User {
@@ -111,6 +112,8 @@ model User {
   updatedAt            DateTime               @updatedAt
   classes              UserClass[]
   AssignmentSubmission AssignmentSubmission[]
+  UserQuestion         UserQuestion[]
+  UserQuiz             UserQuiz[]
 }
 
 model UserClass {
@@ -159,6 +162,56 @@ model Assignment {
   courseId    String                 @db.ObjectId
   course      Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
   submissions AssignmentSubmission[]
+}
+
+model QuizOption {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  body           String
+  quizQuestion   QuizQuestion? @relation(fields: [quizQuestionId], references: [id], onDelete: Cascade)
+  quizQuestionId String?       @db.ObjectId
+}
+
+model UserQuiz {
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String         @db.ObjectId
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId    String         @db.ObjectId
+  quiz      Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answers   UserQuestion[]
+  collected Boolean        @default(false)
+}
+
+model UserQuestion {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String       @db.ObjectId
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String       @db.ObjectId
+  question   QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  userQuiz   UserQuiz     @relation(fields: [userQuizId], references: [id], onDelete: Cascade)
+  userQuizId String       @db.ObjectId
+  answer     String
+}
+
+model QuizQuestion {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  statement   String
+  options     QuizOption[]
+  correct     String
+  submissions UserQuestion[]
+  points      Int
+  quiz        Quiz?          @relation(fields: [quizId], references: [id])
+  quizId      String?        @db.ObjectId
+}
+
+model Quiz {
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime       @default(now())
+  deadline  DateTime
+  courseId  String         @db.ObjectId
+  course    Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  UserQuiz  UserQuiz[]
+  questions QuizQuestion[]
 }
 
 model VerificationToken {
