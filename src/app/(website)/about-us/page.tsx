@@ -30,7 +30,7 @@ export default function Page() {
         </div>
       </div>
       <Image
-        src="/fraternity.webp"
+        src="/friendship.jpg"
         alt="Fraternity"
         width={1080}
         height={374}
