@@ -97,7 +97,18 @@ export default async function Page({
           Course Content
         </p>
         <div className="flex flex-col gap-2">
+          {!courses.length && (
+            <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-border p-2">
+              <p className="text-xl font-bold capitalize">
+                No classes available
+              </p>
+              <p className="text-muted-foreground">
+                There are currently no classes
+              </p>
+            </div>
+          )}
           {session?.user.role === "instructor" &&
+            !!courses.length &&
             courses.map((course, index) => (
               <TopicWithControls
                 href={`?id=${course.id}`}
