@@ -71,13 +71,13 @@ export const globalTabs: GlobalTab[] = [
   {
     name: "Assignments",
     href: "/assignments",
-    permissions: ["instructor", "student"],
+    permissions: ["instructor", "student", "admin"],
     activeOn: [/^\/workspace\/(.*?)\/assignments\/(.*?)$/gi],
   },
   {
     name: "Quizzes",
     href: "/quizzes",
-    permissions: ["instructor", "student"],
+    permissions: ["instructor", "student", "admin"],
     activeOn: [/^\/workspace\/(.*?)\/quizzes\/(.*?)$/gi],
   },
 ];
