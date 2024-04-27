@@ -156,6 +156,7 @@ const tabs: Tab[] = [
     checkedIcon: <HiLightBulb className="text-base" />,
     permissions: ["instructor"],
     notificationsName: "quizzes",
+    activeOn: [/^\/workspace\/(.*?)\/quizzes\/(.*?)$/gi],
   },
 ];
 
