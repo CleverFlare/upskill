@@ -4,8 +4,15 @@ import { getServerAuthSession } from "@/server/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { HiPlus } from "react-icons/hi2";
+import Paginator from "@/components/pagination";
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams: { page: string };
+}) {
   const session = await getServerAuthSession();
   const quizzesData = await db.quiz.findMany({
     where: {
@@ -31,7 +38,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
         },
       },
     },
+    take: 10,
+    skip: searchParams?.page ? 10 * (+searchParams.page - 1) : 0,
   });
+
+  let quizzesCount = await db.quiz.count({ where: { courseId: params.slug } });
+
+  quizzesCount = Math.ceil(quizzesCount / 10);
 
   const data: QuizProps[] = quizzesData.map((quiz, index) => {
     // Convert deadline to Date object
@@ -54,7 +67,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       points: question.points,
       ...(!!question.submissions.length &&
         !!question.submissions[0]!.answer && {
-          chosen: question.submissions[0]!.answer as string,
+          chosen: question.submissions[0]!.answer,
         }),
       ...(!deadline && { correct: question.correct }),
       options: question.options.map((option) => ({
@@ -79,6 +92,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       {data.map((quiz) => (
         <Quiz {...quiz} isDeletable key={`Quiz ${quiz.id}`} />
       ))}
+      {quizzesCount > 1 && <Paginator total={quizzesCount} />}
       <Button
         size="icon"
         asChild
