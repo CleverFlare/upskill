@@ -70,7 +70,7 @@ export default function QuestionForm({ value, onChange }: QuestionFormProps) {
         </TabsContent>
       </Tabs>
       {value.options.map((option, index) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2" key={`Option ${index}`}>
           <Button
             variant="outline"
             disabled={value.correct === index}

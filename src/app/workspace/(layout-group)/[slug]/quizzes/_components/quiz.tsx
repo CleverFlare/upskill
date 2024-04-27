@@ -134,7 +134,7 @@ export default function Quiz({
         <CollapsibleContent className="group relative space-y-2 p-3">
           {questions.map((question) => (
             <Question
-              key={question.id}
+              key={`Question ${question.id}`}
               {...question}
               onSelect={(id, choice) =>
                 setChoices((prev) => ({ ...prev, [id]: choice }))

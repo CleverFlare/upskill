@@ -5,6 +5,7 @@ import Announcement, {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { HiTrash } from "react-icons/hi2";
@@ -22,8 +23,10 @@ export default function AnnouncementWithActions({
     },
   });
 
+  const { data: session } = useSession();
+
   function handleDelete() {
-    mutate({ id });
+    mutate({ id, userId: session!.user.id });
   }
 
   return (

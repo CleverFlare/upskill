@@ -23,7 +23,7 @@ export default async function Page({
         )}
         {announcementsData.map(({ title, image, content, id }) => (
           <AnnouncementWithActions
-            key={id}
+            key={`Announcement With Actions ${id}`}
             id={id}
             title={title}
             createdAt={new Date().toISOString()}

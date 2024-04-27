@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { HiOutlineCheckCircle } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
@@ -12,6 +13,7 @@ export default function AcceptManyButton({
   onSuccess?: () => void;
 }) {
   const router = useRouter();
+  const { data: session } = useSession();
   const { mutate, isPending } = api.user.acceptInstructors.useMutation({
     onSuccess: () => {
       router.push("?");
@@ -21,7 +23,12 @@ export default function AcceptManyButton({
   });
   return (
     <Button
-      onClick={() => mutate(ids as [string, ...string[]])}
+      onClick={() =>
+        mutate({
+          instructors: ids as [string, ...string[]],
+          userId: session!.user.id,
+        })
+      }
       disabled={!ids.length || isPending}
     >
       {!isPending && <HiOutlineCheckCircle className="me-2 text-base" />}

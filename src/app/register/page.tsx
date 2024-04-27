@@ -49,7 +49,6 @@ export default function Page() {
           redirect: false,
         });
         setIsLoading(false);
-        console.log(res);
         if (!res?.ok)
           toast(
             <div className="flex gap-2">
@@ -95,6 +94,7 @@ export default function Page() {
                 state={state}
                 isError={error(errors)}
                 onClick={() => setStepNumber(index)}
+                key={`Step ${index}`}
               />
             );
             if (index === steps.length - 1) return stepComp;

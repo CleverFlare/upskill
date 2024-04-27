@@ -17,6 +17,7 @@ import DescriptionField from "../_components/course-manipulation/description-fie
 import NameField from "../_components/course-manipulation/name-field";
 import Thumbnail from "../_components/course-manipulation/thumbnail";
 import Banner from "../_components/course-manipulation/banner";
+import { useSession } from "next-auth/react";
 
 export default function Page() {
   const {
@@ -41,6 +42,8 @@ export default function Page() {
       router.refresh();
     },
   });
+
+  const { data: session } = useSession();
 
   async function submitData({
     thumbnail,
@@ -77,6 +80,7 @@ export default function Page() {
         { id: string; role: string },
         ...{ id: string; role: string }[],
       ],
+      userId: session!.user.id,
     });
   }
 

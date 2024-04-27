@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
+import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { HiOutlineXCircle } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
@@ -14,13 +15,19 @@ export default function AbsentButton({ id }: { id: string }) {
 
   const searchParams = useSearchParams();
 
+  const { data: session } = useSession();
+
   return (
     <Button
       size="icon"
       variant="outline"
       className="text-destructive hover:text-destructive"
       onClick={() =>
-        mutate({ students: [id], classId: searchParams.get("id")! })
+        mutate({
+          students: [id],
+          classId: searchParams.get("id")!,
+          userId: session!.user.id,
+        })
       }
       disabled={isPending}
     >

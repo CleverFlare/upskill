@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
+import getUsername from "@/lib/get-username";
 
 export default publicProcedure
   .input(
@@ -22,7 +23,7 @@ export default publicProcedure
       )
         return;
 
-      await db.assignmentSubmission.create({
+      const submission = await db.assignmentSubmission.create({
         data: {
           link: input.link,
           assignment: {
@@ -35,6 +36,30 @@ export default publicProcedure
               id: input.userId,
             },
           },
+        },
+        include: {
+          user: true,
+          assignment: {
+            include: {
+              course: true,
+            },
+          },
+        },
+      });
+
+      const username = await getUsername(input.userId);
+
+      const report = `In course \`${
+        submission?.assignment?.course?.name ?? "Unknown"
+      }\` an assignment submission has been made to assignment \`${
+        submission?.assignment?.title ?? "Unknown"
+      }\``;
+
+      await db.log.create({
+        data: {
+          username: username ?? "Unknown",
+          event: "Assignment Submission",
+          description: report,
         },
       });
     } catch (err) {

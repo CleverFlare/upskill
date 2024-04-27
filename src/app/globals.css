@@ -1,8 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
 
 @layer base {
+  code {
+    font-family: "Roboto Mono", monospace;
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -90,7 +94,7 @@
     font-weight: normal;
   }
   .inline-code-paragraph code {
-    @apply rounded-md bg-blue-950 p-1 text-sm text-white;
+    @apply rounded-sm bg-muted-foreground/15 p-1 text-sm text-muted-foreground;
   }
   .code-block {
     @apply w-full;

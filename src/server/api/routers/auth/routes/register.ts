@@ -19,8 +19,6 @@ export default publicProcedure
         },
       });
 
-      console.log(createdUser)
-
       return createdUser;
     } catch (err) {
       console.log(err);

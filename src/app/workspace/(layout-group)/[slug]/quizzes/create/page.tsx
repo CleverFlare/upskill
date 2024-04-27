@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { useParams, useRouter } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
+import { useSession } from "next-auth/react";
 
 export default function Page() {
   const { control, handleSubmit } = useForm<z.infer<typeof createQuizSchema>>({
@@ -36,6 +37,8 @@ export default function Page() {
 
   const router = useRouter();
 
+  const { data: session } = useSession();
+
   const { mutate, isPending } = api.quiz.create.useMutation({
     onSuccess: () => {
       router.push(".");
@@ -43,10 +46,7 @@ export default function Page() {
     },
   });
 
-  console.log(error);
-
   function submitData(data: z.infer<typeof createQuizSchema>) {
-    console.log(data);
     const date = new Date(data.deadlineDate.toISOString());
     const [hours, minutes] = data.deadlineTime.split(":");
     date.setHours(+hours!);
@@ -57,6 +57,7 @@ export default function Page() {
       questions: data.questions,
       name: data.name,
       courseId: params.slug,
+      userId: session!.user.id,
     });
   }
 

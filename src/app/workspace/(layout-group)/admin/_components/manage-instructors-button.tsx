@@ -142,10 +142,6 @@ export default function ManageInstructorsButton({
           } as Omit<Instructor, "role">,
         ];
       });
-
-    console.log(roles);
-
-    console.log(instructors);
   }
 
   function handleSave() {

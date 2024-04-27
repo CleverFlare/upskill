@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
+import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import { HiOutlineXCircle } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
@@ -21,6 +22,7 @@ export default function DenyManyButton({
   });
 
   const params: { slug: string } = useParams();
+  const { data: session } = useSession();
 
   return (
     <Button
@@ -28,6 +30,7 @@ export default function DenyManyButton({
         mutate({
           students: ids as [string, ...string[]],
           courseId: params.slug,
+          userId: session!.user.id,
         })
       }
       disabled={!ids.length || isPending}

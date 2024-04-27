@@ -2,11 +2,11 @@
 import Topic, { type TopicProps } from "@/components/topic";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
+import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import {
   HiOutlineLockClosed,
   HiOutlineLockOpen,
-  HiOutlinePencil,
   HiOutlineTrash,
 } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
@@ -28,9 +28,14 @@ export default function TopicWithControls({
   }
   const { mutate: mutateDelete, isPending: isDeletePending } =
     api.course.deleteClass.useMutation({ onSuccess: handleSuccess });
+
+  const { data: session } = useSession();
+
   const { mutate: mutateLock, isPending: isLockPending } =
     api.course.toggleClassLock.useMutation({ onSuccess: handleSuccess });
+
   const params: { slug: string } = useParams();
+
   return (
     <div className="group relative flex w-full items-center">
       <Topic {...props} className="w-full" />
@@ -41,7 +46,12 @@ export default function TopicWithControls({
             size="icon"
             className="size-7"
             onClick={() =>
-              mutateLock({ locked: !locked, id, courseId: params.slug })
+              mutateLock({
+                locked: !locked,
+                id,
+                courseId: params.slug,
+                userId: session!.user.id,
+              })
             }
             disabled={isLockPending}
           >
@@ -55,7 +65,7 @@ export default function TopicWithControls({
           size="icon"
           className="size-7"
           disabled={isDeletePending}
-          onClick={() => mutateDelete({ id })}
+          onClick={() => mutateDelete({ id, userId: session!.user.id })}
         >
           {isDeletePending && <LuLoader2 className="animate-spin" />}
           {!isDeletePending && <HiOutlineTrash />}

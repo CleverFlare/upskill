@@ -2,6 +2,7 @@ import { z } from "zod";
 import { publicProcedure } from "@/server/api/trpc";
 import { db, imagekit } from "@/server/db";
 import { pusher } from "@/server/pusher";
+import getUsername from "@/lib/get-username";
 
 export default publicProcedure
   .input(
@@ -10,6 +11,7 @@ export default publicProcedure
       title: z.string(),
       content: z.string(),
       image: z.string().optional(),
+      userId: z.string(),
     }),
   )
   .mutation(async ({ input }) => {
@@ -35,11 +37,30 @@ export default publicProcedure
           content: input.content,
           createdAt: new Date(),
         },
+        include: {
+          course: true,
+        },
       });
 
       await pusher.trigger(input.courseId, "notifications", {
         name: "announcements",
         notifications: 1,
+      });
+
+      const username = await getUsername(input.userId);
+
+      const report = `In course \`${
+        announcement.course.name ?? "Unknown"
+      }\` an announcement has been created with the title \`${
+        announcement.title
+      }\``;
+
+      await db.log.create({
+        data: {
+          username: username ?? "Unknown",
+          event: "Create Assignment",
+          description: report,
+        },
       });
 
       return {

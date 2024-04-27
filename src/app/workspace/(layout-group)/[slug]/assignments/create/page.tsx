@@ -17,6 +17,7 @@ import { api } from "@/trpc/react";
 import { useParams, useRouter } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 export default function Page() {
   const { control, handleSubmit, watch } = useForm<
@@ -36,6 +37,8 @@ export default function Page() {
     },
   });
 
+  const { data: session } = useSession();
+
   const params: { slug: string } = useParams();
 
   function submitData(data: z.infer<typeof createAssignmentSchema>) {
@@ -45,6 +48,7 @@ export default function Page() {
       title: data.title,
       content: data.content,
       dueDate: data.dueDate.toISOString(),
+      userId: session!.user.id,
     });
   }
 

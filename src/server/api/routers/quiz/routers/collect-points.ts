@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
+import getUsername from "@/lib/get-username";
 
 export default publicProcedure
   .input(
@@ -17,6 +18,11 @@ export default publicProcedure
           userId: input.userId,
         },
         include: {
+          quiz: {
+            include: {
+              course: true,
+            },
+          },
           answers: {
             include: {
               question: true,
@@ -46,6 +52,18 @@ export default publicProcedure
           id: userQuiz.id,
         },
         data: { collected: true },
+      });
+
+      const username = await getUsername(input.userId);
+
+      const report = `In course \`${userQuiz.quiz.course.name}\` user \`${username}\` has claimed his points on quiz \`${userQuiz.quiz.name}\``;
+
+      await db.log.create({
+        data: {
+          username: username ?? "Unknown",
+          event: "Create Quiz",
+          description: report,
+        },
       });
     } catch (err) {
       console.log("ERROR:", err);

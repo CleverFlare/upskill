@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   return (
     <div className="relative flex flex-col gap-2">
       {data.map((quiz) => (
-        <Quiz {...quiz} isDeletable />
+        <Quiz {...quiz} isDeletable key={`Quiz ${quiz.id}`} />
       ))}
       <Button
         size="icon"

@@ -15,8 +15,6 @@ async function ProgressInjectedSidebarItems() {
 
   const slug = pathnameArray[1];
 
-  console.log(slug);
-
   let unlocked = 0;
 
   const classes =

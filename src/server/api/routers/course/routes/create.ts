@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { publicProcedure } from "@/server/api/trpc";
 import { db, imagekit } from "@/server/db";
+import getUsername from "@/lib/get-username";
 
 export default publicProcedure
   .input(
@@ -15,6 +16,7 @@ export default publicProcedure
         .object({ id: z.string(), role: z.string() })
         .array()
         .nonempty(),
+      userId: z.string(),
     }),
   )
   .mutation(async ({ input }) => {
@@ -67,6 +69,20 @@ export default publicProcedure
               data: instructorRelations,
             },
           },
+        },
+      });
+
+      const username = await getUsername(input.userId);
+
+      const report = `A new course has been created with the name \`${
+        createdCourse?.name ?? "Unknown"
+      }\``;
+
+      await db.log.create({
+        data: {
+          username: username ?? "Unknown",
+          event: "Create Course",
+          description: report,
         },
       });
 

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
+import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { HiOutlineXCircle } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
@@ -21,12 +22,15 @@ export default function AbsentManyButton({
 
   const searchParams = useSearchParams();
 
+  const { data: session } = useSession();
+
   return (
     <Button
       onClick={() =>
         mutate({
           students: ids as [string, ...string[]],
           classId: searchParams.get("id")!,
+          userId: session!.user.id,
         })
       }
       disabled={!ids.length || isPending}

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -34,8 +35,10 @@ export default function CourseCardWithActions({
     },
   });
 
+  const { data: session } = useSession();
+
   async function handleDeleteCourse() {
-    mutate({ id });
+    mutate({ id, userId: session!.user.id });
     setDeleted(true);
   }
 

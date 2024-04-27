@@ -20,7 +20,11 @@ export default function UnenrollButton() {
 
   function handleRequest() {
     setIsLoading(true);
-    mutate({ students: [session!.user.id], courseId: params.slug });
+    mutate({
+      students: [session!.user.id],
+      courseId: params.slug,
+      userId: session!.user.id,
+    });
   }
 
   return (

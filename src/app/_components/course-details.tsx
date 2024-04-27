@@ -45,8 +45,8 @@ export default function CourseDetails({
           technologies
         </p>
         <div className="box-content flex w-full snap-x snap-mandatory flex-wrap gap-4 overflow-x-auto pb-2 md:overflow-x-visible">
-          {technologies.map((technology) => (
-            <TechnologyCard {...technology} />
+          {technologies.map((technology, index: number) => (
+            <TechnologyCard {...technology} key={`Technology Card ${index}`} />
           ))}
         </div>
       </div>
@@ -55,11 +55,12 @@ export default function CourseDetails({
           team
         </p>
         <div className="box-content flex w-full snap-x snap-mandatory flex-wrap gap-4 overflow-x-auto pb-2 md:overflow-x-visible">
-          {instructors.map((instructor) => (
+          {instructors.map((instructor, index) => (
             <TeamMemberCard
               role={instructor.role}
               name={instructor.name}
               image={instructor.image ?? undefined}
+              key={`Instructor ${index}`}
             />
           ))}
         </div>
@@ -70,7 +71,7 @@ export default function CourseDetails({
         </p>
         <div className="flex flex-col gap-[10px]">
           {prerequisites.map((prerequisite, index: number) => (
-            <div className="flex gap-2">
+            <div className="flex gap-2" key={`Prerequisite ${index}`}>
               <p className="h-full w-5 text-xl font-bold text-primary">
                 {index + 1}
               </p>

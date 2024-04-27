@@ -74,7 +74,6 @@ export default function SidebarItems({ progress }: { progress: number }) {
         "notifications",
         (data: { name: string; notifications: number }) => {
           handleAddNotifications(data.name, data.notifications);
-          console.log(data.notifications);
         },
       );
   }, [channel]);
@@ -94,8 +93,8 @@ export default function SidebarItems({ progress }: { progress: number }) {
         <p className="text-xs font-bold uppercase text-gray-700 dark:text-gray-400">
           section
         </p>
-        {tabs.map((tab) => (
-          <TabButton {...tab} channel={channel} />
+        {tabs.map((tab, index) => (
+          <TabButton {...tab} channel={channel} key={`Tab ${index}`} />
         ))}
       </div>
       <div className="mt-auto flex w-full flex-col gap-3">

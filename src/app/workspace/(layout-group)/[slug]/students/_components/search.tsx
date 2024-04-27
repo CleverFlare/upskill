@@ -12,7 +12,6 @@ export default function Search() {
     e.preventDefault();
     const nativeSearchParams = new URLSearchParams(searchParams);
     nativeSearchParams.set("search", search);
-    console.log("?" + nativeSearchParams.toString());
     router.push("?" + nativeSearchParams.toString());
   }
   return (

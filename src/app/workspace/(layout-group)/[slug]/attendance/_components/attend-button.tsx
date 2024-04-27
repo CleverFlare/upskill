@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
+import { useSession } from "next-auth/react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { HiOutlineCheckCircle } from "react-icons/hi2";
 import { LuLoader2 } from "react-icons/lu";
@@ -14,11 +15,17 @@ export default function AttendButton({ id }: { id: string }) {
 
   const searchParams = useSearchParams();
 
+  const { data: session } = useSession();
+
   return (
     <Button
       size="icon"
       onClick={() =>
-        mutate({ students: [id], classId: searchParams.get("id")! })
+        mutate({
+          students: [id],
+          classId: searchParams.get("id")!,
+          userId: session!.user.id,
+        })
       }
       disabled={isPending}
     >

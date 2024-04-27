@@ -51,6 +51,7 @@ export default function Question({
             order={orders[index] ?? `${index + 1}`}
             correct={correct}
             chosen={chosen}
+            key={`Option ${option.id}`}
           />
         ))}
       </div>

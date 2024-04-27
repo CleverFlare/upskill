@@ -28,7 +28,9 @@ export default function ClassDropDown({
       </SelectTrigger>
       <SelectContent>
         {classes.map((item) => (
-          <SelectItem value={item.id}>{item.name}</SelectItem>
+          <SelectItem value={item.id} key={`Class ${item.id}`}>
+            {item.name}
+          </SelectItem>
         ))}
       </SelectContent>
     </Select>

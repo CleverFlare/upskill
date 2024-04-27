@@ -34,13 +34,13 @@ export default function Paginator({ total }: { total: number }) {
         <PaginationItem>
           <PaginationPrevious onClick={previous} />
         </PaginationItem>
-        {range.map((page: number | "dots") =>
+        {range.map((page: number | "dots", index: number) =>
           page === "dots" ? (
-            <PaginationItem>
+            <PaginationItem key={`Pagination ${index}`}>
               <PaginationEllipsis />
             </PaginationItem>
           ) : (
-            <PaginationItem>
+            <PaginationItem key={`Pagination ${index}`}>
               <PaginationButton
                 onClick={() => setPage(page)}
                 isActive={page === active}

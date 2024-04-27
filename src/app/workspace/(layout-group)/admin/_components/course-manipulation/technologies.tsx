@@ -89,7 +89,7 @@ export default function Technologies<T extends FieldValues>({
         <div className="box-content flex w-full snap-x snap-mandatory flex-wrap gap-4 overflow-x-auto pb-2 md:overflow-x-visible">
           {Object?.entries(value ?? {})?.map(([id, { name, logo }]) => (
             <TechnologyCard
-              key={id}
+              key={`Technology Card ${id}`}
               logoUrl={
                 typeof logo === "string" ? logo : URL.createObjectURL(logo)
               }

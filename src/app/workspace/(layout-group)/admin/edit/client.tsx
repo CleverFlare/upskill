@@ -48,8 +48,6 @@ export default function ClientPage({
     defaultValues,
   });
 
-  console.log(errors);
-
   const router = useRouter();
 
   const updateCourse = api.course.update.useMutation({

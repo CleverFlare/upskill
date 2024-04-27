@@ -41,8 +41,13 @@ export default function Instructors<T extends FieldValues>({
         />
       </div>
       <div className="box-content flex w-full snap-x snap-mandatory flex-wrap gap-4 overflow-x-auto pb-2 md:overflow-x-visible">
-        {(value as InstructorType[]).map(({ name, role, image }) => (
-          <TeamMemberCard name={name} role={role} image={image} />
+        {(value as InstructorType[]).map(({ name, role, image }, index) => (
+          <TeamMemberCard
+            name={name}
+            role={role}
+            image={image}
+            key={`Team Member Card ${index}`}
+          />
         ))}
       </div>
       {!!error && <p className="text-sm text-destructive">{error.message}</p>}

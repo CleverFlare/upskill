@@ -19,6 +19,7 @@ import { HiPlus } from "react-icons/hi2";
 import { api } from "@/trpc/react";
 import { useParams } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
+import { useSession } from "next-auth/react";
 
 interface CreateClassDialogProps {
   data?: {
@@ -85,10 +86,13 @@ export default function CreateClassDialog({
     },
   });
 
+  const { data: session } = useSession();
+
   function submitData(data: z.infer<typeof createClassSchema>) {
     mutate({
       ...data,
       courseId: params.slug,
+      userId: session!.user.id,
     });
   }
 
@@ -123,6 +127,7 @@ export default function CreateClassDialog({
               onChange={(type, value) =>
                 handleResourcesChange(index, type, value)
               }
+              key={`Resource Input ${index}`}
             />
           ))}
           <Button
@@ -141,7 +146,7 @@ export default function CreateClassDialog({
             </Button>
           </DialogClose>
           <Button type="submit" disabled={isPending}>
-            {isPending && <LuLoader2 className="animate-spin text-base me-2" />}
+            {isPending && <LuLoader2 className="me-2 animate-spin text-base" />}
             Save changes
           </Button>
         </DialogFooter>

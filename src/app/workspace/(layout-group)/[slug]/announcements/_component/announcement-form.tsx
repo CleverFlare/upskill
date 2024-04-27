@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import createPostSchema from "@/schema/create-post";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createRef } from "react";
@@ -43,6 +44,8 @@ export default function AnnouncementForm({ courseId }: { courseId: string }) {
     },
   });
 
+  const { data: session } = useSession();
+
   async function submitData(data: z.infer<typeof createPostSchema>) {
     const image = !!data?.image
       ? ((await toBase64(data.image)) as string)
@@ -53,6 +56,7 @@ export default function AnnouncementForm({ courseId }: { courseId: string }) {
       content: data.content,
       image,
       courseId,
+      userId: session!.user.id,
     });
   }
 

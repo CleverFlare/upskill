@@ -10,6 +10,7 @@ import {
 import { SelectItem } from "@/components/ui/select";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { LuLoader2 } from "react-icons/lu";
@@ -49,12 +50,15 @@ export default function ModifyPointsDialog({
 
   const params: { slug: string } = useParams();
 
+  const { data: session } = useSession();
+
   function submitData(data: z.infer<typeof zodType>) {
     mutate({
       type: data.type,
       number: data.number,
       ids,
       courseId: params.slug,
+      userId: session!.user.id,
     });
   }
 

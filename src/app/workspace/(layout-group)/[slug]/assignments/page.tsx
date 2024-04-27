@@ -47,8 +47,6 @@ export default async function Page({
 
   assignmentsCount = Math.ceil(assignmentsCount / 10);
 
-  console.log(assignmentsData);
-
   const data: AssignmentProps[] = assignmentsData.map(
     ({ id, title, content, dueDate, createdAt, submissions }) => ({
       id,
@@ -63,7 +61,7 @@ export default async function Page({
   return (
     <div className="relative flex flex-col gap-2">
       {data.map((item) => (
-        <Assignment {...item} />
+        <Assignment {...item} key={`Assignment ${item.id}`} />
       ))}
       {assignmentsCount > 1 && <Paginator total={assignmentsCount} />}
       <Button

@@ -214,6 +214,14 @@ model Quiz {
   questions QuizQuestion[]
 }
 
+model Log {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  username    String
+  event       String
+  createdAt   DateTime @default(now())
+  description String
+}
+
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
