@@ -19,6 +19,7 @@ export default function AnnouncementWithActions({
   const { mutate, isPending } = api.course.deleteAnnouncement.useMutation({
     onSuccess: () => {
       setDeleted(true);
+      router.push("?");
       router.refresh();
     },
   });

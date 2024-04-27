@@ -35,23 +35,29 @@ export default async function Page({
     });
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex min-h-full flex-1 flex-wrap gap-4">
+      {!currentCourse && (
+        <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-border">
+          <p className="text-xl font-bold capitalize">No classes to view</p>
+          <p className="text-muted-foreground">
+            Create the root class to starting viewing
+          </p>
+        </div>
+      )}
       {!!currentCourse && (
         <div className="flex flex-1 flex-col items-start gap-4">
-          {
-            <YouTube
-              videoId={currentCourse?.videoId ?? ""}
-              title="YouTube video player"
-              opts={{
-                allow:
-                  "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
-                referrerpolicy: "strict-origin-when-cross-origin",
-                allowfullscreen: true,
-              }}
-              className="w-full"
-              iframeClassName="aspect-[2/1] max-h-[600px] h-screen w-full rounded-lg border-none"
-            />
-          }
+          <YouTube
+            videoId={currentCourse?.videoId ?? ""}
+            title="YouTube video player"
+            opts={{
+              allow:
+                "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+              referrerpolicy: "strict-origin-when-cross-origin",
+              allowfullscreen: true,
+            }}
+            className="w-full"
+            iframeClassName="aspect-[2/1] max-h-[600px] h-screen w-full rounded-lg border-none"
+          />
           <div className={cn("flex w-full items-center")}>
             <h2 className="text-2xl font-bold">{currentCourse?.title}</h2>
           </div>

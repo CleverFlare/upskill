@@ -21,6 +21,8 @@ export interface AssignmentProps {
   content: string;
   dueDate: string;
   isSubmitted?: boolean;
+  isInstructor?: boolean;
+  hideSubmitForm?: boolean;
 }
 
 export default function Assignment({
@@ -30,6 +32,8 @@ export default function Assignment({
   dueDate,
   id,
   isSubmitted = false,
+  isInstructor,
+  hideSubmitForm,
 }: AssignmentProps) {
   const isDue = new Date() < new Date(dueDate);
   return (
@@ -69,16 +73,18 @@ export default function Assignment({
             <TooltipContent>Deadline</TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        {!isSubmitted && isDue && <SubmitForm id={id} />}
+        {!isSubmitted && isDue && !hideSubmitForm && <SubmitForm id={id} />}
       </div>
-      <div className="absolute right-2 top-2 flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-        <Button variant="outline" size="icon" asChild>
-          <Link href={`assignments/${id}`}>
-            <HiOutlineUserGroup />
-          </Link>
-        </Button>
-        <DeleteButton id={id} />
-      </div>
+      {isInstructor && (
+        <div className="absolute right-2 top-2 flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+          <Button variant="outline" size="icon" asChild>
+            <Link href={`assignments/${id}`}>
+              <HiOutlineUserGroup />
+            </Link>
+          </Button>
+          <DeleteButton id={id} />
+        </div>
+      )}
     </div>
   );
 }

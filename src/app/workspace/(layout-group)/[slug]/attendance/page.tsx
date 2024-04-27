@@ -105,16 +105,18 @@ export default async function Page({
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-h-full flex-col gap-4">
       <h1 className="text-4xl font-bold">Attendance</h1>
       <ClassDropDown
         classes={classes.map((item) => ({ id: item.id, name: item.title }))}
       />
       {!searchParams.id && (
-        <p className="flex items-center">
-          <HiOutlineExclamationCircle className="me-2 animate-pulse text-xl" />
-          You must select a class first to manage its attendance.
-        </p>
+        <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-border">
+          <p className="text-xl font-bold capitalize">Nothing to view</p>
+          <p className="text-muted-foreground">
+            Select the intended class to get started
+          </p>
+        </div>
       )}
       {!!searchParams.id && (
         <>

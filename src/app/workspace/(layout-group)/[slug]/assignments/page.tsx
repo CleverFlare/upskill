@@ -4,8 +4,8 @@ import Assignment, { type AssignmentProps } from "./_components/assignment";
 import Link from "next/link";
 import { HiPlus } from "react-icons/hi2";
 import { db } from "@/server/db";
-import { getServerSession } from "next-auth";
 import Paginator from "@/components/pagination";
+import { getServerAuthSession } from "@/server/auth";
 
 export default async function Page({
   searchParams,
@@ -17,7 +17,11 @@ export default async function Page({
   };
   params: { slug: string };
 }) {
-  const session = await getServerSession();
+  const session = await getServerAuthSession();
+
+  const isInstructor = session?.user.role === "instructor";
+
+  const isAdmin = session?.user.role === "admin";
 
   const assignmentsData = await db.assignment.findMany({
     where: {
@@ -29,13 +33,15 @@ export default async function Page({
     take: 10,
     skip: searchParams?.page ? 10 * (+searchParams.page - 1) : 0,
     include: {
-      submissions: {
-        where: {
-          user: {
-            id: session!.user.id,
+      ...(!isAdmin && {
+        submissions: {
+          where: {
+            user: {
+              id: session!.user.id,
+            },
           },
         },
-      },
+      }),
     },
   });
 
@@ -54,25 +60,50 @@ export default async function Page({
       content,
       dueDate,
       createdAt,
-      isSubmitted: !!submissions.length,
+      isSubmitted: !!submissions?.length,
     }),
   ) as unknown as AssignmentProps[];
 
   return (
-    <div className="relative flex flex-col gap-2">
+    <div className="relative flex min-h-full flex-col gap-2">
+      {!assignmentsData.length && (
+        <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-border">
+          <p className="text-xl font-bold capitalize">
+            Where are the assignments! HUH?
+          </p>
+          <p className="text-muted-foreground">
+            There are no assignments to view
+          </p>
+          {isInstructor && (
+            <Button asChild className="mt-2">
+              <Link href="assignments/create">
+                <HiPlus className="me-2 text-base" />
+                Create a new one
+              </Link>
+            </Button>
+          )}
+        </div>
+      )}
       {data.map((item) => (
-        <Assignment {...item} key={`Assignment ${item.id}`} />
+        <Assignment
+          {...item}
+          key={`Assignment ${item.id}`}
+          isInstructor={isInstructor}
+          hideSubmitForm={isAdmin}
+        />
       ))}
       {assignmentsCount > 1 && <Paginator total={assignmentsCount} />}
-      <Button
-        size="icon"
-        asChild
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 shadow-lg"
-      >
-        <Link href="assignments/create">
-          <HiPlus className="text-base" />
-        </Link>
-      </Button>
+      {isInstructor && !!assignmentsData.length && (
+        <Button
+          size="icon"
+          asChild
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 shadow-lg"
+        >
+          <Link href="assignments/create">
+            <HiPlus className="text-base" />
+          </Link>
+        </Button>
+      )}
     </div>
   );
 }

@@ -87,17 +87,37 @@ export default function Page() {
         </TabsContent>
         <TabsContent value="preview" asChild>
           <div className="flex flex-col gap-[inherit]">
-            <h2 className="text-3xl font-bold">{watch().title}</h2>
+            {!!watch().title && (
+              <h2 className="text-3xl font-bold">{watch().title}</h2>
+            )}
+            {!watch().title && (
+              <h2 className="text-3xl font-bold text-muted-foreground">
+                No title to view
+              </h2>
+            )}
             <p className="text-sm text-gray-500">
               {format(new Date().toISOString(), "PPp")}
             </p>
             <div className="flex flex-col gap-2">
-              <Markdown components={components}>{watch().content}</Markdown>
+              {!!watch().content && (
+                <Markdown components={components}>{watch().content}</Markdown>
+              )}
+              {!watch().content && (
+                <p className="text-muted-foreground">
+                  Write some content to view it here!
+                </p>
+              )}
             </div>
             {!!watch().dueDate && (
               <p className="flex items-center text-base text-gray-500">
                 <HiOutlineClock className="me-2 text-xl text-gray-500" />
                 {format(watch().dueDate.toISOString(), "PPp")}
+              </p>
+            )}
+            {!watch().dueDate && (
+              <p className="flex items-center text-base text-gray-500">
+                <HiOutlineClock className="me-2 text-xl text-gray-500" />
+                No deadline has been specified
               </p>
             )}
           </div>

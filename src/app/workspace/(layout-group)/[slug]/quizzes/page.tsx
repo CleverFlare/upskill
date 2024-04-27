@@ -14,6 +14,8 @@ export default async function Page({
   searchParams: { page: string };
 }) {
   const session = await getServerAuthSession();
+  const isInstructor = session?.user.role === "instructor";
+  const isAdmin = session?.user.role === "admin";
   const quizzesData = await db.quiz.findMany({
     where: {
       courseId: params.slug,
@@ -22,19 +24,23 @@ export default async function Page({
       createdAt: "desc",
     },
     include: {
-      UserQuiz: {
-        where: {
-          userId: session!.user.id,
+      ...(!isAdmin && {
+        UserQuiz: {
+          where: {
+            userId: session!.user.id,
+          },
         },
-      },
+      }),
       questions: {
         include: {
           options: true,
-          submissions: {
-            where: {
-              userId: session!.user.id,
+          ...(!isAdmin && {
+            submissions: {
+              where: {
+                userId: session!.user.id,
+              },
             },
-          },
+          }),
         },
       },
     },
@@ -65,8 +71,8 @@ export default async function Page({
       id: question.id,
       statement: question.statement,
       points: question.points,
-      ...(!!question.submissions.length &&
-        !!question.submissions[0]!.answer && {
+      ...(!!question?.submissions?.length &&
+        !!question?.submissions[0]!.answer && {
           chosen: question.submissions[0]!.answer,
         }),
       ...(!deadline && { correct: question.correct }),
@@ -83,25 +89,41 @@ export default async function Page({
       createdAt: quiz.createdAt,
       defaultOpen: index === 0,
       questions,
-      isCollected: quiz.UserQuiz[0]?.collected ?? false,
+      isCollected: quiz?.UserQuiz?.[0]?.collected ?? false,
     };
   }) as unknown as QuizProps[];
 
   return (
-    <div className="relative flex flex-col gap-2">
+    <div className="relative flex min-h-full flex-col gap-2">
+      {!quizzesData.length && (
+        <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-border">
+          <p className="text-xl font-bold capitalize">No quizzes! why??</p>
+          <p className="text-muted-foreground">There are no quizzes to view</p>
+          {isInstructor && (
+            <Button asChild className="mt-2">
+              <Link href="quizzes/create">
+                <HiPlus className="me-2 text-base" />
+                Create a new one
+              </Link>
+            </Button>
+          )}
+        </div>
+      )}
       {data.map((quiz) => (
-        <Quiz {...quiz} isDeletable key={`Quiz ${quiz.id}`} />
+        <Quiz {...quiz} isDeletable={isInstructor} key={`Quiz ${quiz.id}`} />
       ))}
       {quizzesCount > 1 && <Paginator total={quizzesCount} />}
-      <Button
-        size="icon"
-        asChild
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 shadow-lg"
-      >
-        <Link href="quizzes/create">
-          <HiPlus className="text-base" />
-        </Link>
-      </Button>
+      {isInstructor && !!quizzesData.length && (
+        <Button
+          size="icon"
+          asChild
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 shadow-lg"
+        >
+          <Link href="quizzes/create">
+            <HiPlus className="text-base" />
+          </Link>
+        </Button>
+      )}
     </div>
   );
 }

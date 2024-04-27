@@ -83,7 +83,7 @@ export default function Page() {
       >
         {!value.length && (
           <div className="flex flex-col gap-1 p-2 text-center">
-            <p className="text-xl font-bold">Questions</p>
+            <p className="text-xl font-bold capitalize">Questions</p>
             <p className="text-muted-foreground">
               At least one question is required
             </p>
