@@ -98,6 +98,11 @@ export default function TabButton({
     setIsLoading(false);
   }, [path]);
 
+  useEffect(() => {
+    if (checked)
+      if (notificationsName) handleSetNotifications(notificationsName, 0);
+  }, [checked]);
+
   if (isAdmin && pathArray[1] !== "admin") return;
   if (!isAdmin && pathArray[1] === "admin") return;
 
