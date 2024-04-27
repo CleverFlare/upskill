@@ -54,7 +54,7 @@ model Announcement {
   imageId   String?
   image     String?
   courseId  String   @db.ObjectId
-  course    Course   @relation(fields: [courseId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
