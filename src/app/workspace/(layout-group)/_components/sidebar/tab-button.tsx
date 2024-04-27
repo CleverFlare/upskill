@@ -86,6 +86,8 @@ export default function TabButton({
         }
       }
     }
+
+    setChecked(false);
   }
 
   useEffect(() => {
