@@ -15,40 +15,6 @@ export default async function Page({
   };
   params: { slug: string };
 }) {
-  // const studentsData = await db.user.findMany({
-  //   where: {
-  //     AND: [
-  //       {
-  //         courses: {
-  //           some: { AND: [{ courseId: params.slug }, { isAccepted: true }] },
-  //         },
-  //       },
-  //       {
-  //         OR: [
-  //           {
-  //             username: { startsWith: searchParams?.search ?? "" },
-  //           },
-  //           {
-  //             firstName: { startsWith: searchParams?.search ?? "" },
-  //           },
-  //           {
-  //             lastName: { startsWith: searchParams?.search ?? "" },
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  //   take: 10,
-  //   skip: searchParams?.page ? 10 * (+searchParams.page - 1) : 0,
-  //   include: {
-  //     courses: {
-  //       where: {
-  //         courseId: params.slug,
-  //       },
-  //     },
-  //   },
-  // });
-
   const searchTerm = searchParams?.search ?? "";
 
   const studentsData = (await db.user.aggregateRaw({
@@ -172,10 +138,18 @@ export default async function Page({
     }),
   );
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-h-full flex-col gap-4">
       <h1 className="text-4xl font-bold">Leaderboard</h1>
       <Search />
-      <List students={data} />
+      {!studentsData.length && (
+        <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-border">
+          <p className="text-xl font-bold capitalize">No leaderboard yet</p>
+          <p className="text-muted-foreground">
+            No students available to display on the leaderboard
+          </p>
+        </div>
+      )}
+      {!!studentsData.length && <List students={data} />}
       {studentsCount > 1 && <Paginator total={studentsCount} />}
     </div>
   );
