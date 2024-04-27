@@ -31,6 +31,7 @@ export default (req: NextRequestWithAuth, _next: NextFetchEvent) =>
     const hasCourse = hasCourseRes.ok;
 
     if (!hasCourse) return NextResponse.redirect(new URL("/not-found", url));
+    else return NextResponse.next();
   })(req, _next);
 
-export const matcher = "/(workspace|workspace/+)";
+export const matcher = "/(workspace|workspace/+.)";

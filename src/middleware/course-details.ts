@@ -30,6 +30,7 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(`/workspace/${courseId}`, request.url),
     );
+  else return NextResponse.next();
 }
 
 export const matcher = "/courses/+";

@@ -93,9 +93,16 @@ export default function SidebarItems({ progress }: { progress: number }) {
         <p className="text-xs font-bold uppercase text-gray-700 dark:text-gray-400">
           section
         </p>
-        {tabs.map((tab, index) => (
-          <TabButton {...tab} channel={channel} key={`Tab ${index}`} />
-        ))}
+        {tabs.map((tab, index) => {
+          const isPermitted = tab.permissions.includes(
+            session?.user.role ?? ("unknown" as "student"),
+          );
+          if (isPermitted)
+            return (
+              <TabButton {...tab} channel={channel} key={`Tab ${index}`} />
+            );
+          else return;
+        })}
       </div>
       <div className="mt-auto flex w-full flex-col gap-3">
         {!isAdminPath && isAdmin && (

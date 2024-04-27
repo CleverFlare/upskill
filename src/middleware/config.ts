@@ -11,6 +11,10 @@ import {
   default as CourseDetails,
   matcher as CourseDetailsMatcher,
 } from "@/middleware/course-details";
+import {
+  default as ProtectedRoutes,
+  matcher as ProtectedRoutesMatcher,
+} from "./protected-routes";
 
 export interface middlewareType {
   middleware: (
@@ -31,5 +35,9 @@ export const middleware: middlewareType[] = [
   {
     middleware: CourseDetails,
     matcher: CourseDetailsMatcher,
+  },
+  {
+    middleware: ProtectedRoutes,
+    matcher: ProtectedRoutesMatcher,
   },
 ];

@@ -11,6 +11,7 @@ import {
   type CourseNotification,
 } from "@/data/notifications";
 import { useAtom } from "jotai";
+import { type GlobalTab } from "@/app/global-tabs";
 
 export default function TabButton({
   uncheckedIcon,
@@ -20,9 +21,10 @@ export default function TabButton({
   activeOn,
   notificationsName,
   href,
-}: Tab & {
-  channel?: Channel;
-}) {
+}: GlobalTab &
+  Tab & {
+    channel?: Channel;
+  }) {
   const [checked, setChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const params: { slug: string } = useParams();
