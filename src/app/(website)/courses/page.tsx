@@ -2,7 +2,7 @@ import Container from "@/components/container";
 import { db } from "@/server/db";
 import type { Course } from "@prisma/client";
 import SearchBar from "./_components/search-bar";
-import CourseCardWithActions from "./_components/course-card-with-options";
+import CourseCard from "@/components/course-card";
 
 export default async function Courses({
   searchParams,
@@ -39,14 +39,13 @@ export default async function Courses({
       <div className="grid grid-cols-1 gap-3 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {!!databaseCoursesData.length &&
           databaseCoursesData.map((course) => (
-            <CourseCardWithActions
+            <CourseCard
               key={`Course ${course.id}`}
-              id={course.id}
               href={`/courses/${course.id}`}
               thumbnailUrl={course.thumbnail}
             >
               {course.name}
-            </CourseCardWithActions>
+            </CourseCard>
           ))}
       </div>
     </Container>
