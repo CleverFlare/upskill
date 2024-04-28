@@ -46,7 +46,7 @@ export const globalTabs: GlobalTab[] = [
     name: "Classes",
     href: "/classes",
     permissions: ["instructor", "student", "admin"],
-    activeOn: [/^\/workspace\/(.*?)\/classes\/(.*?)$/g],
+    activeOn: [/^\/workspace\/(.*?)\/classes\/(.*?)/],
   },
   {
     name: "Leaderboard",
