@@ -4,7 +4,7 @@ import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 
 export default async function middleware(request: NextRequest) {
-  const { url, nextUrl } = request;
+  const { nextUrl } = request;
   const token = await getToken({ req: request, secret: env.NEXTAUTH_SECRET });
   const pathArray = nextUrl.pathname
     .trim()
@@ -13,22 +13,23 @@ export default async function middleware(request: NextRequest) {
 
   let isAllowed = false;
 
+  const pathMatches = (pattern: string | RegExp) => {
+    if (typeof pattern === "string") {
+      return nextUrl.pathname === pattern;
+    } else if (pattern instanceof RegExp) {
+      const patternRoslvedValue = pattern.test(nextUrl.pathname);
+      return patternRoslvedValue;
+    }
+    return false;
+  };
+
   for (const { activeOn, href, permissions } of globalTabs) {
     let isCurrentPath = false;
 
     const currentPath = `/${pathArray[0]}/${pathArray[1]}${href.replace(
-      /\/+$/g,
+      /\/$/g,
       "",
     )}`;
-
-    const pathMatches = (pattern: string | RegExp) => {
-      if (typeof pattern === "string") {
-        return nextUrl.pathname === pattern;
-      } else if (pattern instanceof RegExp) {
-        return pattern.test(nextUrl.pathname);
-      }
-      return false;
-    };
 
     // Check if the current path matches the 'path' prop
     if (nextUrl.pathname && currentPath === nextUrl.pathname) {
@@ -38,7 +39,8 @@ export default async function middleware(request: NextRequest) {
     // Check if the current path matches any item in the 'activeOn' prop array
     if (activeOn && Array.isArray(activeOn)) {
       for (const pattern of activeOn) {
-        if (pathMatches(pattern)) {
+        const patternMatched = pathMatches(pattern);
+        if (patternMatched) {
           isCurrentPath = true;
         }
       }
