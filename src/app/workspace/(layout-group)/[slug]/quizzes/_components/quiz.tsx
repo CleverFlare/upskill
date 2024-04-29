@@ -42,6 +42,8 @@ export default function Quiz({
 
   const { data: session } = useSession();
 
+  const isStudent = session?.user.role === "student";
+
   useEffect(() => {
     if (!deadline) return;
 
@@ -94,21 +96,28 @@ export default function Quiz({
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (
+      isStudent &&
       !!questions.length &&
       !questions[0]?.chosen &&
       Object.keys(choices).length > 0
     )
       submitMutate({
         id,
-        userId: session!.user.id,
+        userId: session.user.id,
         answers: Object.entries(choices).map(([key, value]) => ({
           questionId: key,
           answer: value,
         })),
       });
 
-    if (!!questions.length && questions[0]?.chosen && !deadline && !isCollected)
-      collectMutate({ id, userId: session!.user.id });
+    if (
+      isStudent &&
+      !!questions.length &&
+      questions[0]?.chosen &&
+      !deadline &&
+      !isCollected
+    )
+      collectMutate({ id, userId: session.user.id });
   }
 
   return (
@@ -141,7 +150,8 @@ export default function Quiz({
               }
             />
           ))}
-          {!!questions.length &&
+          {isStudent &&
+            !!questions.length &&
             questions[0]?.chosen &&
             !deadline &&
             !isCollected && (
@@ -152,14 +162,17 @@ export default function Quiz({
                 Collect
               </Button>
             )}
-          {!!questions.length && !questions[0]?.chosen && !!deadline && (
-            <Button disabled={submitPending}>
-              {submitPending && (
-                <LuLoader2 className="me-2 animate-spin text-base" />
-              )}
-              Submit
-            </Button>
-          )}
+          {isStudent &&
+            !!questions.length &&
+            !questions[0]?.chosen &&
+            !!deadline && (
+              <Button disabled={submitPending}>
+                {submitPending && (
+                  <LuLoader2 className="me-2 animate-spin text-base" />
+                )}
+                Submit
+              </Button>
+            )}
           {isDeletable && (
             <div className="absolute right-1 top-1 opacity-0 transition-opacity group-hover:opacity-100">
               <DeleteButton id={id} />
