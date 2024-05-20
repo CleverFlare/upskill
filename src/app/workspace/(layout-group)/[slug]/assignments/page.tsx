@@ -89,7 +89,7 @@ export default async function Page({
           {...item}
           key={`Assignment ${item.id}`}
           isInstructor={isInstructor}
-          hideSubmitForm={isAdmin}
+          hideSubmitForm={isAdmin || isInstructor}
         />
       ))}
       {assignmentsCount > 1 && <Paginator total={assignmentsCount} />}
