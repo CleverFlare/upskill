@@ -92,15 +92,19 @@ export default async function Page({ params }: { params: { slug: string } }) {
             </Link>
           </Button>
         )}
-        {!!session && !hasCourse && <EnrollButton />}
-        {!!session && hasCourse && !isAccepted && <UnenrollButton />}
-        {!!session && hasCourse && isAccepted && (
-          <Button asChild>
-            <Link href={`/workspace/${databaseCourseData.id}`}>
-              <HiOutlineWindow className="me-2 text-base" />
-              View in workspace
-            </Link>
-          </Button>
+        {!!session && session.user.role === "student" && (
+          <>
+            {!hasCourse && <EnrollButton />}
+            {hasCourse && !isAccepted && <UnenrollButton />}
+            {hasCourse && isAccepted && (
+              <Button asChild>
+                <Link href={`/workspace/${databaseCourseData.id}`}>
+                  <HiOutlineWindow className="me-2 text-base" />
+                  View in workspace
+                </Link>
+              </Button>
+            )}
+          </>
         )}
       </Container>
     );
